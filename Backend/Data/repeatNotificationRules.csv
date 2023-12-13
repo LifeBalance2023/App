@@ -1,0 +1,11 @@
+id,notificationFK,repeatType,repaitUntilDate,numberOfRepeats
+repeatNotificationRule1,notification1,WEEKLY,2023-11-16T10:00:00Z,3
+repeatNotificationRule2,notification2,DAILY,2023-11-18T12:00:00Z,5
+repeatNotificationRule3,notification3,MONTHLY,2023-11-19T16:00:00Z,2
+repeatNotificationRule4,notification4,WEEKLY,2023-11-20T18:30:00Z,3
+repeatNotificationRule5,notification5,DAILY,2023-11-21T20:00:00Z,4
+repeatNotificationRule6,notification6,MONTHLY,2023-11-22T22:00:00Z,2
+repeatNotificationRule7,notification7,WEEKLY,2023-11-23T10:30:00Z,3
+repeatNotificationRule8,notification8,DAILY,2023-11-24T12:00:00Z,5
+repeatNotificationRule9,notification9,MONTHLY,2023-11-25T16:00:00Z,2
+repeatNotificationRule10,notification10,WEEKLY,2023-11-26T18:30:00Z,3

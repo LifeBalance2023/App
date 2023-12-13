@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from dataFunc import read_csv_file
+from dataFunc import read_data
 
 app = FastAPI()
 
@@ -9,5 +9,5 @@ async def root():
 
 @app.get("/tasks")
 async def get_tasks():
-    tasks = read_csv_file()
+    tasks = read_data()
     return {"tasks": tasks}
