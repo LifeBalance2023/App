@@ -9,3 +9,5 @@ repeatNotificationRule7,notification7,WEEKLY,2023-11-23T10:30:00Z,3
 repeatNotificationRule8,notification8,DAILY,2023-11-24T12:00:00Z,5
 repeatNotificationRule9,notification9,MONTHLY,2023-11-25T16:00:00Z,2
 repeatNotificationRule10,notification10,WEEKLY,2023-11-26T18:30:00Z,3
+repeatNotificationRule11,notification11,DAILY,2023-11-25T12:00:00Z,5
+repeatNotificationRule11,notification11,DAILY,2023-11-25T12:00:00Z,5

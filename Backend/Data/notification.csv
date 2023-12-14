@@ -9,3 +9,4 @@ notification7,task7,Task Reminder 7,Don't forget to start your task 7,2023-11-26
 notification8,task8,Task Reminder 8,Don't forget to start your task 8,2023-11-27T09:45:00Z,repeatNotificationRule8,DAILY,2023-11-24T12:00:00Z,5
 notification9,task9,Task Reminder 9,Don't forget to start your task 9,2023-11-28T13:30:00Z,repeatNotificationRule9,MONTHLY,2023-11-25T16:00:00Z,2
 notification10,task10,Task Reminder 10,Don't forget to start your task 10,2023-11-29T16:45:00Z,repeatNotificationRule10,WEEKLY,2023-11-26T18:30:00Z,3
+notification11,task11,Task Reminder 11,Don't forget to start your task 11,2023-11-22T08:30:00Z,repeatNotificationRule11,DAILY,2023-11-25T12:00:00Z,5

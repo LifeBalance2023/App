@@ -1,3 +1,5 @@
+from fastapi import HTTPException
+
 import os
 import csv
 
