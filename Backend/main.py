@@ -1,8 +1,8 @@
 from fastapi import FastAPI, HTTPException, Depends, Request
 from fastapi.responses import JSONResponse
 
-from functions.readAllData import read_data
-from functions.createNewResource import add_task
+from functions.showAllTasks import read_data
+from functions.createTask import add_task
 
 app = FastAPI()
 
