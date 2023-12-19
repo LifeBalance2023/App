@@ -1,3 +1,5 @@
-env/
-requirements.txt
+.idea/
 __pycache__/
+
+venv/
+database/firestore/credentials.json
