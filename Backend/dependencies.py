@@ -1,7 +1,9 @@
 from fastapi import Depends
 
 from database.firestore.database_manager import DatabaseManager
-from services.task_service import TaskService
+from interfaces.statistic import IStatisticService
+from services.task import TaskService
+from services.statistic import StatisticService
 from interfaces.task import ITaskService
 
 
@@ -18,6 +20,13 @@ def get_task_service(
 ) -> ITaskService:
     task_service: ITaskService = TaskService(database_manager, "tasks")
     yield task_service
+
+
+def get_statistic_service(
+        task_service: ITaskService = Depends(get_task_service)
+) -> IStatisticService:
+    statistic_service: IStatisticService = StatisticService(task_service=task_service)
+    yield statistic_service
 
 
 db_manager_dependency = Depends(get_db_manager)
