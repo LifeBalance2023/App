@@ -1,6 +1,6 @@
 # frontend
 
-Life balnace app - frontend.
+Life balance app - frontend.
 
 ## Getting Started
 
