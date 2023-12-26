@@ -4,6 +4,8 @@ The domain diagram can [be found here on LucidChart](https://lucid.app/lucidchar
 
 ## API
 
+All request should have in URL `stationId` param encoded with Base64.
+
 **Tasks:**
 
 - `GET /tasks` - Get all tasks for the authenticated user.
@@ -16,20 +18,17 @@ The domain diagram can [be found here on LucidChart](https://lucid.app/lucidchar
         "title": "Task One",
         "description": "This is the first task",
         "priority": "HIGH",
-        "progress": "IN_PROGRESS",
-        "startTime": "2023-11-15T09:00:00Z",
-        "endTime": null,
-    		"notificationId": "notification1"
+        "isDone": true,
+        "date": "2023-11-15",
+    		"notificationTime": "10:00:00"
       },
       {
         "id": "task2",
         "title": "Task Two",
         "description": "This is the second task",
+        "isDone": false,
         "priority": "MEDIUM",
-        "progress": "NOT_STARTED",
-        "startTime": null,
-        "endTime": null,
-    		"notificationId": "notification2"
+        "date": "2023-11-15",
       }
     ]
     ```
@@ -39,92 +38,29 @@ The domain diagram can [be found here on LucidChart](https://lucid.app/lucidchar
     
     ```json
     {
-      "title": "New Task",
-      "description": "Details of the new task",
-      "priority": "LOW",
-      "startTime": "2023-11-16T10:00:00Z",
-      "endTime": "2023-11-16T15:00:00Z",
-    	"notification":
-        {
-          "title": "Task Reminder",
-          "description": "Don't forget to start your task",
-          "dateTime": "2023-11-20T07:45:00Z",
-          "repeatNotificationRule": {
-            "repeatType": "WEEKLY",
-    				"repaitUntilDate": "2023-11-16T10:00:00Z",
-    				"numberOfRepeats": 3
-          }
-        }
+      "title": "Task Two",
+      "description": "This is the second task",
+      "priority": "MEDIUM",
+      "date": "2023-11-15",
+      "notificationTime": "10:00:00" // optional
     }
     ```
     
-- `PUT /tasks/{taskId}` - Update a specific task.
+- `PATCH /tasks/{taskId}` - Update a specific task.
     - Request
     
     ```json
     {
-      "id": "task123", // Task ID
       "title": "Updated Task",
       "description": "Updated details about the task",
+      "isDone": false,
       "priority": "MEDIUM",
-      "startTime": "2023-11-20T09:00:00Z",
-      "endTime": "2023-11-20T18:00:00Z",
-      "notification":
-        {
-          "id": "notif123", // Existing notification ID
-          "title": "Updated Reminder",
-          "description": "Reminder to work on the task",
-          "dateTime": "2023-11-20T08:45:00Z",
-          "repeatNotificationRule": {
-            "id": "rule123", // Existing rule ID
-            "repeatType": "WEEKLY"
-          }
-        }
+      "date": "2023-11-15"
     }
     ```
     
 - `DELETE /tasks/{taskId}` - Delete a specific task.
-- `PATCH /tasks/{taskId}/progress` - Update the progress of a task.
-    - Request
     
-    ```json
-    {
-    		"progress": "IN_PROGRESS"
-    }
-    ```
-    
-
-**Notifications:**
-
-- `GET /notifications` - Get all notifications.
-    - Response
-    
-    ```json
-    [
-      {
-        "id": "notif1",
-        "title": "Reminder",
-        "description": "Reminder to start the task",
-        "dateTime": "2023-11-16T09:00:00Z",
-        "repeatNotificationRule": null
-      },
-      {
-        "id": "notif2",
-        "title": "Deadline",
-        "description": "Task deadline approaching",
-        "dateTime": "2023-11-16T14:00:00Z",
-        "repeatNotificationRule": {
-          "repeatType": "DAILY",
-          "repeatUntilDate": "2023-11-20T14:00:00Z",
-          "numberOfRepeats": null
-        }
-      },
-      // ... more notifications
-    ]
-    ```
-    
-- `DELETE /notifications/{notificationId}` - Delete a specific notification.
-
 **Statistics:**
 
 - `GET /statistics` - Get statistics for the authenticated user.
@@ -132,11 +68,10 @@ The domain diagram can [be found here on LucidChart](https://lucid.app/lucidchar
     
     ```json
     {
-      "amountOfFinishedTasks": 10,
-      "amountOfStartedTasks": 5,
       "amountOfToDo": 15,
+      "amountOfDone": 15,
       "amountOfAllTasks": 30,
-      "balancePercentage": 50
+      "progress": 50 // amountOfDone / amountOfAllTasks
     }
     ```
     
@@ -144,11 +79,21 @@ The domain diagram can [be found here on LucidChart](https://lucid.app/lucidchar
 
 ```json
 {
-  "dateTime": "2023-11-21T12:00:00Z",
-  "amountOfFinishedTasks": 10,
-  "amountOfStartedTasks": 5,
+  "dateTime": "2023-11-21",
   "amountOfToDo": 15,
+  "amountOfDone": 15,
   "amountOfAllTasks": 30,
-  "balancePercentage": 50
+  "lifeBalanceValue": 45 // weighted average of all tasks (%)
 }
 ```
+
+**Authentication:**
+
+- `POST /users` - Add new user
+  - Request
+  ```json
+  {
+    "email": "dupa@google.com",
+    "userId": "unique user id",
+  }
+  ```
