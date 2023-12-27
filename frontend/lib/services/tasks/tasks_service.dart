@@ -23,7 +23,13 @@ class TasksService {
 
   Result<List<TaskEntity>> getAllTasks() => Result.success(_taskRepository.getAll());
 
-  Result<TaskEntity> getTaskById(String id) => Result.success(_taskRepository.get(id));
+  Result<TaskEntity> getTaskById(String id) {
+    final task = _taskRepository.get(id);
+    if (task == null) {
+      return Result.failure(ApiError(message: 'Task with id $id not found'));
+    }
+    return Result.success(task);
+  }
 
   Future<Result<void>> createTask({
     required String title,
