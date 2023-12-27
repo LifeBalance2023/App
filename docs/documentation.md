@@ -55,7 +55,8 @@ All request should have in URL `stationId` param encoded with Base64.
       "description": "Updated details about the task",
       "isDone": false,
       "priority": "MEDIUM",
-      "date": "2023-11-15"
+      "date": "2023-11-15",
+      "notificationTime": "10:00:00"
     }
     ```
     

@@ -1,3 +1,5 @@
+import 'package:frontend/api/tasks/requests/create_task_request.dart';
+import 'package:frontend/api/tasks/requests/update_task_request.dart';
 import 'package:frontend/api/tasks/responses/get_tasks_response.dart';
 
 import '../../domain/result.dart';
@@ -15,4 +17,13 @@ class TasksApi {
           return result;
         }
       });
+
+  Future<Result<void>> postTask(CreateTaskRequest request) =>
+      _dioWrapper.post('/tasks', data: request.toJson());
+
+  Future<Result<void>> patchTask(String taskId, UpdateTaskRequest request) =>
+      _dioWrapper.patch('/tasks/$taskId', data: request.toJson());
+
+  Future<Result<void>> deleteTask(String taskId) =>
+      _dioWrapper.delete('/tasks/$taskId');
 }
