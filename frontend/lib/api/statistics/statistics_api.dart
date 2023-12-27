@@ -10,9 +10,13 @@ class StatisticsApi {
 
   StatisticsApi(DioWrapper dioWrapper) : _dioWrapper = dioWrapper;
 
-  Future<Result<GeneralStatisticsResponse>> getUserStatistics() => _dioWrapper.get(_baseUrl)
-        .then((result) => result.map((result) => GeneralStatisticsResponse.fromJson(result)));
+  Future<Result<GeneralStatisticsResponse>> getUserStatistics() async {
+    var result = await _dioWrapper.get<Map<String, dynamic>>(_baseUrl);
+    return result.map((data) => GeneralStatisticsResponse.fromJson(data));
+  }
 
-  Future<Result<DailyStatisticsResponse>> getDailyStatistics(String date) => _dioWrapper.get('$_baseUrl/$date')
-        .then((result) => result.map((result) => DailyStatisticsResponse.fromJson(result)));
+  Future<Result<DailyStatisticsResponse>> getDailyStatistics(String date) async {
+    var result = await _dioWrapper.get<Map<String, dynamic>>('$_baseUrl/$date');
+    return result.map((data) => DailyStatisticsResponse.fromJson(data));
+  }
 }

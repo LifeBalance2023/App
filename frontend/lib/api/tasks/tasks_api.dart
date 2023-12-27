@@ -12,19 +12,23 @@ class TasksApi {
 
   TasksApi(DioWrapper dioWrapper) : _dioWrapper = dioWrapper;
 
-  Future<Result<GetTasksResponse>> getTasks() => _dioWrapper
-      .get<Map<String, dynamic>>(_baseUrl)
-      .then((result) => result.map((result) => GetTasksResponse.fromJson(result)));
+  Future<Result<GetTasksResponse>> getTasks() async {
+    var result = await _dioWrapper.get<Map<String, dynamic>>(_baseUrl);
+    return result.map((data) => GetTasksResponse.fromJson(data));
+  }
 
-  Future<Result<RemoteTask>> postTask(CreateTaskRequest request) => _dioWrapper
-      .post(_baseUrl, data: request.toJson())
-      .then((value) => value.map((value) => RemoteTask.fromJson(value)));
+  Future<Result<RemoteTask>> postTask(CreateTaskRequest request) async {
+    var result = await _dioWrapper.post(_baseUrl, data: request.toJson());
+    return result.map((data) => RemoteTask.fromJson(data));
+  }
 
-  Future<Result<RemoteTask>> patchTask(String taskId, UpdateTaskRequest request) => _dioWrapper
-      .patch('$_baseUrl/$taskId', data: request.toJson())
-      .then((value) => value.map((value) => RemoteTask.fromJson(value)));
+  Future<Result<RemoteTask>> patchTask(String taskId, UpdateTaskRequest request) async {
+    var result = await _dioWrapper.patch('$_baseUrl/$taskId', data: request.toJson());
+    return result.map((data) => RemoteTask.fromJson(data));
+  }
 
-  Future<Result<RemoteTask>> deleteTask(String taskId) => _dioWrapper
-      .delete('$_baseUrl/$taskId')
-      .then((value) => value.map((value) => RemoteTask.fromJson(value)));
+  Future<Result<RemoteTask>> deleteTask(String taskId) async {
+    var result = await _dioWrapper.delete('$_baseUrl/$taskId');
+    return result.map((data) => RemoteTask.fromJson(data));
+  }
 }
