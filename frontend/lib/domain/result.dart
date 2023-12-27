@@ -16,7 +16,6 @@ class Result<T> {
     }
   }
 
-  // Map the failure
   Result<T> mapFailure(ApiError Function(ApiError) transform) {
     if (isFailure) {
       return Result.failure(transform(error!));
