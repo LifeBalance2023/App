@@ -1,5 +1,5 @@
-import '../../api/tasks/models/remote_task.dart';
-import '../../domain/task_entity.dart';
+import 'package:frontend/api/tasks/models/remote_task.dart';
+import 'package:frontend/domain/task_entity.dart';
 
 class TaskAdapter {
   TaskEntity adapt(RemoteTask remoteTask) => TaskEntity(

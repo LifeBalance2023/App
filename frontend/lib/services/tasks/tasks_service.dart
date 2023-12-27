@@ -3,9 +3,9 @@ import 'package:frontend/api/tasks/requests/update_task_request.dart';
 import 'package:frontend/domain/result.dart';
 import 'package:frontend/domain/task_entity.dart';
 import 'package:frontend/repository/task_repository.dart';
+import 'package:frontend/services/tasks/adapters/task_adapter.dart';
 
-import '../api/tasks/tasks_api.dart';
-import 'adapters/task_adapter.dart';
+import '../../api/tasks/tasks_api.dart';
 
 class TasksService {
   final TasksApi _tasksApi;
