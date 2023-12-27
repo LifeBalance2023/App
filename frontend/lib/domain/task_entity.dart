@@ -1,4 +1,7 @@
-class TaskEntity {
+import 'package:frontend/domain/identifiable.dart';
+
+class TaskEntity implements Identifiable{
+  @override
   String id;
   String title;
   String? description;

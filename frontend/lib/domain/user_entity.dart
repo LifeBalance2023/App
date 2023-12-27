@@ -1,4 +1,7 @@
-class UserEntity {
+import 'package:frontend/domain/identifiable.dart';
+
+class UserEntity implements Identifiable {
+  @override
   String id;
   String name;
 
