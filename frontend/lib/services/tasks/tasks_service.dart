@@ -14,10 +14,13 @@ class TasksService {
 
   TasksService(this._tasksApi, this._taskRepository);
 
-  Future<Result<void>> synchronizeTasks() => _tasksApi.getTasks().then((value) => value.onSuccess((response) {
-        final tasks = response.tasks.map((remoteTask) => _taskAdapter.adapt(remoteTask)).toList();
-        _taskRepository.replaceAll(tasks);
-      }));
+  Future<Result<void>> synchronizeTasks() async {
+    final result = await _tasksApi.getTasks();
+    return result.onSuccess((response) {
+      final tasks = response.tasks.map(_taskAdapter.adapt).toList();
+      _taskRepository.replaceAll(tasks);
+    });
+  }
 
   Result<List<TaskEntity>> getTasksForDate(DateTime date) => Result.success(_taskRepository.getTasksForDate(date));
 
@@ -37,14 +40,15 @@ class TasksService {
     required String priority,
     required String date,
     String? notificationTime,
-  }) =>
-      _tasksApi
-          .postTask(
-              CreateTaskRequest(title: title, description: description, priority: priority, date: date, notificationTime: notificationTime))
-          .then((value) => value.onSuccess((response) {
-                final task = _taskAdapter.adapt(response);
-                _taskRepository.addOrUpdate(task);
-              }));
+  }) async {
+    final request = CreateTaskRequest(title: title, description: description, priority: priority, date: date, notificationTime: notificationTime);
+    final result = await _tasksApi.postTask(request);
+
+    return result.onSuccess((response) {
+      final task = _taskAdapter.adapt(response);
+      _taskRepository.addOrUpdate(task);
+    });
+  }
 
   Future<Result<void>> updateTask({
     required String id,
@@ -53,16 +57,20 @@ class TasksService {
     String? priority,
     String? date,
     String? notificationTime,
-  }) =>
-      _tasksApi
-          .patchTask(id,
-              UpdateTaskRequest(title: title, description: description, priority: priority, date: date, notificationTime: notificationTime))
-          .then((value) => value.onSuccess((response) {
-                final task = _taskAdapter.adapt(response);
-                _taskRepository.addOrUpdate(task);
-              }));
+  }) async {
+    var request = UpdateTaskRequest(title: title, description: description, priority: priority, date: date, notificationTime: notificationTime);
+    final result = await _tasksApi.patchTask(id, request);
 
-  Future<Result<void>> deleteTask(String id) => _tasksApi.deleteTask(id).then((value) => value.onSuccess((response) {
-        _taskRepository.delete(id);
-      }));
+    return result.onSuccess((response) {
+      final task = _taskAdapter.adapt(response);
+      _taskRepository.addOrUpdate(task);
+    });
+  }
+
+  Future<Result<void>> deleteTask(String id) async {
+    final result = await _tasksApi.deleteTask(id);
+    return result.onSuccess((response) {
+      _taskRepository.delete(id);
+    });
+  }
 }
