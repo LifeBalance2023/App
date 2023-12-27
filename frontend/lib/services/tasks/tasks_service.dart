@@ -29,7 +29,7 @@ class TasksService {
   Result<TaskEntity> getTaskById(String id) {
     final task = _taskRepository.get(id);
     if (task == null) {
-      return Result.failure(ApiError(message: 'Task with id $id not found'));
+      return Result.failure(Error(message: 'Task with id $id not found'));
     }
     return Result.success(task);
   }
