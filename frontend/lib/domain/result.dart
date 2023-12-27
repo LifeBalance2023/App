@@ -1,6 +1,6 @@
 class Result<T> {
   T? value;
-  ApiError? error;
+  Error? error;
 
   bool get isSuccess => value != null;
   bool get isFailure => error != null;
@@ -16,7 +16,7 @@ class Result<T> {
     }
   }
 
-  Result<T> mapFailure(ApiError Function(ApiError) transform) {
+  Result<T> mapFailure(Error Function(Error) transform) {
     if (isFailure) {
       return Result.failure(transform(error!));
     } else {
@@ -26,9 +26,9 @@ class Result<T> {
 
 }
 
-class ApiError {
+class Error {
   int? code;
   String? message;
 
-  ApiError({this.code, this.message});
+  Error({this.code, this.message});
 }

@@ -23,12 +23,12 @@ class DioWrapper {
       final Response<T> response = await apiCall();
       return Result.success(response.data);
     } on DioException catch (dioError) {
-      return Result.failure(ApiError(
+      return Result.failure(Error(
         code: dioError.response?.statusCode,
         message: dioError.message,
       ));
     } catch (error) {
-      return Result.failure(ApiError(message: error.toString()));
+      return Result.failure(Error(message: error.toString()));
     }
   }
 }
