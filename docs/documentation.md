@@ -70,7 +70,7 @@ All request should have in URL `stationId` param encoded with Base64.
       "title": "Task Two",
       "description": "This is the second task",
       "priority": "MEDIUM",
-      "isDone": False,
+      "isDone": false,
       "date": "2023-11-15",
       "notificationTime": "10:00:00"
     }
