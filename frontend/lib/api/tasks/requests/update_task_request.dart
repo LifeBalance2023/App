@@ -1,26 +1,26 @@
 class UpdateTaskRequest {
-  String title;
-  String description;
-  bool isDone;
-  String priority;
-  String date;
+  String? title;
+  String? description;
+  bool? isDone;
+  String? priority;
+  String? date;
   String? notificationTime;
 
   UpdateTaskRequest({
-    required this.title,
-    required this.description,
-    required this.isDone,
-    required this.priority,
-    required this.date,
+    this.title,
+    this.description,
+    this.isDone,
+    this.priority,
+    this.date,
     this.notificationTime,
   });
 
   Map<String, dynamic> toJson() => {
-        'title': title,
-        'description': description,
-        'isDone': isDone,
-        'priority': priority,
-        'date': date,
+        if (title != null) 'title': title,
+        if (description != null) 'description': description,
+        if (isDone != null) 'isDone': isDone,
+        if (priority != null) 'priority': priority,
+        if (date != null) 'date': date,
         if (notificationTime != null) 'notificationTime': notificationTime,
       };
 }

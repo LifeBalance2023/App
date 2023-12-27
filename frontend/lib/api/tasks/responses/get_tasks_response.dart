@@ -1,29 +1,12 @@
+import '../models/remote_task.dart';
+
 class GetTasksResponse {
-  String id;
-  String title;
-  String? description;
-  String priority;
-  bool isDone;
-  String date;
-  String? notificationTime;
+  List<RemoteTask> tasks;
 
   GetTasksResponse({
-    required this.id,
-    required this.title,
-    this.description,
-    required this.priority,
-    required this.isDone,
-    required this.date,
-    this.notificationTime,
+    required this.tasks,
   });
 
-  factory GetTasksResponse.fromJson(Map<String, dynamic> json) => GetTasksResponse(
-        id: json['id'],
-        title: json['title'],
-        description: json['description'],
-        priority: json['priority'],
-        isDone: json['isDone'],
-        date: json['date'],
-        notificationTime: json['notificationTime'],
-      );
+  factory GetTasksResponse.fromJson(Map<String, dynamic> json) =>
+      GetTasksResponse(tasks: (json['tasks'] as List<Map<String, dynamic>>).map(RemoteTask.fromJson).toList());
 }
