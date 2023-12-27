@@ -4,6 +4,8 @@ The domain diagram can [be found here on LucidChart](https://lucid.app/lucidchar
 
 ## API
 
+All request should have in URL `stationId` param encoded with Base64.
+
 **Tasks:**
 
 - `GET /tasks` - Get all tasks for the authenticated user.
@@ -48,6 +50,33 @@ The domain diagram can [be found here on LucidChart](https://lucid.app/lucidchar
     ```
     
 - `POST /tasks` - Create a new task for the authenticated user.
+   - Request
+   
+    ```json
+    {
+      "title": "Task Two",
+      "description": "This is the second task",
+      "priority": "MEDIUM",
+      "date": "2023-11-15",
+      "notificationTime": "10:00:00" // optional
+    }
+    ```
+    
+   - Response
+
+   ```json
+    {
+      "id": "xxxxxxxxxxxxxxxxxxxx",
+      "title": "Task Two",
+      "description": "This is the second task",
+      "priority": "MEDIUM",
+      "isDone": False,
+      "date": "2023-11-15",
+      "notificationTime": "10:00:00"
+    }
+    ``
+    
+- `PATCH /tasks/{taskId}` - Update a specific task.
     - Request
 
     ```json
@@ -153,4 +182,15 @@ The domain diagram can [be found here on LucidChart](https://lucid.app/lucidchar
       "ToDo": 2,
       "AllTasks": 5
     }
+  ```
+
+**Authentication:**
+
+- `POST /users` - Add new user
+  - Request
+  ```json
+  {
+    "email": "dupa@google.com",
+    "userId": "unique user id",
+  }
   ```
