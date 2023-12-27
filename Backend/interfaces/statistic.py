@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Optional
-from models.statistic import Statistic, StatisticRequest
+from models.statistics import StatisticsBase, StatisticRequest
 
 
 class IStatisticService(ABC):
@@ -8,5 +8,5 @@ class IStatisticService(ABC):
     async def get_statistics(
             self,
             filters: Optional[StatisticRequest] = None
-    ) -> Statistic:
+    ) -> StatisticsBase:
         pass

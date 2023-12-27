@@ -2,7 +2,7 @@ from typing import Optional, List
 
 from interfaces.statistic import IStatisticService
 from interfaces.task import ITaskService
-from models.statistic import Statistic, StatisticRequest
+from models.statistics import StatisticsBase, StatisticRequest
 from models.task import OptionalTaskDTO, Task
 from utils.statistic import StatisticUtils
 
@@ -14,7 +14,7 @@ class StatisticService(IStatisticService):
     async def get_statistics(
             self,
             filters: Optional[StatisticRequest] = None
-    ) -> Statistic:
+    ) -> StatisticsBase:
         task_filters = OptionalTaskDTO()
 
         if filters is not None:

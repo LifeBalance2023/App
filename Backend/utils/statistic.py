@@ -1,24 +1,26 @@
 from typing import List, Optional
 
-from models.statistic import Statistic
+from models.statistics import StatisticsBase, StatisticsDaily, StatisticsTotal
 from models.task import Task, OptionalTaskDTO
 
 
 class StatisticUtils:
 
     @staticmethod
-    def get_from_list(task_list: List[Task], filters: Optional[OptionalTaskDTO] = None) -> Statistic:
+    def get_from_list(task_list: List[Task], filters: Optional[OptionalTaskDTO] = None) -> StatisticsBase:
         statistics_dict: dict = {
-            "Date": filters.date if filters.date is not None else None,
-            "LifeBalanceValue": StatisticUtils.get_weighted_average(
-                task_list=task_list) if filters.date is not None else None,
-            "Progress": StatisticUtils.get_average_of_done(task_list=task_list) if filters.date is None else None,
-            "FinishedTasks": StatisticUtils._get_amount_by_status(task_list=task_list, status=True),
-            "ToDo": StatisticUtils._get_amount_by_status(task_list=task_list, status=False),
-            "AllTasks": StatisticUtils._get_amount(task_list=task_list)
+            "finishedTasks": StatisticUtils._get_amount_by_status(task_list=task_list, status=True),
+            "toDo": StatisticUtils._get_amount_by_status(task_list=task_list, status=False),
+            "allTasks": StatisticUtils._get_amount(task_list=task_list)
         }
 
-        return Statistic(**statistics_dict)
+        if filters.date is not None:
+            statistics_dict["date"] = filters.date
+            statistics_dict["lifeBalanceValue"] = StatisticUtils.get_weighted_average(task_list=task_list)
+            return StatisticsDaily(**statistics_dict)
+        else:
+            statistics_dict["progress"] = StatisticUtils.get_average_of_done(task_list=task_list)
+            return StatisticsTotal(**statistics_dict)
 
     @staticmethod
     def _get_weight_value(priority: str):
