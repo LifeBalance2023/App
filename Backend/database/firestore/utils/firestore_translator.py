@@ -11,8 +11,7 @@ class FirestoreTranslator:
         obj_data = doc.to_dict()
         obj_data['id'] = doc.id
 
-        obj_data = {key: value if value is not None else None
-                    for key, value in obj_data.items()}
+        obj_data = {key: value for key, value in obj_data.items()}
 
         return obj_model(**obj_data)
 

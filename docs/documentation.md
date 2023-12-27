@@ -104,33 +104,6 @@ All request should have in URL `stationId` param encoded with Base64.
     }
     ```
     
-- `PATCH /tasks/{taskId}` - Update a specific task.
-    - Request
-
-    ```json
-    {
-      "title": "Updated task2", // optional
-      "description": "This is the Updated task", // optional
-      "priority": "HIGH", // optional
-      "isDone": true, // optional
-      "date": "2022-12-23", // optional
-      "notificationTime": "12:04:32" // optional
-    }
-    ```
-
-    - Response
-    
-    ```json
-    {
-      "id": "xxxxxxxxxxxxxxxxxxxx",
-      "title": "Updated task2",
-      "description": "This is the Updated task",
-      "priority": "HIGH",
-      "isDone": true,
-      "date": "2022-12-23",
-      "notificationTime": "12:04:32"
-    }
-    ```
     
 - `DELETE /tasks/{taskId}` - Delete a specific task.
     - Response:
@@ -154,7 +127,7 @@ All request should have in URL `stationId` param encoded with Base64.
 
     ```json
     {
-      "Date": "2022-12-23"
+      "date": "2022-12-23"
     }
     ```
 
@@ -162,12 +135,11 @@ All request should have in URL `stationId` param encoded with Base64.
     
     ```json
     {
-      "Date": "2022-12-23",
-      "LifeBalanceValue": 100,
-      "Progress": null,
-      "FinishedTasks": 5,
-      "ToDo": 0,
-      "AllTasks": 5
+      "date": "2022-12-23",
+      "lifeBalanceValue": 100,
+      "finishedTasks": 5,
+      "toDo": 0,
+      "allTasks": 5
     }
     ```
     
@@ -175,12 +147,10 @@ All request should have in URL `stationId` param encoded with Base64.
 
   ```json
   {
-      "Date": null,
-      "LifeBalanceValue": null,
-      "Progress": 50,
-      "FinishedTasks": 3,
-      "ToDo": 2,
-      "AllTasks": 5
+      "progress": 50,
+      "finishedTasks": 3,
+      "toDo": 2,
+      "allTasks": 5
     }
   ```
 

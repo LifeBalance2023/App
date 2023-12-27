@@ -4,7 +4,6 @@ from firebase_admin import firestore_async
 
 cred = credentials.Certificate("./database/firestore/credentials.json")
 
-# Initialize the Firebase Admin SDK
 firebase_admin.initialize_app(cred)
 
 
