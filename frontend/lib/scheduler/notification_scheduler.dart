@@ -7,7 +7,7 @@ class NotificationScheduler {
 
   NotificationScheduler() {
     _initializeNotifications();
-    _flutterLocalNotificationsPlugin.cancelAll();
+    cancelAllNotifications();
   }
 
   Future<void> _initializeNotifications() async {
