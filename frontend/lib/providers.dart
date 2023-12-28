@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import 'api/di/api_providers.dart';
 
-MultiProvider createProviders(Widget child) => MultiProvider(providers: [
+MultiProvider createProviders({required Widget child}) => MultiProvider(providers: [
       ...createApiProviders(),
       ...createRepositoryProviders(),
       ...createNotificationSchedulerProviders(),
