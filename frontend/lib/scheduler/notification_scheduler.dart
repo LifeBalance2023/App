@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:frontend/domain/task_entity.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -13,7 +12,7 @@ class NotificationScheduler {
   }
 
   Future<void> _initializeNotifications() async {
-    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('launch_background');
+    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('app_icon');  // TODO: Repair icon
 
     const InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
@@ -48,34 +47,18 @@ class NotificationScheduler {
       priority: Priority.high,
     );
 
-    if (kDebugMode) {
-      print('Initial scheduling notification for $scheduledTime\n');
-    }
-
     const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidDetails);
 
-    final tzDateTime = tz.TZDateTime.from(scheduledTime.toUtc(), tz.local);
+    final tzScheduledTime = tz.TZDateTime.from(scheduledTime.toUtc(), tz.local);
 
-    if (kDebugMode) {
-      print('Scheduling notification for $tzDateTime\n');
-      print(tz.TZDateTime.now(tz.local));
-    }
-
-    // await _flutterLocalNotificationsPlugin.zonedSchedule(
-    //   id,
-    //   title,
-    //   body,
-    //   tzDateTime,
-    //   platformChannelSpecifics,
-    //   uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
-    //   androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-    // );
-
-    await _flutterLocalNotificationsPlugin.show(
+    await _flutterLocalNotificationsPlugin.zonedSchedule(
       id,
       title,
       body,
+      tzScheduledTime,
       platformChannelSpecifics,
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
   }
 

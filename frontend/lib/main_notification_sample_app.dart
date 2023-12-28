@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/providers.dart';
 import 'package:frontend/scheduler/notification_scheduler.dart';
-import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 import 'domain/task_entity.dart';
 
 void main() {
   tz.initializeTimeZones();
+  tz.setLocalLocation(tz.getLocation('Poland'));
   runApp(const MyApp());
 }
 
@@ -57,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
       priority: PriorityValue.medium,
       date: DateTime.now(),
       isDone: false,
-      notificationTime: DateTime.now().add(const Duration(seconds: 5)),
+      notificationTime: DateTime.now().add(const Duration(seconds: 10)),
     );
 
     await _notificationScheduler.scheduleTaskNotification(task);
