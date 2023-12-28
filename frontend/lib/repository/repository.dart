@@ -1,6 +1,6 @@
 import '../domain/identifiable.dart';
 
-typedef RepositoryCallback<T> = void Function(RepositoryAction action, T? entity);
+typedef RepositoryCallback<T> = void Function(RepositoryAction action, T entity);
 
 enum RepositoryAction { addOrUpdate, delete }
 
@@ -29,7 +29,7 @@ class Repository<T extends Identifiable> {
     if (_data.containsKey(id)) {
       var deletedEntity = _data[id];
       _data.remove(id);
-      _notifyListeners(RepositoryAction.delete, deletedEntity);
+      _notifyListeners(RepositoryAction.delete, deletedEntity!);
       return true;
     }
     return false;
@@ -40,7 +40,7 @@ class Repository<T extends Identifiable> {
     entities.forEach(addOrUpdate);
   }
 
-  void _notifyListeners(RepositoryAction action, T? entity) {
+  void _notifyListeners(RepositoryAction action, T entity) {
     for (var listener in _listeners) {
       listener(action, entity);
     }

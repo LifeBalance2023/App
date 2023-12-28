@@ -1,11 +1,9 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:frontend/domain/task_entity.dart';
-import 'package:frontend/repository/repository.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 class NotificationScheduler {
-  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   NotificationScheduler() {
     _initializeNotifications();
@@ -13,8 +11,7 @@ class NotificationScheduler {
   }
 
   Future<void> _initializeNotifications() async {
-    const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('app_icon');
+    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
 
     const InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
@@ -23,8 +20,19 @@ class NotificationScheduler {
     await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  Future<void> scheduleNotification(
-      int id, String title, String body, DateTime scheduledTime) async {
+  Future<void> scheduleTaskNotification(TaskEntity task) async {
+    if (task.notificationTime == null) {
+      return;
+    }
+    await scheduleNotification(
+      task.id.hashCode,
+      task.title,
+      task.description,
+      task.notificationTime!,
+    );
+  }
+
+  Future<void> scheduleNotification(int id, String title, String? body, DateTime scheduledTime) async {
     const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
       'life_balance_id',
       'life_balance_name',
@@ -44,20 +52,15 @@ class NotificationScheduler {
     );
   }
 
+  Future<void> cancelTaskNotification(TaskEntity task) async {
+    await cancelNotification(task.id.hashCode);
+  }
+
   Future<void> cancelNotification(int id) async {
     await _flutterLocalNotificationsPlugin.cancel(id);
   }
 
-  void taskChangedListener(TaskEntity task, RepositoryAction action) {
-    if (action == RepositoryAction.delete || task.notificationTime == null) {
-      cancelNotification(task.id.hashCode);
-    } else {
-      scheduleNotification(
-        task.id.hashCode,
-        task.title,
-        task.description ?? '',
-        task.notificationTime!,
-      );
-    }
+  Future<void> cancelAllNotifications() async {
+    await _flutterLocalNotificationsPlugin.cancelAll();
   }
 }
