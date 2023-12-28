@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 void main() {
+  _initializeTimeZones();
   runApp(const MyApp());
+}
+
+void _initializeTimeZones() {
+  tz.initializeTimeZones();
+  tz.setLocalLocation(tz.getLocation('Poland'));
 }
 
 class MyApp extends StatelessWidget {

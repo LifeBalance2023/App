@@ -15,9 +15,11 @@ class TasksService {
   final NotificationScheduler _notificationScheduler;
   final TaskAdapter _taskAdapter = TaskAdapter();
 
-  TasksService(this._tasksApi, this._taskRepository, this._notificationScheduler);
+  TasksService(this._tasksApi, this._taskRepository, this._notificationScheduler) {
+    _initializeNotifications();
+  }
 
-  Future<void> initializeNotifications() async {
+  Future<void> _initializeNotifications() async {
     _taskRepository.addListener(_taskChangedListener);
   }
 
