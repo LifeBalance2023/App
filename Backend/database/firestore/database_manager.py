@@ -1,5 +1,6 @@
 import firebase_admin
 from firebase_admin import credentials, firestore_async
+from settings import SETTINGS
 
 
 class DatabaseManager:
@@ -14,7 +15,7 @@ class DatabaseManager:
 
     def init_db(self):
         if self.db is None:
-            cred = credentials.Certificate("./database/firestore/credentials.json")
+            cred = credentials.Certificate(SETTINGS.credentials_path)
             firebase_admin.initialize_app(cred)
 
             self.db = firestore_async.client()
