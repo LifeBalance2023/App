@@ -10,6 +10,14 @@ task_router = APIRouter(
 )
 
 
+@task_router.get("/{task_id}", response_model=Task)
+async def get_task_by_id(
+        task_id: str,
+        task_service: ITaskService = Depends(get_task_service)
+):
+    return await task_service.get_task_by_id(task_id)
+
+
 @task_router.get("/", response_model=dict)
 async def get_tasks(
         filters: Optional[OptionalTaskDTO] = None,
