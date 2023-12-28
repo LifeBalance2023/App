@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:frontend/domain/task_entity.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -7,17 +8,24 @@ class NotificationScheduler {
 
   NotificationScheduler() {
     _initializeNotifications();
+    _requestPermissions();
     cancelAllNotifications();
   }
 
   Future<void> _initializeNotifications() async {
-    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
+    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('launch_background');
 
     const InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
     );
 
     await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  void _requestPermissions() {
+    _flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        ?.requestNotificationsPermission();
   }
 
   Future<void> scheduleTaskNotification(TaskEntity task) async {
@@ -40,15 +48,34 @@ class NotificationScheduler {
       priority: Priority.high,
     );
 
+    if (kDebugMode) {
+      print('Initial scheduling notification for $scheduledTime\n');
+    }
+
     const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidDetails);
 
-    await _flutterLocalNotificationsPlugin.zonedSchedule(
+    final tzDateTime = tz.TZDateTime.from(scheduledTime.toUtc(), tz.local);
+
+    if (kDebugMode) {
+      print('Scheduling notification for $tzDateTime\n');
+      print(tz.TZDateTime.now(tz.local));
+    }
+
+    // await _flutterLocalNotificationsPlugin.zonedSchedule(
+    //   id,
+    //   title,
+    //   body,
+    //   tzDateTime,
+    //   platformChannelSpecifics,
+    //   uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+    //   androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+    // );
+
+    await _flutterLocalNotificationsPlugin.show(
       id,
       title,
       body,
-      tz.TZDateTime.from(scheduledTime, tz.local),
       platformChannelSpecifics,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
     );
   }
 
