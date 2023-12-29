@@ -60,7 +60,7 @@ class FirebaseAuthenticator {
         case null:
           return Result.failure(Error(message: "User not logged in"));
         default:
-          return Result.success(user);
+          return Result.success(user!);
       }
     } on FirebaseAuthException catch (e) {
       return Result.failure(Error(message: "Code:${e.code} Message:${e.message}"));
@@ -73,7 +73,7 @@ class FirebaseAuthenticator {
     try {
       await _googleSignIn.signOut();
       await _auth.signOut();
-      return Result.success(null);
+      return Result.voidSuccess();
     } on FirebaseAuthException catch (e) {
       return Result.failure(Error(message: "Code:${e.code} Message:${e.message}"));
     } catch (e) {

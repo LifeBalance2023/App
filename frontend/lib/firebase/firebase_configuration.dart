@@ -12,7 +12,7 @@ class FirebaseConfiguration {
       await Firebase.initializeApp(
         options: _currentPlatform(),
       );
-      return Result.success(null);
+      return Result.voidSuccess();
     } catch (e) {
       return Result.failure(Error(message: 'Firebase initialization failed: $e'));
     }

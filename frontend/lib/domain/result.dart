@@ -1,12 +1,16 @@
 class Result<T> {
   T? value;
   Error? error;
+  bool _isVoidSuccess = false;
 
-  bool get isSuccess => value != null;
+  bool get isSuccess => value != null || _isVoidSuccess;
   bool get isFailure => error != null;
 
-  Result.success(this.value);
+  Result.success(T this.value);
   Result.failure(this.error);
+  Result.voidSuccess() {
+    _isVoidSuccess = true;
+  }
 
   Result<U> map<U>(U Function(T) transform) {
     if (isSuccess) {
@@ -20,7 +24,7 @@ class Result<T> {
     if (isFailure) {
       return Result.failure(transform(error!));
     } else {
-      return Result.success(value);
+      return Result.success(value as T);
     }
   }
 
