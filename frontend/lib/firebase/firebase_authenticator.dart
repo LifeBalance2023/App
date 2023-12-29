@@ -68,4 +68,16 @@ class FirebaseAuthenticator {
       return Result.failure(Error(message: e.toString()));
     }
   }
+
+  Future<Result<void>> signOut() async {
+    try {
+      await _googleSignIn.signOut();
+      await _auth.signOut();
+      return Result.success(null);
+    } on FirebaseAuthException catch (e) {
+      return Result.failure(Error(message: "Code:${e.code} Message:${e.message}"));
+    } catch (e) {
+      return Result.failure(Error(message: e.toString()));
+    }
+  }
 }

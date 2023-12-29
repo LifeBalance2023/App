@@ -13,7 +13,7 @@ class AuthenticationService {
 
   AuthenticationService(this._authenticationApi, this._firebaseAuthenticator, this._userRepository);
 
-  Future<Result<void>> singIn({
+  Future<Result<void>> signIn({
     required String email,
     required String password,
   }) async {
@@ -21,7 +21,7 @@ class AuthenticationService {
     return _saveUser(result);
   }
 
-  Future<Result<void>> singUp({
+  Future<Result<void>> signUp({
     required String email,
     required String password,
   }) async {
@@ -29,7 +29,7 @@ class AuthenticationService {
     return await _saveUser(result).flatMapFuture((user) => _authenticationApi.addUser(AddUserRequest(email: user.email, userId: user.id)));
   }
 
-  Future<Result<void>> singInWithGoogle() async {
+  Future<Result<void>> signInWithGoogle() async {
     final result = await _firebaseAuthenticator.signInWithGoogle();
     return _saveUser(result);
   }
@@ -52,5 +52,10 @@ class AuthenticationService {
     }
 
     return Result.success(userId);
+  }
+
+  Future<Result<void>> signOut() async {
+    final result = await _firebaseAuthenticator.signOut();
+    return result.onSuccess((_) => _userRepository.clear());
   }
 }
