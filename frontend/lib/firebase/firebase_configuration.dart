@@ -2,14 +2,20 @@ import 'package:firebase_core/firebase_core.dart' show Firebase, FirebaseOptions
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:frontend/domain/result.dart';
 
 class FirebaseConfiguration {
 
-  static Future<void> initialize() async {
-    await dotenv.load(fileName: '.env');
-    await Firebase.initializeApp(
-      options: _currentPlatform(),
-    );
+  static Future<Result<void>> initialize() async {
+    try {
+      await dotenv.load(fileName: '.env');
+      await Firebase.initializeApp(
+        options: _currentPlatform(),
+      );
+      return Result.success(null);
+    } catch (e) {
+      return Result.failure(Error(message: 'Firebase initialization failed: $e'));
+    }
   }
   
   static FirebaseOptions _currentPlatform() {

@@ -30,6 +30,13 @@ class Result<T> {
     }
     return this;
   }
+
+  Result<T> onFailure(void Function(Error) callback) {
+    if (isFailure) {
+      callback(error!);
+    }
+    return this;
+  }
 }
 
 class Error {
