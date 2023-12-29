@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'domain/result.dart';
-import 'firebase/auth_service.dart';
+import 'firebase/firebase_authenticator.dart';
 
 class SampleSignInScreen extends StatelessWidget {
   final FirebaseAuthenticator _authenticator = FirebaseAuthenticator();

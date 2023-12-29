@@ -24,6 +24,30 @@ class Result<T> {
     }
   }
 
+  Result<U> flatMap<U>(Result<U> Function(T) transform) {
+    if (isSuccess) {
+      try {
+        return transform(value as T);
+      } catch (e) {
+        return Result.failure(Error(message: e.toString()));
+      }
+    } else {
+      return Result.failure(error);
+    }
+  }
+
+  Future<Result<U>> flatMapFuture<U>(Future<Result<U>> Function(T) transform) async {
+    if (isSuccess) {
+      try {
+        return await transform(value as T);
+      } catch (e) {
+        return Result.failure(Error(message: e.toString()));
+      }
+    } else {
+      return Result.failure(error);
+    }
+  }
+
   Result<T> onSuccess(void Function(T) callback) {
     if (isSuccess) {
       callback(value as T);

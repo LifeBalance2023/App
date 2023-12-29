@@ -12,7 +12,7 @@ class FirebaseAuthenticator {
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       return Result.success(userCredential);
     } on FirebaseAuthException catch (e) {
-      return Result.failure(Error(message: "${e.code} ${e.message}"));
+      return Result.failure(Error(message: "Code:${e.code} Message:${e.message}"));
     } catch (e) {
       return Result.failure(Error(message: e.toString()));
     }
@@ -23,7 +23,7 @@ class FirebaseAuthenticator {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(email: email, password: password);
       return Result.success(userCredential);
     } on FirebaseAuthException catch (e) {
-      return Result.failure(Error(message: "${e.code} ${e.message}"));
+      return Result.failure(Error(message: "Code:${e.code} Message:${e.message}"));
     } catch (e) {
       return Result.failure(Error(message: e.toString()));
     }
@@ -46,7 +46,24 @@ class FirebaseAuthenticator {
       UserCredential userCredential = await _auth.signInWithCredential(credential);
       return Result.success(userCredential);
     } on FirebaseAuthException catch (e) {
-      return Result.failure(Error(message: "${e.code} ${e.message}"));
+      return Result.failure(Error(message: "Code:${e.code} Message:${e.message}"));
+    } catch (e) {
+      return Result.failure(Error(message: e.toString()));
+    }
+  }
+
+  Future<Result<User>> getCurrentUser() async {
+    try {
+      User? user = _auth.currentUser;
+
+      switch (user) {
+        case null:
+          return Result.failure(Error(message: "User not logged in"));
+        default:
+          return Result.success(user);
+      }
+    } on FirebaseAuthException catch (e) {
+      return Result.failure(Error(message: "Code:${e.code} Message:${e.message}"));
     } catch (e) {
       return Result.failure(Error(message: e.toString()));
     }
