@@ -3,8 +3,11 @@ import 'package:frontend/providers.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-void main() {
+import 'firebase/firebase_configuration.dart';
+
+void main() async {
   _initializeTimeZones();
+  await FirebaseConfiguration.initialize();
   runApp(const MyApp());
 }
 
