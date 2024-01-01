@@ -69,6 +69,8 @@ class WelcomeScreen extends StatelessWidget {
                               const Color(0xFF4A4E69)),
                           foregroundColor: MaterialStateProperty.all<Color?>(
                               const Color(0xFFF2E9E4)),
+                          overlayColor: MaterialStateProperty.all<Color?>(
+                              const Color(0xFF62667C)),
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
@@ -99,6 +101,8 @@ class WelcomeScreen extends StatelessWidget {
                               const Color(0xFF4A4E69)),
                           foregroundColor: MaterialStateProperty.all<Color?>(
                               const Color(0xFFF2E9E4)),
+                          overlayColor: MaterialStateProperty.all<Color?>(
+                              const Color(0xFF62667C)),
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
