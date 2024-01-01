@@ -9,33 +9,49 @@ All request should have in URL `stationId` param encoded with Base64.
 **Tasks:**
 
 - `GET /tasks` - Get all tasks for the authenticated user.
+    - Request
+
+    ```json
+    {
+      "title": "Updated task2", // optional
+      "description": "This is the Updated task", // optional
+      "priority": "HIGH", // optional
+      "isDone": true, // optional
+      "date": "2022-12-23", // optional
+      "notificationTime": "12:04:32" // optional
+    }
+    ```
+
     - Response
     
     ```json
-    [
-      {
-        "id": "task1",
-        "title": "Task One",
-        "description": "This is the first task",
-        "priority": "HIGH",
-        "isDone": true,
-        "date": "2023-11-15",
-    		"notificationTime": "10:00:00"
-      },
-      {
-        "id": "task2",
-        "title": "Task Two",
-        "description": "This is the second task",
-        "isDone": false,
-        "priority": "MEDIUM",
-        "date": "2023-11-15",
-      }
-    ]
+    {
+      "tasks": [
+        {
+          "id": "xxxxxxxxxxxxxxxxxxxx",
+          "title": "Test task",
+          "description": "This is the test task",
+          "priority": "LOW",
+          "isDone": true,
+          "date": "2022-12-23",
+          "notificationTime": "10:23:45"
+        },
+        {
+          "id": "xxxxxxxxxxxxxxxxxxxx",
+          "title": "Test task 2",
+          "description": "This is the test task2",
+          "priority": "MEDIUM",
+          "isDone": true,
+          "date": "2022-12-23",
+          "notificationTime": null
+        }
+      ]
+    }
     ```
     
 - `POST /tasks` - Create a new task for the authenticated user.
-    - Request
-    
+   - Request
+   
     ```json
     {
       "title": "Task Two",
@@ -46,47 +62,97 @@ All request should have in URL `stationId` param encoded with Base64.
     }
     ```
     
-- `PATCH /tasks/{taskId}` - Update a specific task.
-    - Request
-    
-    ```json
+   - Response
+
+   ```json
     {
-      "title": "Updated Task",
-      "description": "Updated details about the task",
-      "isDone": false,
+      "id": "xxxxxxxxxxxxxxxxxxxx",
+      "title": "Task Two",
+      "description": "This is the second task",
       "priority": "MEDIUM",
+      "isDone": false,
       "date": "2023-11-15",
       "notificationTime": "10:00:00"
     }
-    ```
+    ``
     
-- `DELETE /tasks/{taskId}` - Delete a specific task.
-    
-**Statistics:**
+- `PATCH /tasks/{taskId}` - Update a specific task.
+    - Request
 
-- `GET /statistics` - Get statistics for the authenticated user.
+    ```json
+    {
+      "title": "new task",
+      "description": "This is the new task",
+      "priority": "HIGH",
+      "isDone": true,
+      "date": "2022-12-23",
+      "notificationTime": "12:04:32" // optional
+    }
+    ```
+
     - Response
     
     ```json
     {
-      "amountOfToDo": 15,
-      "amountOfDone": 15,
-      "amountOfAllTasks": 30,
-      "progress": 50 // amountOfDone / amountOfAllTasks
+      "id": "xxxxxxxxxxxxxxxxxxxx",
+      "title": "new task",
+      "description": "This is the new task", 
+      "priority": "HIGH",
+      "isDone": true,
+      "date": "2022-12-23",
+      "notificationTime": "12:04:32"
     }
     ```
     
-- `GET /statistics/{date}` - Get statistics for the authenticated user for a specific date.
+    
+- `DELETE /tasks/{taskId}` - Delete a specific task.
+    - Response:
 
-```json
-{
-  "dateTime": "2023-11-21",
-  "amountOfToDo": 15,
-  "amountOfDone": 15,
-  "amountOfAllTasks": 30,
-  "lifeBalanceValue": 45 // weighted average of all tasks (%)
-}
-```
+    ```json
+    {
+      "id": "xxxxxxxxxxxxxxxxxxxx",
+      "title": "Updated task2",
+      "description": "This is the Updated task",
+      "priority": "HIGH",
+      "isDone": true,
+      "date": "2022-12-23",
+      "notificationTime": "12:04:32"
+    }
+    ```
+    
+**Statistics:**
+
+- `GET /statistics` - Get statistics for the authenticated user for a specific date.
+    - Request
+
+    ```json
+    {
+      "date": "2022-12-23"
+    }
+    ```
+
+    - Response
+    
+    ```json
+    {
+      "date": "2022-12-23",
+      "lifeBalanceValue": 100,
+      "finishedTasks": 5,
+      "toDo": 0,
+      "allTasks": 5
+    }
+    ```
+    
+- `GET /statistics` - Get statistics for the authenticated user.
+
+  ```json
+  {
+      "progress": 50,
+      "finishedTasks": 3,
+      "toDo": 2,
+      "allTasks": 5
+    }
+  ```
 
 **Authentication:**
 
