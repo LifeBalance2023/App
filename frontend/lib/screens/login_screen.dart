@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/widgets/divider_with_text.dart';
+import 'package:frontend/widgets/login_form.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -28,8 +30,11 @@ class LoginScreen extends StatelessWidget {
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            const SizedBox(
+              height: 45,
+            ),
             ElevatedButton(
               onPressed: () {},
               style: ButtonStyle(
@@ -42,30 +47,48 @@ class LoginScreen extends StatelessWidget {
                     MaterialStateProperty.all<Color?>(const Color(0xFF62667C)),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        15.0), // Set the desired corner radius
+                    borderRadius: BorderRadius.circular(15.0),
                   ),
                 ),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.login_outlined,
+                  Image.asset(
+                    'assets/icons/google_icon.png',
+                    width: 30,
+                    height: 30,
                   ),
-                  SizedBox(
-                    width: 10,
+                  const SizedBox(
+                    width: 15,
                   ),
-                  Text(
+                  const Text(
                     'Log in with Google',
                     style: TextStyle(
                       fontFamily: 'JejuGothic',
                       fontSize: 20.0,
+                      color: Color(0xFFF2E9E4),
                     ),
                   ),
                 ],
               ),
             ),
+            const SizedBox(
+              height: 45,
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 40,
+              ),
+              child: const DividerWithTextWidget(
+                text: 'or log in with an email',
+                textSize: 24,
+              ),
+            ),
+            const SizedBox(
+              height: 45,
+            ),
+            LoginFormWidget(),
           ],
         ),
       ),
