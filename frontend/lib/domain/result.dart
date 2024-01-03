@@ -65,6 +65,23 @@ class Result<T> {
     }
     return this;
   }
+
+  static Result<U> runCatching<U>(U Function() operation) {
+    try {
+      return Result.success(operation());
+    } catch (e) {
+      return Result.failure(Error(message: e.toString()));
+    }
+  }
+
+  static Future<Result<U>> runCatchingAsync<U>(Future<U> Function() operation) async {
+    try {
+      U result = await operation();
+      return Result.success(result);
+    } catch (e) {
+      return Result.failure(Error(message: e.toString()));
+    }
+  }
 }
 
 class Error {
