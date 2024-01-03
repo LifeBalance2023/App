@@ -82,6 +82,15 @@ class Result<T> {
       return Result.failure(Error(message: e.toString()));
     }
   }
+
+  static Future<Result<void>> runVoidCatchingAsync(Future<void> Function() operation) async {
+    try {
+      await operation();
+      return Result.voidSuccess();
+    } catch (e) {
+      return Result.failure(Error(message: e.toString()));
+    }
+  }
 }
 
 class Error {
