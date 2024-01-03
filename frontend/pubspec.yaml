@@ -43,6 +43,7 @@ dependencies:
   flutter_dotenv: ^5.1.0
   firebase_auth: ^4.15.3
   google_sign_in: ^6.2.1
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:
