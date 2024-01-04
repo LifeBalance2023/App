@@ -9,8 +9,20 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final SettingsService _settingsService;
 
   SettingsBloc(this._settingsService) : super(SettingsInitial()) {
+    on<LoadSettings>(_onLoadSettings);
     on<SettingsUrlChanged>(_onUrlChanged);
     on<SettingsSaveRequested>(_onSaveRequested);
+  }
+
+  Future<void> _onLoadSettings(LoadSettings event, Emitter<SettingsState> emit) async {
+    emit(SettingsLoadInProgress(''));
+    var result = await _settingsService.loadSettings();
+
+    print(result.value?.backendUrl);
+
+    result
+        .onFailure((error) => emit(SettingsLoadFailure('', error)))
+        .onSuccess((settings) => emit(SettingsLoadSuccess(settings?.backendUrl ?? '')));
   }
 
   void _onUrlChanged(SettingsUrlChanged event, Emitter<SettingsState> emit) {
@@ -20,10 +32,9 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   Future<void> _onSaveRequested(SettingsSaveRequested event, Emitter<SettingsState> emit) async {
     emit(SettingsSaveInProgress(state.currentUrl));
     var result = await _settingsService.saveSettings(SettingsValue(backendUrl: state.currentUrl));
-    if (result.isSuccess) {
-      emit(SettingsSaveSuccess(state.currentUrl));
-    } else {
-      emit(SettingsSaveFailure(state.currentUrl, result.error!));
-    }
+
+    result
+        .onFailure((error) => emit(SettingsSaveFailure(state.currentUrl, error)))
+        .onSuccess((_) => emit(SettingsSaveSuccess(state.currentUrl)));
   }
 }

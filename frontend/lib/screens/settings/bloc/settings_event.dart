@@ -1,5 +1,7 @@
 abstract class SettingsEvent {}
 
+class LoadSettings extends SettingsEvent {}
+
 class SettingsUrlChanged extends SettingsEvent {
   final String url;
 
