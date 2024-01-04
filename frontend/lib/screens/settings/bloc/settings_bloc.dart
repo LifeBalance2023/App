@@ -18,8 +18,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     emit(SettingsLoadInProgress(''));
     var result = await _settingsService.loadSettings();
 
-    print(result.value?.backendUrl);
-
     result
         .onFailure((error) => emit(SettingsLoadFailure('', error)))
         .onSuccess((settings) => emit(SettingsLoadSuccess(settings?.backendUrl ?? '')));

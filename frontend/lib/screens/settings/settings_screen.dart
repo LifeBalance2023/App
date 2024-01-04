@@ -39,7 +39,7 @@ class SettingsScreen extends StatelessWidget {
                 onChanged: (url) => settingsBloc.add(SettingsUrlChanged(url)),
                 decoration: const InputDecoration(
                   labelText: 'Backend URL',
-                  hintText: 'Example: http://localhost:8080',
+                  hintText: 'http://localhost:8080',
                 ),
                 controller: textController,
               ),
