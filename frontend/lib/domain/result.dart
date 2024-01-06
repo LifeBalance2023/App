@@ -24,6 +24,12 @@ class Result<T> {
     }
   }
 
+  Result<T> onSuccess(void Function(T) callback) {
+    if (isSuccess) {
+      callback(value as T);
+    }
+    return this;
+  }
 }
 
 class Error {
