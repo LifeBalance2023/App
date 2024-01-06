@@ -1,10 +1,24 @@
 import 'package:dio/dio.dart';
+import 'package:frontend/cache/settings_cache.dart';
 import '../domain/result.dart';
 
 class DioWrapper {
   final Dio _dio;
+  final SettingsCache _cache;
 
-  DioWrapper(this._dio);
+  DioWrapper(this._dio, this._cache) {
+    configureDio();
+  }
+
+  Future<void> configureDio() async {
+    final settingsResult = await _cache.loadSettings();
+
+    settingsResult.onSuccess((settings) {
+      _dio.options = BaseOptions(
+        baseUrl: settings?.backendUrl ?? _dio.options.baseUrl,
+      );
+    });
+  }
 
   Future<Result<T>> get<T>(String path, {Map<String, dynamic>? queryParameters}) =>
       _safeApiCall(() => _dio.get(path, queryParameters: queryParameters));
