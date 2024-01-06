@@ -1,16 +1,21 @@
 # frontend
 
-Life balance app - frontend.
+Life Balance app - frontend.
 
 ## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Before you run the app, make sure you have all proper files. The application is using Firebase so you should have the following files to run the app:
+- `.env` in the root directory with all the necessary variables
+```
+LB_FRONTEND_FIREBASE_PROJECT_ID=example value
+LB_FRONTEND_FIREBASE_STORAGE_BUCKET=example value
+LB_FRONTEND_FIREBASE_MESSAGING_SENDER_ID=example value
+LB_FRONTEND_FIREBASE_WEB_APP_ID=example value
+LB_FRONTEND_FIREBASE_WEB_API_KEY=example value
+LB_FRONTEND_FIREBASE_AUTH_DOMAIN=example value
+LB_FRONTEND_FIREBASE_ANDROID_API_KEY=example value
+LB_FRONTEND_FIREBASE_ANDROID_APP_ID=example value
+LB_FRONTEND_FIREBASE_IOS_API_KEY=example value
+LB_FRONTEND_FIREBASE_IOS_APP_ID=example value
+LB_FRONTEND_FIREBASE_IOS_BUNDLE_ID=example value
+```
+- `google-services.json` in the `android/app` directory

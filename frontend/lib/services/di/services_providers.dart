@@ -1,7 +1,9 @@
 import 'package:frontend/api/authentication/authentication_api.dart';
 import 'package:frontend/api/statistics/statistics_api.dart';
 import 'package:frontend/api/tasks/tasks_api.dart';
+import 'package:frontend/firebase/firebase_authenticator.dart';
 import 'package:frontend/repository/task_repository.dart';
+import 'package:frontend/repository/user_repository.dart';
 import 'package:frontend/scheduler/notification_scheduler.dart';
 import 'package:frontend/services/authentication/authentication_service.dart';
 import 'package:frontend/services/statistics/statistics_service.dart';
@@ -16,7 +18,8 @@ List<SingleChildWidget> createServicesProviders() => [
       ProxyProvider<StatisticsApi, StatisticsService>(
         update: (_, statisticsApi, __) => StatisticsService(statisticsApi),
       ),
-      ProxyProvider<AuthenticationApi, AuthenticationService>(
-        update: (_, authenticationApi, __) => AuthenticationService(authenticationApi),
+      ProxyProvider3<AuthenticationApi, FirebaseAuthenticator, UserRepository, AuthenticationService>(
+        update: (_, authenticationApi, firebaseAuthenticator, userRepository, __) =>
+            AuthenticationService(authenticationApi, firebaseAuthenticator, userRepository),
       ),
     ];

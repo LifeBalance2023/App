@@ -21,7 +21,10 @@ class DioWrapper {
   Future<Result<T>> _safeApiCall<T>(Future<Response<T>> Function() apiCall) async {
     try {
       final Response<T> response = await apiCall();
-      return Result.success(response.data);
+      if(response.data == null) {
+        return Result.voidSuccess();
+      }
+      return Result.success(response.data as T);
     } on DioException catch (dioError) {
       return Result.failure(Error(
         code: dioError.response?.statusCode,

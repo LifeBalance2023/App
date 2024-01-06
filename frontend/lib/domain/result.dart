@@ -1,12 +1,16 @@
 class Result<T> {
   T? value;
   Error? error;
+  bool _isVoidSuccess = false;
 
-  bool get isSuccess => value != null;
+  bool get isSuccess => value != null || _isVoidSuccess;
   bool get isFailure => error != null;
 
-  Result.success(this.value);
+  Result.success(T this.value);
   Result.failure(this.error);
+  Result.voidSuccess() {
+    _isVoidSuccess = true;
+  }
 
   Result<U> map<U>(U Function(T) transform) {
     if (isSuccess) {
@@ -20,13 +24,44 @@ class Result<T> {
     if (isFailure) {
       return Result.failure(transform(error!));
     } else {
-      return Result.success(value);
+      return Result.success(value as T);
+    }
+  }
+
+  Result<U> flatMap<U>(Result<U> Function(T) transform) {
+    if (isSuccess) {
+      try {
+        return transform(value as T);
+      } catch (e) {
+        return Result.failure(Error(message: e.toString()));
+      }
+    } else {
+      return Result.failure(error);
+    }
+  }
+
+  Future<Result<U>> flatMapFuture<U>(Future<Result<U>> Function(T) transform) async {
+    if (isSuccess) {
+      try {
+        return await transform(value as T);
+      } catch (e) {
+        return Result.failure(Error(message: e.toString()));
+      }
+    } else {
+      return Result.failure(error);
     }
   }
 
   Result<T> onSuccess(void Function(T) callback) {
     if (isSuccess) {
       callback(value as T);
+    }
+    return this;
+  }
+
+  Result<T> onFailure(void Function(Error) callback) {
+    if (isFailure) {
+      callback(error!);
     }
     return this;
   }
