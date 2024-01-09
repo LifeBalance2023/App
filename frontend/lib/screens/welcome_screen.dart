@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/components/custom_button.dart';
 import 'package:frontend/screens/register_screen.dart';
 import 'login_screen.dart';
 
@@ -7,31 +8,35 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double topContainerHeight = screenHeight * 0.65;
+    double bottomContainerHeight = screenHeight - topContainerHeight;
+
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Colors.blue.shade200,
-              Colors.blue.shade300,
-              Colors.blue.shade400,
-            ],
-            begin: Alignment.topCenter,
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.all(25),
-              height: MediaQuery.of(context).size.height * 0.65,
-              child: Image.asset(
-                'assets/graphics/w_page_picture.png',
-                fit: BoxFit.contain,
-              ),
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Colors.blue.shade200,
+                Colors.blue.shade300,
+                Colors.blue.shade400,
+              ],
+              begin: Alignment.topCenter,
             ),
-            Expanded(
-              child: Container(
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.all(25),
+                height: topContainerHeight,
+                child: Image.asset(
+                  'assets/graphics/w_page_picture.png',
+                  fit: BoxFit.contain,
+                ),
+              ),
+              Container(
                 decoration: const BoxDecoration(
                   color: Color(0xFF9A8C98),
                   borderRadius: BorderRadius.only(
@@ -40,6 +45,7 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                 ),
                 width: double.infinity,
+                height: bottomContainerHeight,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -60,82 +66,38 @@ class WelcomeScreen extends StatelessWidget {
                     const SizedBox(
                       height: 20.0,
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LoginScreen(),
-                          ),
-                        );
-                      },
-                      style: ButtonStyle(
-                        fixedSize: MaterialStateProperty.all<Size>(
-                            const Size(192, 48)),
-                        backgroundColor: MaterialStateProperty.all<Color?>(
-                            const Color(0xFF4A4E69)),
-                        foregroundColor: MaterialStateProperty.all<Color?>(
-                            const Color(0xFFF2E9E4)),
-                        overlayColor: MaterialStateProperty.all<Color?>(
-                            const Color(0xFF62667C)),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                        ),
-                      ),
-                      child: const Text(
-                        'Log in',
-                        style: TextStyle(
-                          fontFamily: 'JejuGothic',
-                          fontSize: 20.0,
-                          color: Color(0xFFF2E9E4),
-                        ),
-                      ),
-                    ),
+                    CustomButtonComponent(
+                        text: 'Log in',
+                        width: 192,
+                        height: 48,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LoginScreen(),
+                            ),
+                          );
+                        }),
                     const SizedBox(
                       height: 25.0,
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const RegisterScreen(),
-                          ),
-                        );
-                      },
-                      style: ButtonStyle(
-                        fixedSize: MaterialStateProperty.all<Size>(
-                            const Size(192, 48)),
-                        backgroundColor: MaterialStateProperty.all<Color?>(
-                            const Color(0xFF4A4E69)),
-                        foregroundColor: MaterialStateProperty.all<Color?>(
-                            const Color(0xFFF2E9E4)),
-                        overlayColor: MaterialStateProperty.all<Color?>(
-                            const Color(0xFF62667C)),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                        ),
-                      ),
-                      child: const Text(
-                        'Register',
-                        style: TextStyle(
-                          fontFamily: 'JejuGothic',
-                          fontSize: 20.0,
-                          color: Color(0xFFF2E9E4),
-                        ),
-                      ),
-                    ),
+                    CustomButtonComponent(
+                        text: 'Register',
+                        width: 192,
+                        height: 48,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const RegisterScreen(),
+                            ),
+                          );
+                        }),
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

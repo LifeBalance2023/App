@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 
 class FormTextfieldComponent extends StatelessWidget {
   final TextEditingController controller;
-  final String fieldName;
+  final String? fieldName;
   final String hintText;
   final bool obscureText;
 
   const FormTextfieldComponent({
-    super.key,
+    Key? key,
     required this.controller,
-    required this.fieldName,
+    this.fieldName,
     required this.hintText,
     required this.obscureText,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,16 +23,18 @@ class FormTextfieldComponent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            fieldName,
-            style: const TextStyle(
-              fontFamily: 'JejuGothic',
-              fontSize: 24.0,
+          if (fieldName != null) ...[
+            Text(
+              fieldName!,
+              style: const TextStyle(
+                fontFamily: 'JejuGothic',
+                fontSize: 24.0,
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
+            const SizedBox(
+              height: 5,
+            ),
+          ],
           TextField(
             controller: controller,
             obscureText: obscureText,

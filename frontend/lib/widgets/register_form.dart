@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:frontend/components/custom_button.dart';
 import 'package:frontend/components/form_textfield.dart';
 
-class LoginFormWidget extends StatelessWidget {
-  LoginFormWidget({super.key});
+class RegisterFormWidget extends StatelessWidget {
+  RegisterFormWidget({super.key});
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -30,28 +31,16 @@ class LoginFormWidget extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 35.0,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                'Forgot password?',
-                style: TextStyle(
-                  fontFamily: 'JejuGothic',
-                  fontSize: 18.0,
-                  color: Colors.grey[800],
-                ),
-              ),
-            ],
-          ),
+        FormTextfieldComponent(
+          controller: confirmPasswordController,
+          hintText: 'Confirm your password',
+          obscureText: true,
         ),
         const SizedBox(
           height: 35,
         ),
-        CustomButtonComponent(text: 'Log in', width: 328, height: 48, onPressed: () {})
+        CustomButtonComponent(
+            text: 'Register now', width: 328, height: 48, onPressed: () {})
       ],
     );
   }
