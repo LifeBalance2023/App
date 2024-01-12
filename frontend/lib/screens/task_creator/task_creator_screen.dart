@@ -29,69 +29,17 @@ class TaskCreatorScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocConsumer<TaskCreatorBloc, TaskCreatorState>(
-        listener: (context, state) {
-          if (state is TaskModificationState) {
-            titleTextController.text = state.title;
-            descriptionTextController.text = state.description ?? '';
-            dateTextController.text = state.date.toString();
-            notificationTimeTextController.text = state.notificationTime?.toString() ?? '';
-          }
-          if (state is TaskCreationSavingSuccess) {
-            AppRouter.goBack(context);
-          } else if (state is TaskCreationSavingFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Failed to save task: ${state.error.message}')),
-            );
-          }
-        },
-        builder: (context, state) {
-          if (state is TaskCreationSavingInProgress) {
-            return const CircularProgressIndicator();
-          } else {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: <Widget>[
-                  TextField(
-                    controller: titleTextController,
-                    decoration: const InputDecoration(labelText: 'Title'),
-                    onChanged: (value) {
-                      taskCreatorBloc.add(TaskCreatorTitleChanged(value));
-                    },
-                  ),
-                  TextField(
-                    controller: descriptionTextController,
-                    decoration: const InputDecoration(labelText: 'Description'),
-                    onChanged: (value) {
-                      taskCreatorBloc.add(TaskCreatorDescriptionChanged(value));
-                    },
-                  ),
-                  Row(children: [
-                    const Text("Priority: ", style: TextStyle(fontSize: 16)),
-                    ...state.priorityChips.map((priorityChips) => _buildPriorityChip(context, priorityChips)).toList(),
-                  ]),
-                  _buildDateSelector(
-                      context: context,
-                      label: 'Select Date',
-                      dateTextController: dateTextController,
-                      selectedDate: state.date,
-                      onDateChanged: (date) {
-                        taskCreatorBloc.add(TaskCreatorDateChanged(date));
-                      }),
-                  _buildDateSelector(
-                      context: context,
-                      label: 'Select Notification Time',
-                      dateTextController: notificationTimeTextController,
-                      selectedDate: state.notificationTime ?? DateTime.now(),
-                      onDateChanged: (date) {
-                        taskCreatorBloc.add(TaskCreatorNotificationTimeChanged(date));
-                      }),
-                ],
-              ),
-            );
-          }
-        },
+      body: SingleChildScrollView(
+        child: BlocConsumer<TaskCreatorBloc, TaskCreatorState>(
+          listener: (context, state) {
+            _blocListener(
+                state, titleTextController, descriptionTextController, dateTextController, notificationTimeTextController, context);
+          },
+          builder: (context, state) {
+            return _blocBuilder(state, titleTextController, taskCreatorBloc, descriptionTextController, context, dateTextController,
+                notificationTimeTextController);
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -101,6 +49,85 @@ class TaskCreatorScreen extends StatelessWidget {
         label: const Text('Add'),
       ),
     );
+  }
+
+  void _blocListener(
+    TaskCreatorState state,
+    TextEditingController titleTextController,
+    TextEditingController descriptionTextController,
+    TextEditingController dateTextController,
+    TextEditingController notificationTimeTextController,
+    BuildContext context,
+  ) {
+    if (state is TaskModificationState) {
+      titleTextController.text = state.title;
+      descriptionTextController.text = state.description ?? '';
+      dateTextController.text = state.date.toString();
+      notificationTimeTextController.text = state.notificationTime?.toString() ?? '';
+    }
+    if (state is TaskCreationSavingSuccess) {
+      AppRouter.goBack(context);
+    } else if (state is TaskCreationSavingFailure) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to save task: ${state.error.message}')),
+      );
+    }
+  }
+
+  Widget _blocBuilder(
+    TaskCreatorState state,
+    TextEditingController titleTextController,
+    TaskCreatorBloc taskCreatorBloc,
+    TextEditingController descriptionTextController,
+    BuildContext context,
+    TextEditingController dateTextController,
+    TextEditingController notificationTimeTextController,
+  ) {
+    if (state is TaskCreationSavingInProgress) {
+      return const CircularProgressIndicator();
+    } else {
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: <Widget>[
+            TextField(
+              controller: titleTextController,
+              decoration: const InputDecoration(labelText: 'Title'),
+              onChanged: (value) {
+                taskCreatorBloc.add(TaskCreatorTitleChanged(value));
+              },
+            ),
+            TextField(
+              controller: descriptionTextController,
+              decoration: const InputDecoration(labelText: 'Description'),
+              onChanged: (value) {
+                taskCreatorBloc.add(TaskCreatorDescriptionChanged(value));
+              },
+            ),
+            Row(children: [
+              const Text("Priority: ", style: TextStyle(fontSize: 16)),
+              ...state.priorityChips.map((priorityChips) => _buildPriorityChip(context, priorityChips)).toList(),
+            ]),
+            _buildDateSelector(
+                context: context,
+                label: 'Select Date',
+                dateTextController: dateTextController,
+                selectedDate: state.date,
+                onDateChanged: (date) {
+                  taskCreatorBloc.add(TaskCreatorDateChanged(date));
+                }),
+            _buildDateSelector(
+                context: context,
+                label: 'Select Notification Time',
+                dateTextController: notificationTimeTextController,
+                selectedDate: state.notificationTime ?? DateTime.now(),
+                onDateChanged: (date) {
+                  taskCreatorBloc.add(TaskCreatorNotificationTimeChanged(date));
+                }),
+          ],
+        ),
+      );
+    }
   }
 
   Widget _buildPriorityChip(BuildContext context, PriorityChips priorityChips) => ChoiceChip(
