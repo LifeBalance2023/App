@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frontend/domain/task_entity.dart';
 import 'package:frontend/screens/task_creator/bloc/task_creator_bloc.dart';
 import 'package:frontend/screens/task_creator/bloc/task_creator_event.dart';
 import 'package:frontend/screens/task_creator/bloc/task_creator_state.dart';
@@ -56,11 +55,7 @@ class TaskCreatorScreen extends StatelessWidget {
                     },
                   ),
                   Row(
-                    children: <Widget>[
-                      _buildPriorityChip(context, 'Low', PriorityValue.low, state.priority, Colors.green),
-                      _buildPriorityChip(context, 'Medium', PriorityValue.medium, state.priority, Colors.orange),
-                      _buildPriorityChip(context, 'High', PriorityValue.high, state.priority, Colors.red),
-                    ],
+                    children: state.priorityChips.map((priorityChips) => _buildPriorityChip(context, priorityChips)).toList(),
                   ),
 
                   // TODO: Add date selector
@@ -80,15 +75,14 @@ class TaskCreatorScreen extends StatelessWidget {
     );
   }
 
-
-  Widget _buildPriorityChip(BuildContext context, String label, PriorityValue value, PriorityValue selectedPriority, Color color) {
+  Widget _buildPriorityChip(BuildContext context, PriorityChips priorityChips) {
     return ChoiceChip(
-      label: Text(label),
-      selected: value == selectedPriority,
+      label: Text(priorityChips.label),
+      selected: priorityChips.isSelected,
       onSelected: (bool selected) {
-        BlocProvider.of<TaskCreatorBloc>(context).add(TaskCreatorPriorityChanged(value));
+        BlocProvider.of<TaskCreatorBloc>(context).add(TaskCreatorPriorityChanged(priorityChips.priority));
       },
-      selectedColor: color,
+      selectedColor: priorityChips.color,
     );
   }
 }
