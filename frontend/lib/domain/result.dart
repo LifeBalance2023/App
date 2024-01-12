@@ -1,6 +1,6 @@
 class Result<T> {
   T? value;
-  Error? error;
+  ResultError? error;
   bool _isVoidSuccess = false;
 
   bool get isSuccess => value != null || _isVoidSuccess;
@@ -20,7 +20,7 @@ class Result<T> {
     }
   }
 
-  Result<T> mapFailure(Error Function(Error) transform) {
+  Result<T> mapFailure(ResultError Function(ResultError) transform) {
     if (isFailure) {
       return Result.failure(transform(error!));
     } else {
@@ -33,7 +33,7 @@ class Result<T> {
       try {
         return transform(value as T);
       } catch (e) {
-        return Result.failure(Error(message: e.toString()));
+        return Result.failure(ResultError(message: e.toString()));
       }
     } else {
       return Result.failure(error);
@@ -45,7 +45,7 @@ class Result<T> {
       try {
         return await transform(value as T);
       } catch (e) {
-        return Result.failure(Error(message: e.toString()));
+        return Result.failure(ResultError(message: e.toString()));
       }
     } else {
       return Result.failure(error);
@@ -59,7 +59,7 @@ class Result<T> {
     return this;
   }
 
-  Result<T> onFailure(void Function(Error) callback) {
+  Result<T> onFailure(void Function(ResultError) callback) {
     if (isFailure) {
       callback(error!);
     }
@@ -70,7 +70,7 @@ class Result<T> {
     try {
       return Result.success(operation());
     } catch (e) {
-      return Result.failure(Error(message: e.toString()));
+      return Result.failure(ResultError(message: e.toString()));
     }
   }
 
@@ -79,7 +79,7 @@ class Result<T> {
       U result = await operation();
       return Result.success(result);
     } catch (e) {
-      return Result.failure(Error(message: e.toString()));
+      return Result.failure(ResultError(message: e.toString()));
     }
   }
 
@@ -88,14 +88,14 @@ class Result<T> {
       await operation();
       return Result.voidSuccess();
     } catch (e) {
-      return Result.failure(Error(message: e.toString()));
+      return Result.failure(ResultError(message: e.toString()));
     }
   }
 }
 
-class Error {
+class ResultError {
   int? code;
   String? message;
 
-  Error({this.code, this.message});
+  ResultError({this.code, this.message});
 }

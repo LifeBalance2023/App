@@ -19,7 +19,7 @@ class SettingsLoadSuccess extends SettingsState {
 }
 
 class SettingsLoadFailure extends SettingsState {
-  final Error error;
+  final ResultError error;
 
   SettingsLoadFailure(String currentUrl, this.error) : super(currentUrl);
 }
@@ -33,7 +33,7 @@ class SettingsSaveSuccess extends SettingsState {
 }
 
 class SettingsSaveFailure extends SettingsState {
-  final Error error;
+  final ResultError error;
 
   SettingsSaveFailure(String currentUrl, this.error) : super(currentUrl);
 }

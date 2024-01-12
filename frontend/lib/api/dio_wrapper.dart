@@ -40,12 +40,12 @@ class DioWrapper {
       }
       return Result.success(response.data as T);
     } on DioException catch (dioError) {
-      return Result.failure(Error(
+      return Result.failure(ResultError(
         code: dioError.response?.statusCode,
         message: dioError.message,
       ));
     } catch (error) {
-      return Result.failure(Error(message: error.toString()));
+      return Result.failure(ResultError(message: error.toString()));
     }
   }
 }

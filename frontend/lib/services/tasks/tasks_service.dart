@@ -46,14 +46,14 @@ class TasksService {
   Result<TaskEntity> getTaskById(String id) {
     final task = _taskRepository.get(id);
     if (task == null) {
-      return Result.failure(Error(message: 'Task with id $id not found'));
+      return Result.failure(ResultError(message: 'Task with id $id not found'));
     }
     return Result.success(task);
   }
 
   Future<Result<void>> createTask({
     required String title,
-    required String description,
+    String? description,
     required String priority,
     required String date,
     String? notificationTime,

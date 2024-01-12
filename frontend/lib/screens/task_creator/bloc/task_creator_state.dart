@@ -1,3 +1,4 @@
+import 'package:frontend/domain/result.dart';
 import 'package:frontend/domain/task_entity.dart';
 
 abstract class TaskCreatorState {
@@ -14,6 +15,15 @@ abstract class TaskCreatorState {
     required this.date,
     this.notificationTime,
   });
+}
+
+class TaskCreatorInitial extends TaskModificationState {
+  TaskCreatorInitial()
+      : super(
+          title: '',
+          priority: PriorityValue.low,
+          date: DateTime.now(),
+        );
 }
 
 class TaskModificationState extends TaskCreatorState {
@@ -80,7 +90,7 @@ class TaskCreationSavingSuccess extends TaskCreatorState {
 }
 
 class TaskCreationSavingFailure extends TaskCreatorState {
-  final Error error;
+  final ResultError error;
 
   TaskCreationSavingFailure({
     required String title,

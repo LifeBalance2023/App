@@ -1,13 +1,13 @@
 class CreateTaskRequest {
   String title;
-  String description;
+  String? description;
   String priority;
   String date;
   String? notificationTime;
 
   CreateTaskRequest({
     required this.title,
-    required this.description,
+    this.description,
     required this.priority,
     required this.date,
     this.notificationTime,
