@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/providers.dart';
+import 'package:frontend/router/router.dart';
+import 'package:frontend/screens/settings/settings_screen.dart';
 import 'package:frontend/screens/task_creator/task_creator_screen.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -23,7 +25,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return createProviders(
+        child: MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Life Balance App',
       theme: ThemeData(
@@ -38,8 +41,12 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: createProviders(child: const TaskCreatorScreen()),
-    );
+      home: const TaskCreatorScreen(),
+      routes: {
+        AppRouter.taskCreator: (context) => const TaskCreatorScreen(),
+        AppRouter.settings: (context) => const SettingsScreen(),
+      },
+    ));
   }
 }
 

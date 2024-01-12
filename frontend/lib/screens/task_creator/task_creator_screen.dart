@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/router/router.dart';
 import 'package:frontend/screens/task_creator/bloc/task_creator_bloc.dart';
 import 'package:frontend/screens/task_creator/bloc/task_creator_event.dart';
 import 'package:frontend/screens/task_creator/bloc/task_creator_state.dart';
@@ -19,6 +20,14 @@ class TaskCreatorScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Task'),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              AppRouter.goToSettings(context);
+            },
+          ),
+        ],
       ),
       body: BlocConsumer<TaskCreatorBloc, TaskCreatorState>(
         listener: (context, state) {
@@ -29,7 +38,7 @@ class TaskCreatorScreen extends StatelessWidget {
             notificationTimeTextController.text = state.notificationTime?.toString() ?? '';
           }
           if (state is TaskCreationSavingSuccess) {
-            Navigator.pop(context);
+            AppRouter.goBack(context);
           } else if (state is TaskCreationSavingFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Failed to save task: ${state.error.message}')),
@@ -58,9 +67,10 @@ class TaskCreatorScreen extends StatelessWidget {
                       taskCreatorBloc.add(TaskCreatorDescriptionChanged(value));
                     },
                   ),
-                  Row(
-                    children: state.priorityChips.map((priorityChips) => _buildPriorityChip(context, priorityChips)).toList(),
-                  ),
+                  Row(children: [
+                    const Text("Priority: ", style: TextStyle(fontSize: 16)),
+                    ...state.priorityChips.map((priorityChips) => _buildPriorityChip(context, priorityChips)).toList(),
+                  ]),
                   _buildDateSelector(
                       context: context,
                       label: 'Select Date',
@@ -77,17 +87,18 @@ class TaskCreatorScreen extends StatelessWidget {
                       onDateChanged: (date) {
                         taskCreatorBloc.add(TaskCreatorNotificationTimeChanged(date));
                       }),
-                  ElevatedButton(
-                    onPressed: () {
-                      taskCreatorBloc.add(TaskCreatorSaveRequested());
-                    },
-                    child: const Text('Add'),
-                  ),
                 ],
               ),
             );
           }
         },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          taskCreatorBloc.add(TaskCreatorSaveRequested());
+        },
+        icon: const Icon(Icons.add),
+        label: const Text('Add'),
       ),
     );
   }

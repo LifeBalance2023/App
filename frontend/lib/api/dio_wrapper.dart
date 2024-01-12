@@ -33,6 +33,10 @@ class DioWrapper {
       _safeApiCall(() => _dio.delete(path, data: data, queryParameters: queryParameters));
 
   Future<Result<T>> _safeApiCall<T>(Future<Response<T>> Function() apiCall) async {
+    if(_dio.options.baseUrl.isEmpty) {
+      return Result.failure(ResultError(message: 'Backend url is not set. Go to settings to set it up'));
+    }
+
     try {
       final Response<T> response = await apiCall();
       if(response.data == null) {
