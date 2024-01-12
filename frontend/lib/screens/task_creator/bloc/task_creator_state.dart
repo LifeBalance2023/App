@@ -106,7 +106,7 @@ class TaskCreationSavingSuccess extends TaskCreatorState {
         );
 }
 
-class TaskCreationSavingFailure extends TaskCreatorState {
+class TaskCreationSavingFailure extends TaskModificationState {
   final ResultError error;
 
   TaskCreationSavingFailure({
