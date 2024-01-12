@@ -13,6 +13,8 @@ class TaskCreatorScreen extends StatelessWidget {
 
     final titleTextController = TextEditingController();
     final descriptionTextController = TextEditingController();
+    final dateTextController = TextEditingController();
+    final notificationTimeTextController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -23,6 +25,8 @@ class TaskCreatorScreen extends StatelessWidget {
           if (state is TaskModificationState) {
             titleTextController.text = state.title;
             descriptionTextController.text = state.description ?? '';
+            dateTextController.text = state.date.toString();
+            notificationTimeTextController.text = state.notificationTime?.toString() ?? '';
           }
           if (state is TaskCreationSavingSuccess) {
             Navigator.pop(context);
@@ -57,9 +61,41 @@ class TaskCreatorScreen extends StatelessWidget {
                   Row(
                     children: state.priorityChips.map((priorityChips) => _buildPriorityChip(context, priorityChips)).toList(),
                   ),
-
-                  // TODO: Add date selector
-                  // TODO: Add notification time selector
+                  TextFormField(
+                    controller: dateTextController,
+                    decoration: const InputDecoration(
+                      labelText: 'Select Date',
+                      suffixIcon: Icon(Icons.calendar_today),
+                    ),
+                    readOnly: true,
+                    onTap: () async {
+                      DateTime? picked = await showDatePicker(
+                        context: context,
+                        initialDate: state.date,
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2025),
+                      );
+                      if (picked != null && picked != state.date) {
+                        taskCreatorBloc.add(TaskCreatorDateChanged(picked));
+                      }
+                    },
+                  ),
+                  _buildDateSelector(
+                      context: context,
+                      label: 'Select Date',
+                      dateTextController: dateTextController,
+                      selectedDate: state.date,
+                      onDateChanged: (date) {
+                        taskCreatorBloc.add(TaskCreatorDateChanged(date));
+                      }),
+                  _buildDateSelector(
+                      context: context,
+                      label: 'Select Notification Time',
+                      dateTextController: notificationTimeTextController,
+                      selectedDate: state.notificationTime ?? DateTime.now(),
+                      onDateChanged: (date) {
+                        taskCreatorBloc.add(TaskCreatorNotificationTimeChanged(date));
+                      }),
                   ElevatedButton(
                     onPressed: () {
                       taskCreatorBloc.add(TaskCreatorSaveRequested());
@@ -83,6 +119,34 @@ class TaskCreatorScreen extends StatelessWidget {
         BlocProvider.of<TaskCreatorBloc>(context).add(TaskCreatorPriorityChanged(priorityChips.priority));
       },
       selectedColor: priorityChips.color,
+    );
+  }
+
+  Widget _buildDateSelector({
+    required BuildContext context,
+    required String label,
+    required TextEditingController dateTextController,
+    required DateTime selectedDate,
+    required Function(DateTime) onDateChanged,
+  }) {
+    return TextFormField(
+      controller: dateTextController,
+      decoration: InputDecoration(
+        labelText: label,
+        suffixIcon: const Icon(Icons.calendar_today),
+      ),
+      readOnly: true,
+      onTap: () async {
+        DateTime? picked = await showDatePicker(
+          context: context,
+          initialDate: selectedDate,
+          firstDate: DateTime(2000),
+          lastDate: DateTime(2030),
+        );
+        if (picked != null && picked != selectedDate) {
+          onDateChanged(picked);
+        }
+      },
     );
   }
 }
