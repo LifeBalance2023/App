@@ -61,25 +61,6 @@ class TaskCreatorScreen extends StatelessWidget {
                   Row(
                     children: state.priorityChips.map((priorityChips) => _buildPriorityChip(context, priorityChips)).toList(),
                   ),
-                  TextFormField(
-                    controller: dateTextController,
-                    decoration: const InputDecoration(
-                      labelText: 'Select Date',
-                      suffixIcon: Icon(Icons.calendar_today),
-                    ),
-                    readOnly: true,
-                    onTap: () async {
-                      DateTime? picked = await showDatePicker(
-                        context: context,
-                        initialDate: state.date,
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2025),
-                      );
-                      if (picked != null && picked != state.date) {
-                        taskCreatorBloc.add(TaskCreatorDateChanged(picked));
-                      }
-                    },
-                  ),
                   _buildDateSelector(
                       context: context,
                       label: 'Select Date',
@@ -111,16 +92,14 @@ class TaskCreatorScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPriorityChip(BuildContext context, PriorityChips priorityChips) {
-    return ChoiceChip(
-      label: Text(priorityChips.label),
-      selected: priorityChips.isSelected,
-      onSelected: (bool selected) {
-        BlocProvider.of<TaskCreatorBloc>(context).add(TaskCreatorPriorityChanged(priorityChips.priority));
-      },
-      selectedColor: priorityChips.color,
-    );
-  }
+  Widget _buildPriorityChip(BuildContext context, PriorityChips priorityChips) => ChoiceChip(
+        label: Text(priorityChips.label),
+        selected: priorityChips.isSelected,
+        onSelected: (bool selected) {
+          BlocProvider.of<TaskCreatorBloc>(context).add(TaskCreatorPriorityChanged(priorityChips.priority));
+        },
+        selectedColor: priorityChips.color,
+      );
 
   Widget _buildDateSelector({
     required BuildContext context,
@@ -128,25 +107,24 @@ class TaskCreatorScreen extends StatelessWidget {
     required TextEditingController dateTextController,
     required DateTime selectedDate,
     required Function(DateTime) onDateChanged,
-  }) {
-    return TextFormField(
-      controller: dateTextController,
-      decoration: InputDecoration(
-        labelText: label,
-        suffixIcon: const Icon(Icons.calendar_today),
-      ),
-      readOnly: true,
-      onTap: () async {
-        DateTime? picked = await showDatePicker(
-          context: context,
-          initialDate: selectedDate,
-          firstDate: DateTime(2000),
-          lastDate: DateTime(2030),
-        );
-        if (picked != null && picked != selectedDate) {
-          onDateChanged(picked);
-        }
-      },
-    );
-  }
+  }) =>
+      TextFormField(
+        controller: dateTextController,
+        decoration: InputDecoration(
+          labelText: label,
+          suffixIcon: const Icon(Icons.calendar_today),
+        ),
+        readOnly: true,
+        onTap: () async {
+          DateTime? picked = await showDatePicker(
+            context: context,
+            initialDate: selectedDate,
+            firstDate: DateTime(2000),
+            lastDate: DateTime(2030),
+          );
+          if (picked != null && picked != selectedDate) {
+            onDateChanged(picked);
+          }
+        },
+      );
 }
