@@ -90,53 +90,71 @@ class TaskCreatorScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
-            TextField(
-              controller: titleTextController,
-              decoration: const InputDecoration(labelText: 'Title'),
-              onChanged: (value) {
-                taskCreatorBloc.add(TaskCreatorTitleChanged(value));
-              },
+            Padding(
+              padding: const EdgeInsets.only(bottom: 2.0),
+              child: TextField(
+                controller: titleTextController,
+                decoration: const InputDecoration(labelText: 'Title'),
+                onChanged: (value) {
+                  taskCreatorBloc.add(TaskCreatorTitleChanged(value));
+                },
+              ),
             ),
-            TextField(
-              controller: descriptionTextController,
-              decoration: const InputDecoration(labelText: 'Description'),
-              onChanged: (value) {
-                taskCreatorBloc.add(TaskCreatorDescriptionChanged(value));
-              },
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2.0),
+              child: TextField(
+                controller: descriptionTextController,
+                decoration: const InputDecoration(labelText: 'Description'),
+                onChanged: (value) {
+                  taskCreatorBloc.add(TaskCreatorDescriptionChanged(value));
+                },
+              ),
             ),
-            Row(children: [
-              const Text("Priority: ", style: TextStyle(fontSize: 16)),
-              ...state.priorityChips.map((priorityChips) => _buildPriorityChip(context, priorityChips)).toList(),
-            ]),
-            _buildDateSelector(
-                context: context,
-                label: 'Select Date',
-                dateTextController: dateTextController,
-                selectedDate: state.date,
-                onDateChanged: (date) {
-                  taskCreatorBloc.add(TaskCreatorDateChanged(date));
-                }),
-            _buildDateSelector(
-                context: context,
-                label: 'Select Notification Time',
-                dateTextController: notificationTimeTextController,
-                selectedDate: state.notificationTime ?? DateTime.now(),
-                onDateChanged: (date) {
-                  taskCreatorBloc.add(TaskCreatorNotificationTimeChanged(date));
-                }),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2.0),
+              child: Row(children: [
+                const Text("Priority: ", style: TextStyle(fontSize: 16)),
+                ...state.priorityChips.map((priorityChips) => _buildPriorityChip(context, priorityChips)).toList(),
+              ]),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2.0),
+              child: _buildDateSelector(
+                  context: context,
+                  label: 'Select Date',
+                  dateTextController: dateTextController,
+                  selectedDate: state.date,
+                  onDateChanged: (date) {
+                    taskCreatorBloc.add(TaskCreatorDateChanged(date));
+                  }),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 2.0),
+              child: _buildDateSelector(
+                  context: context,
+                  label: 'Select Notification Time',
+                  dateTextController: notificationTimeTextController,
+                  selectedDate: state.notificationTime ?? DateTime.now(),
+                  onDateChanged: (date) {
+                    taskCreatorBloc.add(TaskCreatorNotificationTimeChanged(date));
+                  }),
+            ),
           ],
         ),
       );
     }
   }
 
-  Widget _buildPriorityChip(BuildContext context, PriorityChips priorityChips) => ChoiceChip(
-        label: Text(priorityChips.label),
-        selected: priorityChips.isSelected,
-        onSelected: (bool selected) {
-          BlocProvider.of<TaskCreatorBloc>(context).add(TaskCreatorPriorityChanged(priorityChips.priority));
-        },
-        selectedColor: priorityChips.color,
+  Widget _buildPriorityChip(BuildContext context, PriorityChips priorityChips) => Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: ChoiceChip(
+          label: Text(priorityChips.label),
+          selected: priorityChips.isSelected,
+          onSelected: (bool selected) {
+            BlocProvider.of<TaskCreatorBloc>(context).add(TaskCreatorPriorityChanged(priorityChips.priority));
+          },
+          selectedColor: priorityChips.color,
+        ),
       );
 
   Widget _buildDateSelector({
