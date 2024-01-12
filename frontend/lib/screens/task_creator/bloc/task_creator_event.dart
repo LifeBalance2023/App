@@ -1,3 +1,5 @@
+import 'package:frontend/domain/task_entity.dart';
+
 abstract class TaskCreatorEvent {}
 
 class TaskCreatorTitleChanged extends TaskCreatorEvent {
@@ -13,7 +15,7 @@ class TaskCreatorDescriptionChanged extends TaskCreatorEvent {
 }
 
 class TaskCreatorPriorityChanged extends TaskCreatorEvent {
-  final int priority;
+  final PriorityValue priority;
 
   TaskCreatorPriorityChanged(this.priority);
 }

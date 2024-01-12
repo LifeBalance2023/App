@@ -30,7 +30,7 @@ class TaskCreatorBloc extends Bloc<TaskCreatorEvent, TaskCreatorState> {
 
   void _onPriorityChanged(TaskCreatorPriorityChanged event, Emitter<TaskCreatorState> emit) {
     if (state is TaskModificationState) {
-      emit((state as TaskModificationState).copyWith(priority: PriorityValue.values[event.priority]));
+      emit((state as TaskModificationState).copyWith(priority: event.priority));
     }
   }
 
