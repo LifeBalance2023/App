@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/components/date_selector_component.dart';
 import 'package:frontend/components/form_textfield.dart';
 import 'package:frontend/router/router.dart';
 import 'package:frontend/screens/task_creator/bloc/task_creator_bloc.dart';
@@ -17,8 +18,6 @@ class TaskCreatorScreen extends StatelessWidget {
 
     final titleTextController = TextEditingController();
     final descriptionTextController = TextEditingController();
-    final dateTextController = TextEditingController();
-    final notificationTimeTextController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -40,11 +39,10 @@ class TaskCreatorScreen extends StatelessWidget {
           child: BlocConsumer<TaskCreatorBloc, TaskCreatorState>(
             listener: (context, state) {
               _blocListener(
-                  state, titleTextController, descriptionTextController, dateTextController, notificationTimeTextController, context);
+                  state, titleTextController, descriptionTextController, context);
             },
             builder: (context, state) {
-              return _blocBuilder(state, titleTextController, taskCreatorBloc, descriptionTextController, context, dateTextController,
-                  notificationTimeTextController);
+              return _blocBuilder(state, titleTextController, taskCreatorBloc, descriptionTextController, context);
             },
           ),
         ),
@@ -65,15 +63,11 @@ class TaskCreatorScreen extends StatelessWidget {
     TaskCreatorState state,
     TextEditingController titleTextController,
     TextEditingController descriptionTextController,
-    TextEditingController dateTextController,
-    TextEditingController notificationTimeTextController,
     BuildContext context,
   ) {
     if (state is TaskModificationState) {
       titleTextController.text = state.title;
       descriptionTextController.text = state.description ?? '';
-      dateTextController.text = state.date.toString();
-      notificationTimeTextController.text = state.notificationTime?.toString() ?? '';
     }
     if (state is TaskCreationSavingSuccess) {
       AppRouter.goBack(context);
@@ -90,8 +84,6 @@ class TaskCreatorScreen extends StatelessWidget {
     TaskCreatorBloc taskCreatorBloc,
     TextEditingController descriptionTextController,
     BuildContext context,
-    TextEditingController dateTextController,
-    TextEditingController notificationTimeTextController,
   ) {
     if (state is TaskCreationSavingInProgress) {
       return const CircularProgressIndicator();
@@ -133,22 +125,18 @@ class TaskCreatorScreen extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 2.0),
-              child: _buildDateSelector(
-                  context: context,
+              child: DateSelectorComponent(
                   label: 'Select Date',
-                  dateTextController: dateTextController,
-                  selectedDate: state.date,
+                  initialDate: state.date,
                   onDateChanged: (date) {
                     taskCreatorBloc.add(TaskCreatorDateChanged(date));
                   }),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 2.0),
-              child: _buildDateSelector(
-                  context: context,
+              child: DateSelectorComponent(
                   label: 'Select Notification Time',
-                  dateTextController: notificationTimeTextController,
-                  selectedDate: state.notificationTime ?? DateTime.now(),
+                  initialDate: state.notificationTime ?? DateTime.now(),
                   onDateChanged: (date) {
                     taskCreatorBloc.add(TaskCreatorNotificationTimeChanged(date));
                   }),
@@ -169,32 +157,5 @@ class TaskCreatorScreen extends StatelessWidget {
           },
           selectedColor: priorityChips.color,
         ),
-      );
-
-  // TODO: Extract this to a separate widget
-  Widget _buildDateSelector({
-    required BuildContext context,
-    required String label,
-    required TextEditingController dateTextController,
-    required DateTime selectedDate,
-    required Function(DateTime) onDateChanged,
-  }) =>
-      FormTextfieldComponent(
-        controller: dateTextController,
-        fieldName: label,
-        hintText: 'Select Date',
-        obscureText: false,
-        readOnly: true,
-        onTap: () async {
-          DateTime? picked = await showDatePicker(
-            context: context,
-            initialDate: selectedDate,
-            firstDate: DateTime(2000),
-            lastDate: DateTime(2030),
-          );
-          if (picked != null && picked != selectedDate) {
-            onDateChanged(picked);
-          }
-        },
       );
 }
