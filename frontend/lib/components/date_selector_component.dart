@@ -2,66 +2,85 @@ import 'package:flutter/material.dart';
 import 'package:frontend/components/form_textfield.dart';
 import 'package:intl/intl.dart';
 
-class DateSelectorComponent extends StatefulWidget {
+class DateTimeSelectorComponent extends StatefulWidget {
   final String label;
-  final DateTime initialDate;
-  final Function(DateTime) onDateChanged;
-  final String dateFormatPattern;
+  final DateTime initialDateTime;
+  final Function(DateTime) onDateTimeChanged;
+  final bool includeTime; // Flag for including time
 
-  const DateSelectorComponent({
+  const DateTimeSelectorComponent({
     Key? key,
     required this.label,
-    required this.initialDate,
-    required this.onDateChanged,
-    this.dateFormatPattern = 'yyyy-MM-dd',
+    required this.initialDateTime,
+    required this.onDateTimeChanged,
+    this.includeTime = true, // Default value is true
   }) : super(key: key);
 
   @override
-  _DateSelectorComponentState createState() => _DateSelectorComponentState();
+  _DateTimeSelectorComponentState createState() => _DateTimeSelectorComponentState();
 }
 
-class _DateSelectorComponentState extends State<DateSelectorComponent> {
-  late TextEditingController _dateTextController;
+class _DateTimeSelectorComponentState extends State<DateTimeSelectorComponent> {
+  late TextEditingController _dateTimeTextController;
+  late String _dateTimeFormatPattern;
 
   @override
   void initState() {
     super.initState();
-    _dateTextController = TextEditingController(text: _formatDate(widget.initialDate));
+    // Set the format pattern based on includeTime
+    _dateTimeFormatPattern = widget.includeTime ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd';
+    _dateTimeTextController = TextEditingController(text: _formatDateTime(widget.initialDateTime));
   }
 
   @override
   void dispose() {
-    _dateTextController.dispose();
+    _dateTimeTextController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return FormTextfieldComponent(
-      controller: _dateTextController,
+      controller: _dateTimeTextController,
       fieldName: widget.label,
-      hintText: 'Select Date',
+      hintText: 'Select Date and Time',
       obscureText: false,
       readOnly: true,
       onTap: () async {
-        DateTime? picked = await showDatePicker(
+        DateTime? pickedDate = await showDatePicker(
           context: context,
-          initialDate: widget.initialDate,
+          initialDate: widget.initialDateTime,
           firstDate: DateTime(2000),
           lastDate: DateTime(2030),
         );
-        if (picked != null) {
+        if (pickedDate != null) {
+          DateTime finalDateTime = pickedDate;
+          if (widget.includeTime) {
+            TimeOfDay? pickedTime = await showTimePicker(
+              context: context,
+              initialTime: TimeOfDay.fromDateTime(widget.initialDateTime),
+            );
+            if (pickedTime != null) {
+              finalDateTime = DateTime(
+                pickedDate.year,
+                pickedDate.month,
+                pickedDate.day,
+                pickedTime.hour,
+                pickedTime.minute,
+              );
+            }
+          }
           setState(() {
-            _dateTextController.text = _formatDate(picked);
+            _dateTimeTextController.text = _formatDateTime(finalDateTime);
           });
-          widget.onDateChanged(picked);
+          widget.onDateTimeChanged(finalDateTime);
         }
       },
     );
   }
 
-  String _formatDate(DateTime date) {
-    final DateFormat formatter = DateFormat(widget.dateFormatPattern);
-    return formatter.format(date);
+  String _formatDateTime(DateTime dateTime) {
+    final DateFormat formatter = DateFormat(_dateTimeFormatPattern);
+    return formatter.format(dateTime);
   }
 }

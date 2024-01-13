@@ -125,19 +125,21 @@ class TaskCreatorScreen extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 2.0),
-              child: DateSelectorComponent(
+              child: DateTimeSelectorComponent(
                   label: 'Select Date',
-                  initialDate: state.date,
-                  onDateChanged: (date) {
+                  initialDateTime: state.date,
+                  includeTime: false,
+                  onDateTimeChanged: (date) {
                     taskCreatorBloc.add(TaskCreatorDateChanged(date));
                   }),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 2.0),
-              child: DateSelectorComponent(
+              child: DateTimeSelectorComponent(
                   label: 'Select Notification Time',
-                  initialDate: state.notificationTime ?? DateTime.now(),
-                  onDateChanged: (date) {
+                  initialDateTime: state.notificationTime ?? DateTime.now(),
+                  includeTime: true,
+                  onDateTimeChanged: (date) {
                     taskCreatorBloc.add(TaskCreatorNotificationTimeChanged(date));
                   }),
             ),
