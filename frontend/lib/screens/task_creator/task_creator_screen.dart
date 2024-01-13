@@ -6,6 +6,8 @@ import 'package:frontend/screens/task_creator/bloc/task_creator_bloc.dart';
 import 'package:frontend/screens/task_creator/bloc/task_creator_event.dart';
 import 'package:frontend/screens/task_creator/bloc/task_creator_state.dart';
 
+import '../../components/custom_button.dart';
+
 class TaskCreatorScreen extends StatelessWidget {
   const TaskCreatorScreen({Key? key}) : super(key: key);
 
@@ -30,25 +32,32 @@ class TaskCreatorScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: BlocConsumer<TaskCreatorBloc, TaskCreatorState>(
-          listener: (context, state) {
-            _blocListener(
-                state, titleTextController, descriptionTextController, dateTextController, notificationTimeTextController, context);
-          },
-          builder: (context, state) {
-            return _blocBuilder(state, titleTextController, taskCreatorBloc, descriptionTextController, context, dateTextController,
-                notificationTimeTextController);
-          },
+      body: Container(
+        color: const Color(0xFF9A8C98),
+        width: double.infinity,
+        height: double.infinity,
+        child: SingleChildScrollView(
+          child: BlocConsumer<TaskCreatorBloc, TaskCreatorState>(
+            listener: (context, state) {
+              _blocListener(
+                  state, titleTextController, descriptionTextController, dateTextController, notificationTimeTextController, context);
+            },
+            builder: (context, state) {
+              return _blocBuilder(state, titleTextController, taskCreatorBloc, descriptionTextController, context, dateTextController,
+                  notificationTimeTextController);
+            },
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: CustomButtonComponent(
+        text: 'Add',
+        width: 140,
+        height: 48,
         onPressed: () {
           taskCreatorBloc.add(TaskCreatorSaveRequested());
         },
-        icon: const Icon(Icons.add),
-        label: const Text('Add'),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -88,7 +97,7 @@ class TaskCreatorScreen extends StatelessWidget {
       return const CircularProgressIndicator();
     } else {
       return Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
             Padding(
@@ -97,7 +106,7 @@ class TaskCreatorScreen extends StatelessWidget {
                 controller: titleTextController,
                 fieldName: 'Title',
                 hintText: 'Enter your title',
-                obscureText: true,
+                obscureText: false,
                 onChanged: (value) {
                   taskCreatorBloc.add(TaskCreatorTitleChanged(value));
                 },
@@ -109,7 +118,7 @@ class TaskCreatorScreen extends StatelessWidget {
                 controller: descriptionTextController,
                 fieldName: 'Description',
                 hintText: 'Enter your description',
-                obscureText: true,
+                obscureText: false,
                 onChanged: (value) {
                   taskCreatorBloc.add(TaskCreatorDescriptionChanged(value));
                 },
@@ -174,7 +183,7 @@ class TaskCreatorScreen extends StatelessWidget {
         controller: dateTextController,
         fieldName: label,
         hintText: 'Select Date',
-        obscureText: true,
+        obscureText: false,
         readOnly: true,
         onTap: () async {
           DateTime? picked = await showDatePicker(
