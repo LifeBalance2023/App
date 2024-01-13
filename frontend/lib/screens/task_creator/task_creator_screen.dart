@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/components/form_textfield.dart';
 import 'package:frontend/router/router.dart';
 import 'package:frontend/screens/task_creator/bloc/task_creator_bloc.dart';
 import 'package:frontend/screens/task_creator/bloc/task_creator_event.dart';
@@ -92,9 +93,11 @@ class TaskCreatorScreen extends StatelessWidget {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(bottom: 2.0),
-              child: TextField(
+              child: FormTextfieldComponent(
                 controller: titleTextController,
-                decoration: const InputDecoration(labelText: 'Title'),
+                fieldName: 'Title',
+                hintText: 'Enter your title',
+                obscureText: true,
                 onChanged: (value) {
                   taskCreatorBloc.add(TaskCreatorTitleChanged(value));
                 },
@@ -102,9 +105,11 @@ class TaskCreatorScreen extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 2.0),
-              child: TextField(
+              child: FormTextfieldComponent(
                 controller: descriptionTextController,
-                decoration: const InputDecoration(labelText: 'Description'),
+                fieldName: 'Description',
+                hintText: 'Enter your description',
+                obscureText: true,
                 onChanged: (value) {
                   taskCreatorBloc.add(TaskCreatorDescriptionChanged(value));
                 },
@@ -165,12 +170,11 @@ class TaskCreatorScreen extends StatelessWidget {
     required DateTime selectedDate,
     required Function(DateTime) onDateChanged,
   }) =>
-      TextFormField(
+      FormTextfieldComponent(
         controller: dateTextController,
-        decoration: InputDecoration(
-          labelText: label,
-          suffixIcon: const Icon(Icons.calendar_today),
-        ),
+        fieldName: label,
+        hintText: 'Select Date',
+        obscureText: true,
         readOnly: true,
         onTap: () async {
           DateTime? picked = await showDatePicker(
