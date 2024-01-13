@@ -21,7 +21,10 @@ class TaskCreatorScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Task'),
+        title: const Text('Create Task',
+            style: TextStyle(
+              fontFamily: 'JejuGothic',
+            )),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.settings),
@@ -38,8 +41,7 @@ class TaskCreatorScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: BlocConsumer<TaskCreatorBloc, TaskCreatorState>(
             listener: (context, state) {
-              _blocListener(
-                  state, titleTextController, descriptionTextController, context);
+              _blocListener(state, titleTextController, descriptionTextController, context);
             },
             builder: (context, state) {
               return _blocBuilder(state, titleTextController, taskCreatorBloc, descriptionTextController, context);
@@ -99,6 +101,7 @@ class TaskCreatorScreen extends StatelessWidget {
                 fieldName: 'Title',
                 hintText: 'Enter your title',
                 obscureText: false,
+                horizontalPadding: 16.0,
                 onChanged: (value) {
                   taskCreatorBloc.add(TaskCreatorTitleChanged(value));
                 },
@@ -111,24 +114,20 @@ class TaskCreatorScreen extends StatelessWidget {
                 fieldName: 'Description',
                 hintText: 'Enter your description',
                 obscureText: false,
+                horizontalPadding: 16.0,
                 onChanged: (value) {
                   taskCreatorBloc.add(TaskCreatorDescriptionChanged(value));
                 },
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2.0),
-              child: Row(children: [
-                const Text("Priority: ", style: TextStyle(fontSize: 16)),
-                ...state.priorityChips.map((priorityChips) => _buildPriorityChip(context, priorityChips)).toList(),
-              ]),
-            ),
+            _buildAllPriorityChips(state: state, context: context),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 2.0),
               child: DateTimeSelectorComponent(
                   label: 'Select Date',
                   initialDateTime: state.date,
                   includeTime: false,
+                  horizontalPadding: 16.0,
                   onDateTimeChanged: (date) {
                     taskCreatorBloc.add(TaskCreatorDateChanged(date));
                   }),
@@ -139,6 +138,7 @@ class TaskCreatorScreen extends StatelessWidget {
                   label: 'Select Notification Time',
                   initialDateTime: state.notificationTime ?? DateTime.now(),
                   includeTime: true,
+                  horizontalPadding: 16.0,
                   onDateTimeChanged: (date) {
                     taskCreatorBloc.add(TaskCreatorNotificationTimeChanged(date));
                   }),
@@ -149,10 +149,39 @@ class TaskCreatorScreen extends StatelessWidget {
     }
   }
 
+  Padding _buildAllPriorityChips({
+    required TaskCreatorState state,
+    required BuildContext context,
+  }) =>
+      Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+        ),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Text(
+            'Select Priority',
+            style: TextStyle(
+              fontFamily: 'JejuGothic',
+              fontSize: 24.0,
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center, // Center the chips
+            children: state.priorityChips.map((priorityChips) => _buildPriorityChip(context, priorityChips)).toList(),
+          ),
+        ]),
+      );
+
   Widget _buildPriorityChip(BuildContext context, PriorityChips priorityChips) => Padding(
         padding: const EdgeInsets.all(2.0),
         child: ChoiceChip(
-          label: Text(priorityChips.label),
+          label: Text(
+            priorityChips.label,
+            style: const TextStyle(
+              fontFamily: 'JejuGothic',
+              fontSize: 16.0,
+            ),
+          ),
           selected: priorityChips.isSelected,
           onSelected: (bool selected) {
             BlocProvider.of<TaskCreatorBloc>(context).add(TaskCreatorPriorityChanged(priorityChips.priority));

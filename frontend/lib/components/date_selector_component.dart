@@ -6,14 +6,17 @@ class DateTimeSelectorComponent extends StatefulWidget {
   final String label;
   final DateTime initialDateTime;
   final Function(DateTime) onDateTimeChanged;
-  final bool includeTime; // Flag for including time
+  final bool includeTime;
+  final double? horizontalPadding;
+
 
   const DateTimeSelectorComponent({
     Key? key,
     required this.label,
     required this.initialDateTime,
     required this.onDateTimeChanged,
-    this.includeTime = true, // Default value is true
+    this.includeTime = true,
+    this.horizontalPadding,
   }) : super(key: key);
 
   @override
@@ -46,6 +49,7 @@ class _DateTimeSelectorComponentState extends State<DateTimeSelectorComponent> {
       hintText: 'Select Date and Time',
       obscureText: false,
       readOnly: true,
+      horizontalPadding: widget.horizontalPadding,
       onTap: () async {
         DateTime? pickedDate = await showDatePicker(
           context: context,
