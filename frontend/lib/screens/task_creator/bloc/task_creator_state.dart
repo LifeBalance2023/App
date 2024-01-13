@@ -8,7 +8,7 @@ abstract class TaskCreatorState {
   final PriorityValue priority;
   final DateTime date;
   DateTime? notificationTime;
-  late List<PriorityChips> priorityChips;
+  late List<PriorityChip> priorityChips;
 
   TaskCreatorState({
     required this.title,
@@ -18,20 +18,20 @@ abstract class TaskCreatorState {
     this.notificationTime,
   }) {
     priorityChips = [
-      PriorityChips(PriorityValue.low, 'Low', Colors.green, PriorityValue.low == priority),
-      PriorityChips(PriorityValue.medium, 'Medium', Colors.orange, PriorityValue.medium == priority),
-      PriorityChips(PriorityValue.high, 'High', Colors.red, PriorityValue.high == priority),
+      PriorityChip(PriorityValue.low, 'Low', Colors.green, PriorityValue.low == priority),
+      PriorityChip(PriorityValue.medium, 'Medium', Colors.orange, PriorityValue.medium == priority),
+      PriorityChip(PriorityValue.high, 'High', Colors.red, PriorityValue.high == priority),
     ];
   }
 }
 
-class PriorityChips {
+class PriorityChip {
   final PriorityValue priority;
   final String label;
   final Color color;
   final bool isSelected;
 
-  PriorityChips(this.priority, this.label, this.color, this.isSelected);
+  PriorityChip(this.priority, this.label, this.color, this.isSelected);
 }
 
 class TaskCreatorInitial extends TaskModificationState {
