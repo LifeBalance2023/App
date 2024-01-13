@@ -149,6 +149,7 @@ class TaskCreatorScreen extends StatelessWidget {
     }
   }
 
+  // TODO: Refactor this into a separate widget
   Padding _buildAllPriorityChips({
     required TaskCreatorState state,
     required BuildContext context,
@@ -173,20 +174,28 @@ class TaskCreatorScreen extends StatelessWidget {
       );
 
   Widget _buildPriorityChip(BuildContext context, PriorityChips priorityChips) => Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: ChoiceChip(
-          label: Text(
-            priorityChips.label,
-            style: const TextStyle(
-              fontFamily: 'JejuGothic',
-              fontSize: 16.0,
-            ),
-          ),
-          selected: priorityChips.isSelected,
-          onSelected: (bool selected) {
-            BlocProvider.of<TaskCreatorBloc>(context).add(TaskCreatorPriorityChanged(priorityChips.priority));
-          },
-          selectedColor: priorityChips.color,
+    padding: const EdgeInsets.all(2.0),
+    child: ChoiceChip(
+      label: Text(
+        priorityChips.label,
+        style: const TextStyle(
+          fontFamily: 'JejuGothic',
+          fontSize: 16.0,
+          color: Color(0xFF604E5E), // Adjust color to match the TextField cursor color
         ),
-      );
+      ),
+      selected: priorityChips.isSelected,
+      onSelected: (bool selected) {
+        BlocProvider.of<TaskCreatorBloc>(context).add(TaskCreatorPriorityChanged(priorityChips.priority));
+      },
+      selectedColor: priorityChips.color,
+      backgroundColor: const Color(0xFFD9D9D9), // Similar to TextField fill color
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+        side: BorderSide(
+          color: priorityChips.isSelected ? Color(0xFFA68DA4) : Color(0xFF91778F), // Adjust border color
+        ),
+      ),
+    ),
+  );
 }

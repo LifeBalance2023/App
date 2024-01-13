@@ -10,7 +10,9 @@ import 'firebase/firebase_configuration.dart';
 
 void main() async {
   _initializeTimeZones();
-  (await FirebaseConfiguration.initialize()).onFailure(print);
+  (await FirebaseConfiguration.initialize()).onFailure((error) {
+    print(error.message);
+  });
   runApp(const MyApp());
 }
 
