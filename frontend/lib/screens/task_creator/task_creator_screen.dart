@@ -103,6 +103,7 @@ class TaskCreatorScreen extends StatelessWidget {
                 hintText: 'Enter your title',
                 obscureText: false,
                 horizontalPadding: 16.0,
+                textCapitalization: TextCapitalization.words,
                 onChanged: (value) {
                   taskCreatorBloc.add(TaskCreatorTitleChanged(value));
                 },
@@ -116,6 +117,7 @@ class TaskCreatorScreen extends StatelessWidget {
                 hintText: 'Enter your description',
                 obscureText: false,
                 horizontalPadding: 16.0,
+                textCapitalization: TextCapitalization.sentences,
                 onChanged: (value) {
                   taskCreatorBloc.add(TaskCreatorDescriptionChanged(value));
                 },
