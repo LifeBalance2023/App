@@ -7,6 +7,7 @@ class ITaskService(ABC):
     @abstractmethod
     async def get_task_by_id(
             self,
+            user_id: str,
             doc_id: str
     ) -> Task:
         pass
@@ -14,6 +15,7 @@ class ITaskService(ABC):
     @abstractmethod
     async def get_tasks(
             self,
+            user_id: str,
             filters: Optional[OptionalTaskDTO] = None
     ) -> List[Task]:
         pass

@@ -3,14 +3,14 @@ import typing as t
 
 
 class User(BaseModel):
+    db_id: str
     id: str
-    userId: str
     email: str
 
     def to_dict(self) -> dict:
         return {
+            "db_id": self.db_id,
             "id": self.id,
-            "userId": self.userId,
             "email": self.email
         }
 
@@ -19,18 +19,18 @@ class User(BaseModel):
         schema_extra = {
             "example": {
                 "email": "johndoe@email.com",
-                "userId": "3dsfsd4afs24"
+                "id": "3dsfsd4afs24"
             }
         }
 
 
 class UserDTO(BaseModel):
-    userId: str
+    id: str
     email: str
 
     def to_dict(self) -> dict:
         return {
-            "userId": self.userId,
+            "id": self.id,
             "email": self.email
         }
 
@@ -39,6 +39,6 @@ class UserDTO(BaseModel):
         schema_extra = {
             "example": {
                 "email": "johndoe@email.com",
-                "userId": "3dsfsd4afs24"
+                "id": "3dsfsd4afs24"
             }
         }

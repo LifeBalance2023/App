@@ -15,6 +15,7 @@ class TaskService(ITaskService):
 
     async def get_task_by_id(
             self,
+            user_id: str,
             doc_id: str
     ) -> Task:
         doc_ref = self.db_manager.collection(self.collection_name).document(doc_id)
@@ -28,10 +29,10 @@ class TaskService(ITaskService):
 
     async def get_tasks(
             self,
+            user_id: str,
             filters: Optional[OptionalTaskDTO] = None
     ) -> List[Task]:
-        doc_ref = self.db_manager.collection(self.collection_name)
-        docs = doc_ref
+        docs = self.db_manager.collection(self.collection_name)
 
         if filters is not None:
             for key, value in filters.to_dict().items():
@@ -94,3 +95,9 @@ class TaskService(ITaskService):
         await doc_ref.delete()
 
         return deleted_task
+
+    async def get_tasks_ref_by_user_id(
+            self,
+            user_id: str
+    ):
+        return self.db_manager.collection(self.collection_name).where(filter=FieldFilter('user_id', '==', user_id))
