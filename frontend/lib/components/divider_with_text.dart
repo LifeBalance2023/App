@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class DividerWithTextWidget extends StatelessWidget {
+class DividerWithTextComponent extends StatelessWidget {
   final String text;
   final double height;
   final Color textColor;
   final double textSize;
 
-  const DividerWithTextWidget({super.key,
+  const DividerWithTextComponent({super.key,
     required this.text,
     this.height = 1.0,
     this.textColor = Colors.black,

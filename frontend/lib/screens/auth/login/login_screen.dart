@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/widgets/register_form.dart';
+import 'package:frontend/components/custom_button.dart';
+import 'package:frontend/components/divider_with_text.dart';
+import 'package:frontend/widgets/login_form.dart';
 
-import '../components/custom_button.dart';
-import '../components/divider_with_text.dart';
-
-class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({super.key});
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +12,11 @@ class RegisterScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: const Color(0xFF9A8C98),
         title: const Text(
-          'Register',
+          'Log in',
           style: TextStyle(
             fontFamily: 'JejuGothic',
             fontSize: 20.0,
+            fontWeight: FontWeight.w400,
           ),
         ),
         centerTitle: true,
@@ -48,7 +48,7 @@ class RegisterScreen extends StatelessWidget {
                 height: 45,
               ),
               CustomButtonComponent(
-                text: 'Register with Google',
+                text: 'Log in with Google',
                 width: 328,
                 height: 48,
                 iconPath: 'assets/icons/google_icon.png',
@@ -64,14 +64,14 @@ class RegisterScreen extends StatelessWidget {
                   horizontal: 40,
                 ),
                 child: const DividerWithTextComponent(
-                  text: 'or register with an email',
+                  text: 'or log in with an email',
                   textSize: 24,
                 ),
               ),
               const SizedBox(
                 height: 45,
               ),
-              RegisterFormWidget(),
+              LoginFormWidget(),
               const SizedBox(
                 height: 45,
               ),
