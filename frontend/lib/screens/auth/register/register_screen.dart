@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/widgets/register_form.dart';
 
-import '../components/custom_button.dart';
-import '../components/divider_with_text.dart';
+import '../../../components/custom_button.dart';
+import '../../../components/divider_with_text.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
