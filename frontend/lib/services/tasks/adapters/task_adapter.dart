@@ -16,11 +16,11 @@ class TaskAdapter {
 
   PriorityValue _mapPriority(String priorityString) {
     switch (priorityString.toLowerCase()) {
-      case 'LOW':
+      case 'low':
         return PriorityValue.low;
-      case 'MEDIUM':
+      case 'medium':
         return PriorityValue.medium;
-      case 'HIGH':
+      case 'high':
         return PriorityValue.high;
       default:
         throw ArgumentError('Invalid priority value: $priorityString');

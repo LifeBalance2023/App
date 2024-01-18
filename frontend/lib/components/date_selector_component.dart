@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/form_textfield.dart';
-import 'package:intl/intl.dart';
+import 'package:frontend/utils/date_time_formatter.dart';
 
 class DateTimeSelectorComponent extends StatefulWidget {
   final String label;
@@ -25,13 +25,10 @@ class DateTimeSelectorComponent extends StatefulWidget {
 
 class _DateTimeSelectorComponentState extends State<DateTimeSelectorComponent> {
   late TextEditingController _dateTimeTextController;
-  late String _dateTimeFormatPattern;
 
   @override
   void initState() {
     super.initState();
-    // Set the format pattern based on includeTime
-    _dateTimeFormatPattern = widget.includeTime ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd';
     _dateTimeTextController = TextEditingController(text: _formatDateTime(widget.initialDateTime));
   }
 
@@ -84,7 +81,9 @@ class _DateTimeSelectorComponentState extends State<DateTimeSelectorComponent> {
   }
 
   String _formatDateTime(DateTime dateTime) {
-    final DateFormat formatter = DateFormat(_dateTimeFormatPattern);
-    return formatter.format(dateTime);
+    if(widget.includeTime) {
+      return DateTimeFormatter.toDateTime(dateTime);
+    }
+    return DateTimeFormatter.toDate(dateTime);
   }
 }

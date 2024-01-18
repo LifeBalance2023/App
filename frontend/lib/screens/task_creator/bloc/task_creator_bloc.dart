@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/screens/task_creator/bloc/task_creator_event.dart';
 import 'package:frontend/screens/task_creator/bloc/task_creator_state.dart';
 import 'package:frontend/services/tasks/tasks_service.dart';
+import 'package:frontend/utils/date_time_formatter.dart';
 
 class TaskCreatorBloc extends Bloc<TaskCreatorEvent, TaskCreatorState> {
   final TasksService _tasksService;
@@ -58,25 +59,30 @@ class TaskCreatorBloc extends Bloc<TaskCreatorEvent, TaskCreatorState> {
       title: state.title,
       description: state.description,
       priority: state.priority.name,
-      date: state.date.toString(),
-      notificationTime: state.notificationTime?.toString(),
+      date: DateTimeFormatter.toDate(state.date),
+      notificationTime: state.notificationTime != null ? DateTimeFormatter.toTime(state.notificationTime!) : null
     );
 
     result
-        .onFailure((error) => emit(TaskCreationSavingFailure(
+        .onFailure((error) {
+          emit(TaskCreationSavingFailure(
               title: state.title,
               description: state.description,
               priority: state.priority,
               date: state.date,
               notificationTime: state.notificationTime,
               error: error,
-            )))
-        .onSuccess((_) => emit(TaskCreationSavingSuccess(
+            ));
+        })
+        .onSuccess((_) {
+          print("XDDD");
+          emit(TaskCreationSavingSuccess(
               title: state.title,
               description: state.description,
               priority: state.priority,
               date: state.date,
               notificationTime: state.notificationTime,
-            )));
+            ));
+        });
   }
 }
