@@ -5,7 +5,7 @@ import 'package:frontend/screens/auth/login/login_screen.dart';
 import 'package:frontend/screens/auth/register/register_screen.dart';
 import 'package:frontend/screens/settings/settings_screen.dart';
 import 'package:frontend/screens/task_creator/task_creator_screen.dart';
-import 'package:frontend/screens/welcome_screen.dart';
+import 'package:frontend/screens/welcome/welcome_screen.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 

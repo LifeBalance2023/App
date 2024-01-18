@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/custom_button.dart';
 import 'package:frontend/screens/auth/register/register_screen.dart';
-import 'auth/login/login_screen.dart';
+import '../auth/login/login_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
