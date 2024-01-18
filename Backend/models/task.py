@@ -1,7 +1,7 @@
 from typing import Optional
 
 from pydantic import BaseModel
-from datetime import date, time
+from datetime import date, datetime
 
 
 class Task(BaseModel):
@@ -11,7 +11,7 @@ class Task(BaseModel):
     priority: str
     isDone: bool
     date: date
-    notificationTime: Optional[time]
+    notificationTime: Optional[datetime]
 
     class Config:
         orm_mode = True
@@ -23,7 +23,7 @@ class Task(BaseModel):
                 "isDone": False,
                 "priority": "MEDIUM",
                 "date": "2023-11-15",
-                "notificationTime": "10:00:00",
+                "notificationTime": datetime.now(),
             }
         }
 
@@ -34,7 +34,7 @@ class TaskDTO(BaseModel):
     priority: str
     isDone: bool
     date: date
-    notificationTime: Optional[time]
+    notificationTime: Optional[datetime]
 
     def to_dict(self) -> dict:
         return {
@@ -55,7 +55,7 @@ class TaskDTO(BaseModel):
                 "isDone": False,
                 "priority": "MEDIUM",
                 "date": "2023-11-15",
-                "notificationTime": "10:00:00",
+                "notificationTime": datetime.now(),
             }
         }
 
@@ -66,7 +66,7 @@ class OptionalTaskDTO(BaseModel):
     priority: Optional[str]
     isDone: Optional[bool]
     date: Optional[date]
-    notificationTime: Optional[time]
+    notificationTime: Optional[datetime]
 
     def to_dict(self) -> dict:
         return {
@@ -75,7 +75,7 @@ class OptionalTaskDTO(BaseModel):
             "priority": self.priority,
             "isDone": self.isDone,
             "date": self.date.isoformat() if self.date else None,
-            "notificationTime": self.notificationTime.isoformat() if self.notificationTime else None
+            "notificationTime": self.notificationTime if self.notificationTime else None
         }
 
     class Config:
