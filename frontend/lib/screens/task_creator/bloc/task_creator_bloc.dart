@@ -75,7 +75,6 @@ class TaskCreatorBloc extends Bloc<TaskCreatorEvent, TaskCreatorState> {
             ));
         })
         .onSuccess((_) {
-          print("XDDD");
           emit(TaskCreationSavingSuccess(
               title: state.title,
               description: state.description,
