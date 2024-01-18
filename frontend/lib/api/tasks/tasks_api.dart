@@ -13,12 +13,12 @@ class TasksApi {
   TasksApi(DioWrapper dioWrapper) : _dioWrapper = dioWrapper;
 
   Future<Result<GetTasksResponse>> getTasks() async {
-    var result = await _dioWrapper.get<Map<String, dynamic>>(_baseUrl);
+    var result = await _dioWrapper.get<Map<String, dynamic>>('$_baseUrl/');
     return result.map((data) => GetTasksResponse.fromJson(data));
   }
 
   Future<Result<RemoteTask>> postTask(CreateTaskRequest request) async {
-    var result = await _dioWrapper.post(_baseUrl, data: request.toJson());
+    var result = await _dioWrapper.post('$_baseUrl/', data: request.toJson());
     return result.map((data) => RemoteTask.fromJson(data));
   }
 

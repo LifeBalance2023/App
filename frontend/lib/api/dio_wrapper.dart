@@ -11,6 +11,15 @@ class DioWrapper {
   }
 
   Future<void> configureDio() async {
+    _dio.interceptors.add(LogInterceptor(
+      request: true,
+      responseBody: true,
+      requestBody: true,
+      responseHeader: false,
+      requestHeader: false,
+      error: true,
+    ));
+
     final settingsResult = await _cache.loadSettings();
 
     settingsResult.onSuccess((settings) {
@@ -44,11 +53,13 @@ class DioWrapper {
       }
       return Result.success(response.data as T);
     } on DioException catch (dioError) {
+      print(dioError);
       return Result.failure(ResultError(
         code: dioError.response?.statusCode,
         message: dioError.message,
       ));
     } catch (error) {
+      print(error);
       return Result.failure(ResultError(message: error.toString()));
     }
   }
