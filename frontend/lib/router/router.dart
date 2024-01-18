@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class AppRouter {
-    static const String home = '/';
+    static const String main = '/home';
     static const String welcomeScreen = '/welcomeScreen';
     static const String login = '/login';
     static const String register = '/register';
@@ -20,8 +20,8 @@ class AppRouter {
         Navigator.pushNamed(context, register);
     }
 
-    static void goToHome(BuildContext context) {
-        Navigator.pushNamed(context, home);
+    static void goToMainScreen(BuildContext context) {
+        Navigator.pushNamed(context, main);
     }
 
     static void goToTaskCreator(BuildContext context) {

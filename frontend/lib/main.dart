@@ -46,13 +46,14 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const TaskCreatorScreen(),
+      home: const WelcomeScreen(),
       routes: {
         AppRouter.taskCreator: (context) => const TaskCreatorScreen(),
         AppRouter.settings: (context) => const SettingsScreen(),
         AppRouter.welcomeScreen: (context) => const WelcomeScreen(),
         AppRouter.login: (context) => const LoginScreen(),
         AppRouter.register: (context) => const RegisterScreen(),
+        AppRouter.main: (context) => const TaskCreatorScreen(), // TODO: change to main screen
       },
     ));
   }

@@ -16,8 +16,10 @@ class WelcomeScreenBloc extends Bloc<WelcomeScreenEvent, WelcomeScreenState> {
     final userIdResult = await _authenticationService.getUserId();
 
     userIdResult.onFailure((error) {
+      print(error);
       emit(ShowWelcomeMessage());
     }).onSuccess((userId) {
+      print(userId);
       emit(GoToMainScreen());
     });
   }
