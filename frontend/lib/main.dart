@@ -3,9 +3,10 @@ import 'package:frontend/providers.dart';
 import 'package:frontend/router/router.dart';
 import 'package:frontend/screens/auth/login/login_screen.dart';
 import 'package:frontend/screens/auth/register/register_screen.dart';
+import 'package:frontend/screens/main/main_screen.dart';
 import 'package:frontend/screens/settings/settings_screen.dart';
 import 'package:frontend/screens/task_creator/task_creator_screen.dart';
-import 'package:frontend/screens/welcome/welcome_screen.dart';
+import 'package:frontend/screens/welcome_screen.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const WelcomeScreen(),
+      home: const MainScreen(),
       routes: {
         AppRouter.taskCreator: (context) => const TaskCreatorScreen(),
         AppRouter.settings: (context) => const SettingsScreen(),
