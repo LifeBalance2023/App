@@ -63,7 +63,6 @@ async def update_task(
         task: OptionalTaskDTO,
         task_service: ITaskService = Depends(get_task_service)
 ):
-    print(user_id,task,task)
     return await task_service.update_task(user_id, task_id, task)
 
 
