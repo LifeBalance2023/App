@@ -7,10 +7,10 @@ class ShowProgressIndicator extends MainScreenState {}
 
 class GoToWelcomeScreen extends MainScreenState {}
 
-class ShowErrorMessage extends MainScreenState {
-  final String message;
+class MainScreenError extends MainScreenState {
+  final String errorMessage;
 
-  ShowErrorMessage(this.message);
+  MainScreenError(this.errorMessage);
 }
 
 class ShowMainScreen extends MainScreenState {

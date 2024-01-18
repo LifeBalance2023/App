@@ -13,10 +13,10 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
   final StatisticsService _statisticsService;
 
   MainScreenBloc(this._authenticationService, this._tasksService, this._statisticsService) : super(ShowProgressIndicator()) {
-    on<LoadTasks>(_onLoadTasks);
+    on<LoadMainScreen>(_onLoadTasks);
   }
 
-  Future<void> _onLoadTasks(LoadTasks event, Emitter<MainScreenState> emit) async {
+  Future<void> _onLoadTasks(LoadMainScreen event, Emitter<MainScreenState> emit) async {
     final userIdResult = await _authenticationService.getUserId();
 
     userIdResult.onFailure((error) {
@@ -29,7 +29,7 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
   Future<void> _loadTasks(Emitter<MainScreenState> emit) async {
     final synchronizeTasksResult = await _tasksService.synchronizeTasks();
     synchronizeTasksResult.onFailure((error) {
-      emit(ShowErrorMessage("Error synchronizing tasks: ${error.code} ${error.message}}"));
+      emit(MainScreenError("Error synchronizing tasks: ${error.code} ${error.message}}"));
     }).onSuccess((p0) {
       _loadStatistics(emit);
     });
@@ -38,12 +38,12 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
   Future<void> _loadStatistics(Emitter<MainScreenState> emit) async {
     final getStatisticsResult = await _statisticsService.getDailyStatistics(DateTime.now());
     getStatisticsResult.onFailure((error) {
-      emit(ShowErrorMessage("Error getting statistics: ${error.code} ${error.message}}"));
+      emit(MainScreenError("Error getting statistics: ${error.code} ${error.message}}"));
     }).onSuccess((statistics) {
       final tasksResult = _tasksService.getTasksForDate(DateTime.now()); // TODO: Think about getting all tasks
 
       tasksResult.onFailure((error) {
-        emit(ShowErrorMessage("Error getting tasks: ${error.code} ${error.message}}"));
+        emit(MainScreenError("Error getting tasks: ${error.code} ${error.message}}"));
       }).onSuccess((tasks) {
         emit(ShowMainScreen(tasks, statistics));
       });

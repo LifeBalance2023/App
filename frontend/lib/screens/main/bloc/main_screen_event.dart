@@ -1,3 +1,3 @@
 abstract class MainScreenEvent {}
 
-class LoadTasks extends MainScreenEvent {}
+class LoadMainScreen extends MainScreenEvent {}
