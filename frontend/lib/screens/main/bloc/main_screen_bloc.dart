@@ -19,20 +19,22 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
   Future<void> _onLoadTasks(LoadMainScreen event, Emitter<MainScreenState> emit) async {
     final userIdResult = await _authenticationService.getUserId();
 
-    userIdResult.onFailure((error) {
+    if(userIdResult.isSuccess) {
+      await _loadTasks(emit);
+    } else {
       emit(GoToWelcomeScreen());
-    }).onSuccess((userId) {
-      _loadTasks(emit);
-    });
+    }
   }
 
   Future<void> _loadTasks(Emitter<MainScreenState> emit) async {
     final synchronizeTasksResult = await _tasksService.synchronizeTasks();
-    synchronizeTasksResult.onFailure((error) {
-      emit(MainScreenError("Error synchronizing tasks: ${error.code} ${error.message}}"));
-    }).onSuccess((p0) {
-      _loadStatistics(emit);
-    });
+
+    if(synchronizeTasksResult.isFailure) {
+      emit(MainScreenError("Error synchronizing tasks: ${synchronizeTasksResult.error?.code} ${synchronizeTasksResult.error?.message}}"));
+      return;
+    }
+
+    await _loadStatistics(emit);
   }
 
   Future<void> _loadStatistics(Emitter<MainScreenState> emit) async {
