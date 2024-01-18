@@ -1,3 +1,3 @@
 abstract class MainScreenEvent {}
 
-class CheckIfUserIsLoggedIn extends MainScreenEvent {}
+class LoadTasks extends MainScreenEvent {}

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/screens/main/bloc/main_screen_bloc.dart';
+import 'package:frontend/screens/main/bloc/main_screen_state.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -6,14 +9,17 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Main Screen'),
-        ),
-        body: Center(
-          child: ElevatedButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Go back!'),
-          ),
-        ));
+      appBar: AppBar(
+        title: const Text('Main Screen'),
+      ),
+      body: BlocConsumer<MainScreenBloc, MainScreenState>(
+        listener: (context, state) {
+
+        },
+        builder: (context, state) {
+          return Container();
+        },
+      ),
+    );
   }
 }

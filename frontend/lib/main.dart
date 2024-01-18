@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
         AppRouter.welcomeScreen: (context) => const WelcomeScreen(),
         AppRouter.login: (context) => const LoginScreen(),
         AppRouter.register: (context) => const RegisterScreen(),
-        AppRouter.main: (context) => const TaskCreatorScreen(), // TODO: change to main screen
+        AppRouter.main: (context) => const MainScreen(),
       },
     ));
   }
