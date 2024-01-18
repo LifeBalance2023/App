@@ -3,6 +3,7 @@ from routers.task import task_router
 from routers.statistic import statistic_router
 from routers.user import user_router
 
+
 app = FastAPI()
 
 
