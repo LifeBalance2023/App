@@ -19,6 +19,7 @@ class TaskCreatorScreen extends StatelessWidget {
 
     final titleTextController = TextEditingController();
     final descriptionTextController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
 
     return Scaffold(
       appBar: AppBar(
@@ -45,7 +46,7 @@ class TaskCreatorScreen extends StatelessWidget {
               _blocListener(state, titleTextController, descriptionTextController, context);
             },
             builder: (context, state) {
-              return _blocBuilder(state, titleTextController, taskCreatorBloc, descriptionTextController, context);
+              return _blocBuilder(state, titleTextController, taskCreatorBloc, descriptionTextController, formKey, context);
             },
           ),
         ),
@@ -55,6 +56,10 @@ class TaskCreatorScreen extends StatelessWidget {
         width: 140,
         height: 48,
         onPressed: () {
+          if(!formKey.currentState!.validate()) {
+            return;
+          }
+
           taskCreatorBloc.add(TaskCreatorSaveRequested());
         },
       ),
@@ -86,72 +91,82 @@ class TaskCreatorScreen extends StatelessWidget {
     TextEditingController titleTextController,
     TaskCreatorBloc taskCreatorBloc,
     TextEditingController descriptionTextController,
+    GlobalKey<FormState> formKey,
     BuildContext context,
   ) {
     if (state is TaskCreationSavingInProgress) {
       return const CircularProgressIndicator();
     } else {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(bottom: 2.0),
-              child: FormTextfieldComponent(
-                controller: titleTextController,
-                fieldName: 'Title',
-                hintText: 'Enter your title',
-                obscureText: false,
-                horizontalPadding: 16.0,
-                textCapitalization: TextCapitalization.words,
-                onChanged: (value) {
-                  taskCreatorBloc.add(TaskCreatorTitleChanged(value));
+      return Form(
+        key: formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(bottom: 2.0),
+                child: FormTextfieldComponent(
+                  controller: titleTextController,
+                  fieldName: 'Title',
+                  hintText: 'Enter your title',
+                  obscureText: false,
+                  horizontalPadding: 16.0,
+                  textCapitalization: TextCapitalization.words,
+                  onChanged: (value) {
+                    taskCreatorBloc.add(TaskCreatorTitleChanged(value));
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Field can\'t be empty';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2.0),
+                child: FormTextfieldComponent(
+                  controller: descriptionTextController,
+                  fieldName: 'Description',
+                  hintText: 'Enter your description',
+                  obscureText: false,
+                  horizontalPadding: 16.0,
+                  textCapitalization: TextCapitalization.sentences,
+                  onChanged: (value) {
+                    taskCreatorBloc.add(TaskCreatorDescriptionChanged(value));
+                  },
+                ),
+              ),
+              PriorityChipSelector(
+                priorityChips: state.priorityChips,
+                onPrioritySelected: (selectedPriority) {
+                  taskCreatorBloc.add(TaskCreatorPriorityChanged(selectedPriority));
                 },
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2.0),
-              child: FormTextfieldComponent(
-                controller: descriptionTextController,
-                fieldName: 'Description',
-                hintText: 'Enter your description',
-                obscureText: false,
-                horizontalPadding: 16.0,
-                textCapitalization: TextCapitalization.sentences,
-                onChanged: (value) {
-                  taskCreatorBloc.add(TaskCreatorDescriptionChanged(value));
-                },
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2.0),
+                child: DateTimeSelectorComponent(
+                    label: 'Select Date',
+                    initialDateTime: state.date,
+                    includeTime: false,
+                    horizontalPadding: 16.0,
+                    onDateTimeChanged: (date) {
+                      taskCreatorBloc.add(TaskCreatorDateChanged(date));
+                    }),
               ),
-            ),
-            PriorityChipSelector(
-              priorityChips: state.priorityChips,
-              onPrioritySelected: (selectedPriority) {
-                taskCreatorBloc.add(TaskCreatorPriorityChanged(selectedPriority));
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2.0),
-              child: DateTimeSelectorComponent(
-                  label: 'Select Date',
-                  initialDateTime: state.date,
-                  includeTime: false,
-                  horizontalPadding: 16.0,
-                  onDateTimeChanged: (date) {
-                    taskCreatorBloc.add(TaskCreatorDateChanged(date));
-                  }),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 2.0),
-              child: DateTimeSelectorComponent(
-                  label: 'Select Notification Time',
-                  initialDateTime: state.notificationTime ?? DateTime.now(),
-                  includeTime: true,
-                  horizontalPadding: 16.0,
-                  onDateTimeChanged: (date) {
-                    taskCreatorBloc.add(TaskCreatorNotificationTimeChanged(date));
-                  }),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(top: 2.0),
+                child: DateTimeSelectorComponent(
+                    label: 'Select Notification Time',
+                    initialDateTime: state.notificationTime ?? DateTime.now(),
+                    includeTime: true,
+                    horizontalPadding: 16.0,
+                    onDateTimeChanged: (date) {
+                      taskCreatorBloc.add(TaskCreatorNotificationTimeChanged(date));
+                    }),
+              ),
+            ],
+          ),
         ),
       );
     }

@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const WelcomeScreen(),
+      home: const TaskCreatorScreen(),
       routes: {
         AppRouter.taskCreator: (context) => const TaskCreatorScreen(),
         AppRouter.settings: (context) => const SettingsScreen(),
