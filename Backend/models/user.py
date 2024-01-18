@@ -3,13 +3,11 @@ import typing as t
 
 
 class User(BaseModel):
-    db_id: str
     id: str
     email: str
 
     def to_dict(self) -> dict:
         return {
-            "db_id": self.db_id,
             "id": self.id,
             "email": self.email
         }

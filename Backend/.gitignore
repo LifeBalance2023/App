@@ -4,4 +4,3 @@ __pycache__/
 venv/
 database/firestore/credentials.json
 
-*/.env
