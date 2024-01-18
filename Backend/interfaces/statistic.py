@@ -7,6 +7,7 @@ class IStatisticService(ABC):
     @abstractmethod
     async def get_statistics(
             self,
+            user_id: str,
             filters: Optional[StatisticRequest] = None
     ) -> StatisticsBase:
         pass

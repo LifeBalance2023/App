@@ -11,16 +11,21 @@ task_router = APIRouter(
 )
 
 
-@task_router.get("/{task_id}", response_model=Task)
+@task_router.get("/{user_id}/{task_id}", response_model=Task)
 async def get_task_by_id(
+        user_id: str,
         task_id: str,
         task_service: ITaskService = Depends(get_task_service)
 ):
-    return await task_service.get_task_by_id(task_id)
+    return await task_service.get_task_by_id(
+        user_id=user_id,
+        doc_id=task_id
+    )
 
 
-@task_router.get("/", response_model=dict)
+@task_router.get("/{user_id}", response_model=dict)
 async def get_tasks(
+        user_id: str,
         title: Optional[str] = Query(None, description="Task title"),
         description: Optional[str] = Query(None, description="Task description"),
         priority: Optional[str] = Query(None, description="Task priority"),
@@ -30,6 +35,7 @@ async def get_tasks(
         task_service: ITaskService = Depends(get_task_service)
 ):
     filters = OptionalTaskDTO(
+        userId=user_id,
         title=title,
         description=description,
         priority=priority,
@@ -41,26 +47,30 @@ async def get_tasks(
     return {"tasks": tasks}
 
 
-@task_router.post("/", status_code=status.HTTP_201_CREATED, response_model=Task)
+@task_router.post("/{user_id}", status_code=status.HTTP_201_CREATED, response_model=Task)
 async def create_task(
+        user_id: str,
         task: TaskDTO,
         task_service: ITaskService = Depends(get_task_service)
 ):
-    return await task_service.add_task(task)
+    return await task_service.add_task(user_id,task)
 
 
-@task_router.patch("/{task_id}", response_model=Task)
+@task_router.patch("/{user_id}/{task_id}", response_model=Task)
 async def update_task(
+        user_id: str,
         task_id: str,
         task: OptionalTaskDTO,
         task_service: ITaskService = Depends(get_task_service)
 ):
-    return await task_service.update_task(task_id, task)
+    print(user_id,task,task)
+    return await task_service.update_task(user_id, task_id, task)
 
 
-@task_router.delete("/{task_id}", response_model=Task)
+@task_router.delete("/{user_id}/{task_id}", response_model=Task)
 async def delete_task(
+        user_id: str,
         task_id: str,
         task_service: ITaskService = Depends(get_task_service)
 ):
-    return await task_service.delete_task(task_id)
+    return await task_service.delete_task(user_id, task_id)

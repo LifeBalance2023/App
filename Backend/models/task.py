@@ -6,6 +6,7 @@ from datetime import date, datetime
 
 class Task(BaseModel):
     id: str
+    userId: str
     title: str
     description: str
     priority: str
@@ -18,6 +19,7 @@ class Task(BaseModel):
         schema_extra = {
             "example": {
                 "id": "2",
+                "userId": "u2",
                 "title": "Task Two",
                 "description": "This is the second task",
                 "isDone": False,
@@ -61,6 +63,7 @@ class TaskDTO(BaseModel):
 
 
 class OptionalTaskDTO(BaseModel):
+    userId: Optional[str]
     title: Optional[str]
     description: Optional[str]
     priority: Optional[str]
@@ -70,6 +73,7 @@ class OptionalTaskDTO(BaseModel):
 
     def to_dict(self) -> dict:
         return {
+            "userId": self.userId,
             "title": self.title,
             "description": self.description,
             "priority": self.priority,
