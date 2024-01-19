@@ -8,5 +8,5 @@ class GetTasksResponse {
   });
 
   factory GetTasksResponse.fromJson(Map<String, dynamic> json) =>
-      GetTasksResponse(tasks: (json['tasks'] as List<Map<String, dynamic>>).map(RemoteTask.fromJson).toList());
+      GetTasksResponse(tasks: (json['tasks'] as List<dynamic>).map((task) => RemoteTask.fromJson(task)).toList());
 }

@@ -1,3 +1,4 @@
+import 'package:frontend/repository/user_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -11,10 +12,10 @@ List<SingleChildWidget> createApiProviders(DioWrapper dioWrapper) => [
       ProxyProvider<DioWrapper, AuthenticationApi>(
         update: (_, dioWrapper, __) => AuthenticationApi(dioWrapper),
       ),
-      ProxyProvider<DioWrapper, StatisticsApi>(
-        update: (_, dioWrapper, __) => StatisticsApi(dioWrapper),
+      ProxyProvider2<DioWrapper, UserRepository, StatisticsApi>(
+        update: (_, dioWrapper, userRepository, __) => StatisticsApi(dioWrapper, userRepository),
       ),
-      ProxyProvider<DioWrapper, TasksApi>(
-        update: (_, dioWrapper, __) => TasksApi(dioWrapper),
+      ProxyProvider2<DioWrapper, UserRepository, TasksApi>(
+        update: (_, dioWrapper, userRepository, __) => TasksApi(dioWrapper, userRepository),
       ),
     ];

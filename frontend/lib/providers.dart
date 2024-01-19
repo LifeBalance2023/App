@@ -16,9 +16,9 @@ MultiProvider createProviders({
       required Widget child
 }) => MultiProvider(providers: [
       ...createCacheProviders(),
+      ...createRepositoryProviders(),
       ...createFirebaseProviders(),
       ...createApiProviders(dioWrapper),
-      ...createRepositoryProviders(),
       ...createNotificationSchedulerProviders(),
       ...createServicesProviders(),
       ...createSettingsProviders(),
