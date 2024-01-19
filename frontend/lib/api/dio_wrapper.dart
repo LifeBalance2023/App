@@ -57,13 +57,11 @@ class DioWrapper {
       }
       return Result.success(response.data as T);
     } on DioException catch (dioError) {
-      print(dioError);
       return Result.failure(ResultError(
         code: dioError.response?.statusCode,
         message: dioError.message,
       ));
     } catch (error) {
-      print(error);
       return Result.failure(ResultError(message: error.toString()));
     }
   }

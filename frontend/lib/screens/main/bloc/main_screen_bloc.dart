@@ -13,11 +13,11 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
   final StatisticsService _statisticsService;
 
   MainScreenBloc(this._authenticationService, this._tasksService, this._statisticsService) : super(ShowProgressIndicator()) {
-    on<LoadMainScreen>(_onLoadTasks);
-    on<GetTasksAndStatistics>(_getTasksAndStatistics);
+    on<LoadMainScreen>(_onLoadMainScreen);
+    on<GetTasksAndStatistics>(_onGetTasksAndStatistics);
   }
 
-  Future<void> _onLoadTasks(LoadMainScreen event, Emitter<MainScreenState> emit) async {
+  Future<void> _onLoadMainScreen(LoadMainScreen event, Emitter<MainScreenState> emit) async {
     final userIdResult = await _authenticationService.getUserId();
 
     if (userIdResult.isSuccess) {
@@ -53,7 +53,7 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
     });
   }
 
-  Future<void> _getTasksAndStatistics(GetTasksAndStatistics event, Emitter<MainScreenState> emit) async {
+  Future<void> _onGetTasksAndStatistics(GetTasksAndStatistics event, Emitter<MainScreenState> emit) async {
     await _loadTasksAndStatistics(emit);
   }
 }
