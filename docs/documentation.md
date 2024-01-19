@@ -4,58 +4,165 @@ The domain diagram can [be found here on LucidChart](https://lucid.app/lucidchar
 
 ## Statistics Endpoints
 
-### GET `/statistics/{user_id}`
-- **Function**: Fetches statistics data for a given user.
-- **Parameters**:
-  - `user_id` (Path): User's ID.
-  - `date` (Query, Optional): Date in ISO format (YYYY-MM-DD).
-- **Response**: Details of user statistics.
-- **Example**:
+- `GET /statistics/{user_id}` - Get statistics for the authenticated user for a specific date.
+    - Request
+
+    ```json
+    {
+      "date": "2022-12-23"
+    }
+    ```
+
+    - Response
+    
+    ```json
+    {
+      "date": "2022-12-23",
+      "lifeBalanceValue": 100,
+      "finishedTasks": 5,
+      "toDo": 0,
+      "allTasks": 5
+    }
+    ```
+    
+- `GET /statistics/{user_id}` - Get statistics for the authenticated user.
+
   ```json
-  GET /statistics/123?date=2024-01-01
+  {
+      "progress": 50,
+      "finishedTasks": 3,
+      "toDo": 2,
+      "allTasks": 5
+    }
   ```
 
 ## Task Endpoints
 
-### GET `/tasks/{user_id}/{task_id}`
-- **Function**: Retrieves a specific task by ID for a user.
-- **Parameters**:
-  - `user_id` (Path): User's ID.
-  - `task_id` (Path): Task's ID.
-- **Response**: Details of the specified task.
-- **Example**:
-  ```json
-  GET /tasks/123/456
-  ```
+- `GET /tasks/{userId}` - Get all tasks for the authenticated user.
+    - Request
 
-### GET `/tasks/{user_id}`
-- **Function**: Fetches tasks for a user.
-- **Parameters**:
-  - `user_id` (Path): User's ID.
-  - `title` (Query, Optional): Title of the task.
-  - `description` (Query, Optional): Description of the task.
-  - `priority` (Query, Optional): Task's priority.
-  - `is_done` (Query, Optional): Completion status.
-- **Response**: List of tasks.
-- **Example**:
-  ```json
-  GET /tasks/123?title=Meeting&is_done=true
-  ```
+    ```json
+    {
+      "title": "Updated task2", // optional
+      "description": "This is the Updated task", // optional
+      "priority": "HIGH", // optional
+      "isDone": true, // optional
+      "date": "2022-12-23", // optional
+      "notificationTime": "12:04:32" // optional
+    }
+    ```
+
+    - Response
+    
+    ```json
+    {
+      "tasks": [
+        {
+          "id": "xxxxxxxxxxxxxxxxxxxx",
+          "userId": "u1",
+          "title": "Test task",
+          "description": "This is the test task",
+          "priority": "LOW",
+          "isDone": true,
+          "date": "2022-12-23",
+          "notificationTime": "10:23:45"
+        },
+        {
+          "id": "xxxxxxxxxxxxxxxxxxxx",
+          "userId": "u1",
+          "title": "Test task 2",
+          "description": "This is the test task2",
+          "priority": "MEDIUM",
+          "isDone": true,
+          "date": "2022-12-23",
+          "notificationTime": null
+        }
+      ]
+    }
+    ```
+    
+- `POST /tasks/{userId}` - Create a new task for the authenticated user.
+   - Request
+   
+    ```json
+    {
+      "title": "Task Two",
+      "description": "This is the second task",
+      "priority": "MEDIUM",
+      "date": "2023-11-15",
+      "notificationTime": "10:00:00" // optional
+    }
+    ```
+    
+   - Response
+
+   ```json
+    {
+      "id": "xxxxxxxxxxxxxxxxxxxx",
+      "userId": "u1",
+      "title": "Task Two",
+      "description": "This is the second task",
+      "priority": "MEDIUM",
+      "isDone": false,
+      "date": "2023-11-15",
+      "notificationTime": "10:00:00"
+    }
+    ``
+    
+- `PATCH /tasks/{userId}/{taskId}` - Update a specific task.
+    - Request
+
+    ```json
+    {
+      "title": "new task",
+      "description": "This is the new task",
+      "priority": "HIGH",
+      "isDone": true,
+      "date": "2022-12-23",
+      "notificationTime": "12:04:32" // optional
+    }
+    ```
+
+    - Response
+    
+    ```json
+    {
+      "id": "xxxxxxxxxxxxxxxxxxxx",
+      "userId": "u1",
+      "title": "new task",
+      "description": "This is the new task", 
+      "priority": "HIGH",
+      "isDone": true,
+      "date": "2022-12-23",
+      "notificationTime": "12:04:32"
+    }
+    ```
+    
+    
+- `DELETE /tasks/{userId}/{taskId}` - Delete a specific task.
+    - Response:
+
+    ```json
+    {
+      "id": "xxxxxxxxxxxxxxxxxxxx",
+      "userId": "u1",
+      "title": "Updated task2",
+      "description": "This is the Updated task",
+      "priority": "HIGH",
+      "isDone": true,
+      "date": "2022-12-23",
+      "notificationTime": "12:04:32"
+    }
+    ```
 
 ## User Endpoints
 
-### POST `/users/`
-- **Function**: Creates a new user.
-- **Parameters**:
-  - `UserDTO` (Body): User information.
-- **Response**: Details of the created user.
-- **Status Code**: HTTP 201 (Created).
-- **Example**:
+- `POST /users` - Add new user
+  - Request
   ```json
-  POST /users/
   {
-      "username": "johndoe",
-      "email": "johndoe@example.com"
+    "email": "dupa@google.com",
+    "userId": "u1",
   }
   ```
 
