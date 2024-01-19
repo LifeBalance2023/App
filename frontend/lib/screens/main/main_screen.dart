@@ -48,6 +48,12 @@ class MainScreen extends StatelessWidget {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          AppRouter.goToTaskCreator(context);
+        },
+        child: const Icon(Icons.add),
+      )
     );
   }
 }

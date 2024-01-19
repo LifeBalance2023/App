@@ -20,7 +20,7 @@ class TasksApi {
   }
 
   Future<Result<RemoteTask>> postTask(CreateTaskRequest request) async {
-    var result = await _dioWrapper.post('$_baseUrl/${_userRepository.getUserId()}/', data: request.toJson());
+    var result = await _dioWrapper.post('$_baseUrl/${_userRepository.getUserId()}', data: request.toJson());
     return result.map((data) => RemoteTask.fromJson(data));
   }
 
