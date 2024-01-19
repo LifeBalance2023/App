@@ -6,11 +6,15 @@ class DioWrapper {
   final Dio _dio;
   final SettingsCache _cache;
 
-  DioWrapper(this._dio, this._cache) {
-    configureDio();
+  DioWrapper._(this._dio, this._cache);
+
+  static Future<DioWrapper> create(Dio dio, SettingsCache cache) async {
+    var wrapper = DioWrapper._(dio, cache);
+    await wrapper._configureDio();
+    return wrapper;
   }
 
-  Future<void> configureDio() async {
+  Future<void> _configureDio() async {
     _dio.interceptors.add(LogInterceptor(
       request: true,
       responseBody: true,

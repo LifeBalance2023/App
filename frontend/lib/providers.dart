@@ -11,10 +11,13 @@ import 'package:provider/provider.dart';
 
 import 'api/di/api_providers.dart';
 
-MultiProvider createProviders({required Widget child}) => MultiProvider(providers: [
+MultiProvider createProviders({
+      required dioWrapper,
+      required Widget child
+}) => MultiProvider(providers: [
       ...createCacheProviders(),
       ...createFirebaseProviders(),
-      ...createApiProviders(),
+      ...createApiProviders(dioWrapper),
       ...createRepositoryProviders(),
       ...createNotificationSchedulerProviders(),
       ...createServicesProviders(),
