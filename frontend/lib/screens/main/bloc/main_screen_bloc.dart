@@ -14,35 +14,36 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
 
   MainScreenBloc(this._authenticationService, this._tasksService, this._statisticsService) : super(ShowProgressIndicator()) {
     on<LoadMainScreen>(_onLoadTasks);
+    on<GetTasksAndStatistics>(_getTasksAndStatistics);
   }
 
   Future<void> _onLoadTasks(LoadMainScreen event, Emitter<MainScreenState> emit) async {
     final userIdResult = await _authenticationService.getUserId();
 
-    if(userIdResult.isSuccess) {
-      await _loadTasks(emit);
+    if (userIdResult.isSuccess) {
+      await _synchronizeTasks(emit);
     } else {
       emit(GoToWelcomeScreen());
     }
   }
 
-  Future<void> _loadTasks(Emitter<MainScreenState> emit) async {
+  Future<void> _synchronizeTasks(Emitter<MainScreenState> emit) async {
     final synchronizeTasksResult = await _tasksService.synchronizeTasks();
 
-    if(synchronizeTasksResult.isFailure) {
+    if (synchronizeTasksResult.isFailure) {
       emit(MainScreenError("Error synchronizing tasks: ${synchronizeTasksResult.error?.code} ${synchronizeTasksResult.error?.message}}"));
       return;
     }
 
-    await _loadStatistics(emit);
+    await _loadTasksAndStatistics(emit);
   }
 
-  Future<void> _loadStatistics(Emitter<MainScreenState> emit) async {
+  Future<void> _loadTasksAndStatistics(Emitter<MainScreenState> emit) async {
     final getStatisticsResult = await _statisticsService.getDailyStatistics(DateTime.now());
     getStatisticsResult.onFailure((error) {
       emit(MainScreenError("Error getting statistics: ${error.code} ${error.message}}"));
     }).onSuccess((statistics) {
-      final tasksResult = _tasksService.getTasksForDate(DateTime.now()); // TODO: Think about getting all tasks
+      final tasksResult = _tasksService.getAllTasks();    // TODO: Choose specific date
 
       tasksResult.onFailure((error) {
         emit(MainScreenError("Error getting tasks: ${error.code} ${error.message}}"));
@@ -50,5 +51,9 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
         emit(ShowMainScreen(tasks, statistics));
       });
     });
+  }
+
+  Future<void> _getTasksAndStatistics(GetTasksAndStatistics event, Emitter<MainScreenState> emit) async {
+    await _loadTasksAndStatistics(emit);
   }
 }

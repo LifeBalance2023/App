@@ -49,8 +49,9 @@ class MainScreen extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          AppRouter.goToTaskCreator(context);
+        onPressed: () async {
+          await AppRouter.goToTaskCreator(context);
+          mainScreenBloc.add(GetTasksAndStatistics());
         },
         child: const Icon(Icons.add),
       )
