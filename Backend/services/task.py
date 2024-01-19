@@ -15,6 +15,7 @@ class TaskService(ITaskService):
 
     async def get_task_by_id(
             self,
+            user_id: str,
             doc_id: str
     ) -> Task:
         doc_ref = self.db_manager.collection(self.collection_name).document(doc_id)
@@ -24,14 +25,19 @@ class TaskService(ITaskService):
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                                 detail=f"Task with id: {doc_id} not found")
 
-        return FirestoreTranslator.document_to_object(task_doc, Task)
+        task_obj: Task = FirestoreTranslator.document_to_object(task_doc, Task)
+
+        if not task_obj.userId == user_id:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail=f"Task with id: {doc_id} exists but you are not authorized to handle")
+
+        return task_obj
 
     async def get_tasks(
             self,
             filters: Optional[OptionalTaskDTO] = None
     ) -> List[Task]:
-        doc_ref = self.db_manager.collection(self.collection_name)
-        docs = doc_ref
+        docs = self.db_manager.collection(self.collection_name)
 
         if filters is not None:
             for key, value in filters.to_dict().items():
@@ -49,18 +55,21 @@ class TaskService(ITaskService):
 
     async def add_task(
             self,
+            user_id: str,
             task: TaskDTO
     ) -> Task:
         collection_ref = self.db_manager.collection(self.collection_name)
-        timestamp, doc_ref = await collection_ref.add(task.to_dict())
+        task_dict = task.to_dict()
+        task_dict["userId"] = user_id
+        timestamp, doc_ref = await collection_ref.add(task_dict)
 
         if doc_ref.id is not None:
-            added_data = task.to_dict()
-            added_data["id"] = doc_ref.id
-            return Task(**added_data)
+            task_dict["id"] = doc_ref.id
+            return Task(**task_dict)
 
     async def update_task(
             self,
+            user_id: str,
             doc_id: str,
             update_task: OptionalTaskDTO
     ) -> Task:
@@ -72,6 +81,11 @@ class TaskService(ITaskService):
                                 detail=f"Task with id: {doc_id} not found")
 
         base: TaskDTO = FirestoreTranslator.update_base_object(to_update, TaskDTO, update_task)
+
+        if not to_update.userId == user_id:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail=f"Task with id: {doc_id} exists but you are not authorized to handle")
+
         await doc_ref.update(base.to_dict())
 
         updated = await doc_ref.get()
@@ -80,9 +94,11 @@ class TaskService(ITaskService):
 
     async def delete_task(
             self,
+            user_id: str,
             doc_id: str
     ) -> Task:
-        doc_ref = self.db_manager.collection(self.collection_name).document(doc_id)
+        doc_ref = self.db_manager.collection(self.collection_name).where(filter=FieldFilter('userId', '==', user_id))
+        doc_ref = doc_ref.document(doc_id)
         deleted_task_doc = await doc_ref.get()
 
         if not deleted_task_doc.exists:
@@ -90,6 +106,10 @@ class TaskService(ITaskService):
                                 detail=f"Task with id: {doc_id} not found")
 
         deleted_task = FirestoreTranslator.document_to_object(deleted_task_doc, Task)
+
+        if not deleted_task.userId == user_id:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail=f"Task with id: {doc_id} exists but you are not authorized to handle")
 
         await doc_ref.delete()
 

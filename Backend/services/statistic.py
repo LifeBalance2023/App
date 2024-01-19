@@ -13,12 +13,15 @@ class StatisticService(IStatisticService):
 
     async def get_statistics(
             self,
+            user_id: str,
             filters: Optional[StatisticRequest] = None
     ) -> StatisticsBase:
-        task_filters = OptionalTaskDTO()
+        task_filters = OptionalTaskDTO(userId=user_id)
 
         if filters is not None:
-            task_filters = OptionalTaskDTO(**filters.to_dict())
+            filters_dict = filters.to_dict()
+            filters_dict['userId'] = user_id
+            task_filters = OptionalTaskDTO(**filters_dict)
 
         task_list: List[Task] = await self.task_service.get_tasks(task_filters)
 

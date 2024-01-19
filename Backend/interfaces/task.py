@@ -7,6 +7,7 @@ class ITaskService(ABC):
     @abstractmethod
     async def get_task_by_id(
             self,
+            user_id: str,
             doc_id: str
     ) -> Task:
         pass
@@ -21,6 +22,7 @@ class ITaskService(ABC):
     @abstractmethod
     async def add_task(
             self,
+            user_id: str,
             task: TaskDTO
     ) -> Task:
         pass
@@ -28,7 +30,8 @@ class ITaskService(ABC):
     @abstractmethod
     async def update_task(
             self,
-            task_id: str,
+            user_id: str,
+            doc_id: str,
             update_task: OptionalTaskDTO
     ) -> Task:
         pass
@@ -36,6 +39,7 @@ class ITaskService(ABC):
     @abstractmethod
     async def delete_task(
             self,
+            user_id: str,
             task_id: str
     ) -> Task:
         pass
