@@ -33,14 +33,15 @@ class MainScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          if(state is ShowProgressIndicator) {
+          if (state is ShowProgressIndicator) {
             return const Center(
               child: CircularProgressIndicator(),
             );
           }
           if (state is ShowMainScreen) {
             return Center(
-              child: Text('Main Screen ${state.tasks.length} ${state.statistics.amountOfAllTasks}'),
+              child: Text(
+                  'Main Screen ${state.tasks.length} ${state.statistics.amountOfAllTasks}'),
             );
           }
           return const Center(
@@ -54,7 +55,7 @@ class MainScreen extends StatelessWidget {
           mainScreenBloc.add(GetTasksAndStatistics());
         },
         child: const Icon(Icons.add),
-      )
+      ),
     );
   }
 }

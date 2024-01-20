@@ -7,8 +7,7 @@ import 'package:frontend/screens/task_creator/bloc/task_creator_bloc.dart';
 import 'package:frontend/screens/task_creator/bloc/task_creator_event.dart';
 import 'package:frontend/screens/task_creator/bloc/task_creator_state.dart';
 import 'package:frontend/screens/task_creator/widgets/priority_chip_selector.dart';
-
-import '../../components/custom_button.dart';
+import 'package:frontend/components/custom_button.dart';
 
 class TaskCreatorScreen extends StatelessWidget {
   const TaskCreatorScreen({Key? key}) : super(key: key);
@@ -43,10 +42,12 @@ class TaskCreatorScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: BlocConsumer<TaskCreatorBloc, TaskCreatorState>(
             listener: (context, state) {
-              _blocListener(state, titleTextController, descriptionTextController, context);
+              _blocListener(state, titleTextController,
+                  descriptionTextController, context);
             },
             builder: (context, state) {
-              return _blocBuilder(state, titleTextController, taskCreatorBloc, descriptionTextController, formKey, context);
+              return _blocBuilder(state, titleTextController, taskCreatorBloc,
+                  descriptionTextController, formKey, context);
             },
           ),
         ),
@@ -56,7 +57,7 @@ class TaskCreatorScreen extends StatelessWidget {
         width: 140,
         height: 48,
         onPressed: () {
-          if(!formKey.currentState!.validate()) {
+          if (!formKey.currentState!.validate()) {
             return;
           }
 
@@ -140,30 +141,34 @@ class TaskCreatorScreen extends StatelessWidget {
               PriorityChipSelector(
                 priorityChips: state.priorityChips,
                 onPrioritySelected: (selectedPriority) {
-                  taskCreatorBloc.add(TaskCreatorPriorityChanged(selectedPriority));
+                  taskCreatorBloc
+                      .add(TaskCreatorPriorityChanged(selectedPriority));
                 },
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 2.0),
                 child: DateTimeSelectorComponent(
-                    label: 'Select Date',
-                    initialDateTime: state.date,
-                    includeTime: false,
-                    horizontalPadding: 16.0,
-                    onDateTimeChanged: (date) {
-                      taskCreatorBloc.add(TaskCreatorDateChanged(date));
-                    }),
+                  label: 'Select Date',
+                  initialDateTime: state.date,
+                  includeTime: false,
+                  horizontalPadding: 16.0,
+                  onDateTimeChanged: (date) {
+                    taskCreatorBloc.add(TaskCreatorDateChanged(date));
+                  },
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 2.0),
                 child: DateTimeSelectorComponent(
-                    label: 'Select Notification Time',
-                    initialDateTime: state.notificationTime ?? DateTime.now(),
-                    includeTime: true,
-                    horizontalPadding: 16.0,
-                    onDateTimeChanged: (date) {
-                      taskCreatorBloc.add(TaskCreatorNotificationTimeChanged(date));
-                    }),
+                  label: 'Select Notification Time',
+                  initialDateTime: state.notificationTime ?? DateTime.now(),
+                  includeTime: true,
+                  horizontalPadding: 16.0,
+                  onDateTimeChanged: (date) {
+                    taskCreatorBloc
+                        .add(TaskCreatorNotificationTimeChanged(date));
+                  },
+                ),
               ),
             ],
           ),

@@ -1,4 +1,4 @@
-import '../../../../domain/result.dart';
+import 'package:frontend/domain/result.dart';
 
 abstract class LoginState {
   final String email;
@@ -26,8 +26,6 @@ class LoginSuccess extends LoginState {
 class LoginFailure extends LoginState {
   final ResultError error;
 
-  LoginFailure({email, password, required this.error}) : super(email: email, password: password);
-
+  LoginFailure({email, password, required this.error})
+      : super(email: email, password: password);
 }
-
-

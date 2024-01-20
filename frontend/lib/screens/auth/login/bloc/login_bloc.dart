@@ -1,8 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/screens/auth/login/bloc/login_event.dart';
 import 'package:frontend/screens/auth/login/bloc/login_state.dart';
-
-import '../../../../services/authentication/authentication_service.dart';
+import 'package:frontend/services/authentication/authentication_service.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthenticationService _authenticationService;
