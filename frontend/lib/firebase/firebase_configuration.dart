@@ -14,7 +14,7 @@ class FirebaseConfiguration {
       );
       return Result.voidSuccess();
     } catch (e) {
-      return Result.failure(Error(message: 'Firebase initialization failed: $e'));
+      return Result.failure(ResultError(message: 'Firebase initialization failed: $e'));
     }
   }
   

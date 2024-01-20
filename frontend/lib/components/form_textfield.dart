@@ -7,6 +7,10 @@ class FormTextfieldComponent extends StatelessWidget {
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final void Function(String)? onChanged;
+  final double? horizontalPadding;
+  final TextCapitalization textCapitalization;
+  final bool readOnly;
+  final void Function()? onTap;
 
   const FormTextfieldComponent({
     Key? key,
@@ -16,13 +20,17 @@ class FormTextfieldComponent extends StatelessWidget {
     this.controller,
     this.validator,
     this.onChanged,
+    this.horizontalPadding = 35.0,
+    this.textCapitalization = TextCapitalization.none,
+    this.readOnly = false,
+    this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 35.0,
+      padding: EdgeInsets.symmetric(
+        horizontal: horizontalPadding ?? 35.0,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,6 +88,9 @@ class FormTextfieldComponent extends StatelessWidget {
             ),
             validator: validator,
             onChanged: onChanged,
+            textCapitalization: textCapitalization,
+            readOnly: readOnly,
+            onTap: onTap,
           ),
         ],
       ),

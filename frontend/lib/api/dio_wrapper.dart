@@ -11,6 +11,15 @@ class DioWrapper {
   }
 
   Future<void> configureDio() async {
+    _dio.interceptors.add(LogInterceptor(
+      request: true,
+      responseBody: true,
+      requestBody: true,
+      responseHeader: false,
+      requestHeader: false,
+      error: true,
+    ));
+
     final settingsResult = await _cache.loadSettings();
 
     settingsResult.onSuccess((settings) {
@@ -33,6 +42,10 @@ class DioWrapper {
       _safeApiCall(() => _dio.delete(path, data: data, queryParameters: queryParameters));
 
   Future<Result<T>> _safeApiCall<T>(Future<Response<T>> Function() apiCall) async {
+    if(_dio.options.baseUrl.isEmpty) {
+      return Result.failure(ResultError(message: 'Backend url is not set. Go to settings to set it up'));
+    }
+
     try {
       final Response<T> response = await apiCall();
       if(response.data == null) {
@@ -40,12 +53,14 @@ class DioWrapper {
       }
       return Result.success(response.data as T);
     } on DioException catch (dioError) {
-      return Result.failure(Error(
+      print(dioError);
+      return Result.failure(ResultError(
         code: dioError.response?.statusCode,
         message: dioError.message,
       ));
     } catch (error) {
-      return Result.failure(Error(message: error.toString()));
+      print(error);
+      return Result.failure(ResultError(message: error.toString()));
     }
   }
 }
