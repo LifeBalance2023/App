@@ -1,8 +1,12 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/api/dio_wrapper.dart';
+import 'package:frontend/cache/settings_cache.dart';
 import 'package:frontend/providers.dart';
 import 'package:frontend/router/router.dart';
 import 'package:frontend/screens/auth/login/login_screen.dart';
 import 'package:frontend/screens/auth/register/register_screen.dart';
+import 'package:frontend/screens/main/main_screen.dart';
 import 'package:frontend/screens/settings/settings_screen.dart';
 import 'package:frontend/screens/task_creator/task_creator_screen.dart';
 import 'package:frontend/screens/welcome_screen.dart';
@@ -16,7 +20,8 @@ void main() async {
   (await FirebaseConfiguration.initialize()).onFailure((error) {
     print(error.message);
   });
-  runApp(const MyApp());
+  final dioWrapper = await DioWrapper.create(Dio(), SettingsCache());
+  runApp(MyApp(dioWrapper: dioWrapper));
 }
 
 void _initializeTimeZones() {
@@ -25,35 +30,39 @@ void _initializeTimeZones() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final DioWrapper dioWrapper;
+
+  const MyApp({super.key, required this.dioWrapper});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return createProviders(
+        dioWrapper: dioWrapper,
         child: MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Life Balance App',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const TaskCreatorScreen(),
-      routes: {
-        AppRouter.taskCreator: (context) => const TaskCreatorScreen(),
-        AppRouter.settings: (context) => const SettingsScreen(),
-        AppRouter.welcomeScreen: (context) => const WelcomeScreen(),
-        AppRouter.login: (context) => const LoginScreen(),
-        AppRouter.register: (context) => const RegisterScreen(),
-      },
-    ));
+          debugShowCheckedModeBanner: false,
+          title: 'Life Balance App',
+          theme: ThemeData(
+            // This is the theme of your application.
+            //
+            // Try running your application with "flutter run". You'll see the
+            // application has a blue toolbar. Then, without quitting the app, try
+            // changing the primarySwatch below to Colors.green and then invoke
+            // "hot reload" (press "r" in the console where you ran "flutter run",
+            // or simply save your changes to "hot reload" in a Flutter IDE).
+            // Notice that the counter didn't reset back to zero; the application
+            // is not restarted.
+            primarySwatch: Colors.blue,
+          ),
+          home: const MainScreen(),
+          routes: {
+            AppRouter.taskCreator: (context) => const TaskCreatorScreen(),
+            AppRouter.settings: (context) => const SettingsScreen(),
+            AppRouter.welcomeScreen: (context) => const WelcomeScreen(),
+            AppRouter.login: (context) => const LoginScreen(),
+            AppRouter.register: (context) => const RegisterScreen(),
+            AppRouter.main: (context) => const MainScreen(),
+          },
+        ));
   }
 }

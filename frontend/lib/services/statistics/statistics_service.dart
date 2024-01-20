@@ -3,6 +3,7 @@ import 'package:frontend/domain/result.dart';
 import 'package:frontend/domain/statistics_values.dart';
 import 'package:frontend/services/statistics/adapters/daily_statistics_adapter.dart';
 import 'package:frontend/services/statistics/adapters/user_statistics_adapter.dart';
+import 'package:frontend/utils/date_time_formatter.dart';
 
 class StatisticsService {
   final StatisticsApi _statisticsApi;
@@ -17,7 +18,7 @@ class StatisticsService {
   }
 
   Future<Result<DailyStatisticsValue>> getDailyStatistics(DateTime date) async {
-    final response = await _statisticsApi.getDailyStatistics(date.toString());
+    final response = await _statisticsApi.getDailyStatistics(DateTimeFormatter.toDate(date));
     return response.map(_dailyStatisticsAdapter.adapt);
   }
 }

@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/api/dio_wrapper.dart';
+import 'package:frontend/cache/settings_cache.dart';
 import 'package:frontend/services/authentication/authentication_service.dart';
 import 'package:provider/provider.dart';
 import 'domain/result.dart';
@@ -32,6 +35,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: createProviders(
+        dioWrapper: DioWrapper.create(Dio(), SettingsCache()),
         child: SampleSignInScreen(),
       ),
     );

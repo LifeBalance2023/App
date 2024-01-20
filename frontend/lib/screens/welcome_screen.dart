@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/custom_button.dart';
-import 'package:frontend/screens/auth/register/register_screen.dart';
-import 'auth/login/login_screen.dart';
+import 'package:frontend/router/router.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -63,12 +62,7 @@ class WelcomeScreen extends StatelessWidget {
                     width: 192,
                     height: 48,
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LoginScreen(),
-                        ),
-                      );
+                      AppRouter.goToLogin(context);
                     },
                   ),
                   const SizedBox(
@@ -79,12 +73,7 @@ class WelcomeScreen extends StatelessWidget {
                     width: 192,
                     height: 48,
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterScreen(),
-                        ),
-                      );
+                      AppRouter.goToRegister(context);
                     },
                   ),
                 ],
