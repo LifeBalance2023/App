@@ -83,7 +83,6 @@ void _blocListener(
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Failed to log in: ${state.error.message}')),
     );
-
   }
 }
 

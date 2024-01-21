@@ -4,6 +4,7 @@ import 'package:frontend/firebase/firebase_providers.dart';
 import 'package:frontend/repository/di/repository_providers.dart';
 import 'package:frontend/scheduler/notification_scheduler_provider.dart';
 import 'package:frontend/screens/auth/login/di/login_provider.dart';
+import 'package:frontend/screens/auth/register/di/register_provider.dart';
 import 'package:frontend/screens/main/di/main_screen_provider.dart';
 import 'package:frontend/screens/settings/di/settings_provider.dart';
 import 'package:frontend/screens/task_creator/di/task_creator_provider.dart';
@@ -20,6 +21,7 @@ MultiProvider createProviders({required dioWrapper, required Widget child}) =>
       ...createNotificationSchedulerProviders(),
       ...createServicesProviders(),
       ...createLoginProviders(),
+      ...createRegisterProviders(),
       ...createSettingsProviders(),
       ...createTaskCreatorProviders(),
       ...createMainScreenProviders(),
