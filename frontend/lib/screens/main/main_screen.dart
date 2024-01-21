@@ -71,33 +71,10 @@ class MainScreen extends StatelessWidget {
       ),
       body: BlocConsumer<MainScreenBloc, MainScreenState>(
         listener: (context, state) {
-          if (state is MainScreenError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.errorMessage),
-              ),
-            );
-          }
-
-          if (state is GoToWelcomeScreen) {
-            AppRouter.goToWelcomeScreen(context);
-          }
+          _blocListener(state, context);
         },
         builder: (context, state) {
-          if (state is ShowProgressIndicator) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (state is ShowMainScreen) {
-            return Center(
-              child: Text(
-                  'Main Screen ${state.tasks.length} ${state.statistics.amountOfAllTasks}'),
-            );
-          }
-          return const Center(
-            child: Text('Error'),
-          );
+          return _blocBuilder(state, context);
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -109,4 +86,41 @@ class MainScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+void _blocListener(
+  MainScreenState state,
+  BuildContext context,
+) {
+  if (state is MainScreenError) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(state.errorMessage),
+      ),
+    );
+  }
+
+  if (state is GoToWelcomeScreen) {
+    AppRouter.goToWelcomeScreen(context);
+  }
+}
+
+Widget _blocBuilder(
+  MainScreenState state,
+  BuildContext context,
+) {
+  if (state is ShowProgressIndicator) {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+  if (state is ShowMainScreen) {
+    return Center(
+      child: Text(
+          'Main Screen ${state.tasks.length} ${state.statistics.amountOfAllTasks}'),
+    );
+  }
+  return const Center(
+    child: Text('Error'),
+  );
 }

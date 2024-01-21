@@ -67,113 +67,112 @@ class TaskCreatorScreen extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
+}
 
-  void _blocListener(
-    TaskCreatorState state,
-    TextEditingController titleTextController,
-    TextEditingController descriptionTextController,
-    BuildContext context,
-  ) {
-    if (state is TaskModificationState) {
-      titleTextController.text = state.title;
-      descriptionTextController.text = state.description ?? '';
-    }
-    if (state is TaskCreationSavingSuccess) {
-      AppRouter.goBack(context);
-    } else if (state is TaskCreationSavingFailure) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to save task: ${state.error.message}')),
-      );
-    }
+void _blocListener(
+  TaskCreatorState state,
+  TextEditingController titleTextController,
+  TextEditingController descriptionTextController,
+  BuildContext context,
+) {
+  if (state is TaskModificationState) {
+    titleTextController.text = state.title;
+    descriptionTextController.text = state.description ?? '';
   }
+  if (state is TaskCreationSavingSuccess) {
+    AppRouter.goBack(context);
+  } else if (state is TaskCreationSavingFailure) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Failed to save task: ${state.error.message}')),
+    );
+  }
+}
 
-  Widget _blocBuilder(
-    TaskCreatorState state,
-    TextEditingController titleTextController,
-    TaskCreatorBloc taskCreatorBloc,
-    TextEditingController descriptionTextController,
-    GlobalKey<FormState> formKey,
-    BuildContext context,
-  ) {
-    if (state is TaskCreationSavingInProgress) {
-      return const CircularProgressIndicator();
-    } else {
-      return Form(
-        key: formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(bottom: 2.0),
-                child: FormTextfieldComponent(
-                  controller: titleTextController,
-                  fieldName: 'Title',
-                  hintText: 'Enter your title',
-                  obscureText: false,
-                  horizontalPadding: 16.0,
-                  textCapitalization: TextCapitalization.words,
-                  onChanged: (value) {
-                    taskCreatorBloc.add(TaskCreatorTitleChanged(value));
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Field can\'t be empty';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2.0),
-                child: FormTextfieldComponent(
-                  controller: descriptionTextController,
-                  fieldName: 'Description',
-                  hintText: 'Enter your description',
-                  obscureText: false,
-                  horizontalPadding: 16.0,
-                  textCapitalization: TextCapitalization.sentences,
-                  onChanged: (value) {
-                    taskCreatorBloc.add(TaskCreatorDescriptionChanged(value));
-                  },
-                ),
-              ),
-              PriorityChipSelector(
-                priorityChips: state.priorityChips,
-                onPrioritySelected: (selectedPriority) {
-                  taskCreatorBloc
-                      .add(TaskCreatorPriorityChanged(selectedPriority));
+Widget _blocBuilder(
+  TaskCreatorState state,
+  TextEditingController titleTextController,
+  TaskCreatorBloc taskCreatorBloc,
+  TextEditingController descriptionTextController,
+  GlobalKey<FormState> formKey,
+  BuildContext context,
+) {
+  if (state is TaskCreationSavingInProgress) {
+    return const CircularProgressIndicator();
+  } else {
+    return Form(
+      key: formKey,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(bottom: 2.0),
+              child: FormTextfieldComponent(
+                controller: titleTextController,
+                fieldName: 'Title',
+                hintText: 'Enter your title',
+                obscureText: false,
+                horizontalPadding: 16.0,
+                textCapitalization: TextCapitalization.words,
+                onChanged: (value) {
+                  taskCreatorBloc.add(TaskCreatorTitleChanged(value));
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Field can\'t be empty';
+                  }
+                  return null;
                 },
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2.0),
-                child: DateTimeSelectorComponent(
-                  label: 'Select Date',
-                  initialDateTime: state.date,
-                  includeTime: false,
-                  horizontalPadding: 16.0,
-                  onDateTimeChanged: (date) {
-                    taskCreatorBloc.add(TaskCreatorDateChanged(date));
-                  },
-                ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2.0),
+              child: FormTextfieldComponent(
+                controller: descriptionTextController,
+                fieldName: 'Description',
+                hintText: 'Enter your description',
+                obscureText: false,
+                horizontalPadding: 16.0,
+                textCapitalization: TextCapitalization.sentences,
+                onChanged: (value) {
+                  taskCreatorBloc.add(TaskCreatorDescriptionChanged(value));
+                },
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 2.0),
-                child: DateTimeSelectorComponent(
-                  label: 'Select Notification Time',
-                  initialDateTime: state.notificationTime ?? DateTime.now(),
-                  includeTime: true,
-                  horizontalPadding: 16.0,
-                  onDateTimeChanged: (date) {
-                    taskCreatorBloc
-                        .add(TaskCreatorNotificationTimeChanged(date));
-                  },
-                ),
+            ),
+            PriorityChipSelector(
+              priorityChips: state.priorityChips,
+              onPrioritySelected: (selectedPriority) {
+                taskCreatorBloc
+                    .add(TaskCreatorPriorityChanged(selectedPriority));
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2.0),
+              child: DateTimeSelectorComponent(
+                label: 'Select Date',
+                initialDateTime: state.date,
+                includeTime: false,
+                horizontalPadding: 16.0,
+                onDateTimeChanged: (date) {
+                  taskCreatorBloc.add(TaskCreatorDateChanged(date));
+                },
               ),
-            ],
-          ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 2.0),
+              child: DateTimeSelectorComponent(
+                label: 'Select Notification Time',
+                initialDateTime: state.notificationTime ?? DateTime.now(),
+                includeTime: true,
+                horizontalPadding: 16.0,
+                onDateTimeChanged: (date) {
+                  taskCreatorBloc.add(TaskCreatorNotificationTimeChanged(date));
+                },
+              ),
+            ),
+          ],
         ),
-      );
-    }
+      ),
+    );
   }
 }
