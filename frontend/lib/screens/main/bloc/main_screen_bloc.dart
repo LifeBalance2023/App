@@ -16,6 +16,7 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
       : super(ShowProgressIndicator()) {
     on<LoadMainScreen>(_onLoadMainScreen);
     on<GetTasksAndStatistics>(_onGetTasksAndStatistics);
+    on<SignOutRequest>(_onSignOutRequest);
   }
 
   Future<void> _onLoadMainScreen(
@@ -63,5 +64,15 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
   Future<void> _onGetTasksAndStatistics(
       GetTasksAndStatistics event, Emitter<MainScreenState> emit) async {
     await _loadTasksAndStatistics(emit);
+  }
+
+  Future<void> _onSignOutRequest(
+      SignOutRequest event, Emitter<MainScreenState> emit) async {
+    final signOutResult = await _authenticationService.signOut();
+
+    signOutResult
+        .onFailure((error) => emit(MainScreenError(
+            "Error while signing out: ${error.code} ${error.message}}")))
+        .onSuccess((_) => emit(GoToWelcomeScreen()));
   }
 }

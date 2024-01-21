@@ -44,8 +44,19 @@ class MainScreen extends StatelessWidget {
                   'Main Screen ${state.tasks.length} ${state.statistics.amountOfAllTasks}'),
             );
           }
-          return const Center(
-            child: Text('Error'),
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Error'),
+                ElevatedButton(
+                  onPressed: () {
+                    mainScreenBloc.add(SignOutRequest());
+                  },
+                  child: const Text('Sign out'),
+                )
+              ],
+            ),
           );
         },
       ),
