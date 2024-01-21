@@ -1,28 +1,28 @@
 import 'package:frontend/domain/box.dart';
 
 class Result<T> {
-  Box<T> _value = EmptyBox();
-  Box<ResultError> _error = EmptyBox();
+  Box<T> _valueBox = EmptyBox();
+  Box<ResultError> _errorBox = EmptyBox();
 
-  bool get isSuccess => _value is ValueBox<T>;
-  bool get isFailure => _error is ValueBox<ResultError>;
+  bool get isSuccess => _valueBox is ValueBox<T>;
+  bool get isFailure => _errorBox is ValueBox<ResultError>;
 
-  T get value => (_value as ValueBox<T>).value;
-  ResultError get error => (_error as ValueBox<ResultError>).value;
+  T get value => (_valueBox as ValueBox<T>).value;
+  ResultError get error => (_errorBox as ValueBox<ResultError>).value;
 
   Result.success(T value) {
-    this._value = ValueBox(value);
+    this._valueBox = ValueBox(value);
   }
   Result.failure(ResultError error) {
-    this._error = ValueBox(error);
+    this._errorBox = ValueBox(error);
   }
-  Result._failure(this._error);
+  Result._failure(this._errorBox);
 
   Result<U> map<U>(U Function(T) transform) {
     if (isSuccess) {
       return Result.success(transform(value));
     }
-    return Result._failure(_error);
+    return Result._failure(_errorBox);
   }
 
   Result<T> mapFailure(ResultError Function(ResultError) transform) {
