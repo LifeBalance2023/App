@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/components/custom_button.dart';
 import 'package:frontend/components/divider_with_text.dart';
+import 'package:frontend/components/form_textfield.dart';
 import 'package:frontend/router/router.dart';
 import 'package:frontend/screens/auth/register/bloc/register_bloc.dart';
 import 'package:frontend/screens/auth/register/bloc/register_state.dart';
+import 'package:frontend/screens/auth/register/bloc/register_event.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -137,7 +139,91 @@ Widget _blocBuilder(
           const SizedBox(
             height: 45,
           ),
-          //TODO add register fields
+          FormTextfieldComponent(
+            fieldName: 'Email',
+            hintText: 'Enter your email',
+            obscureText: false,
+            controller: emailTextController,
+            onChanged: (value) {
+              registerBloc.add(EmailChanged(email: value));
+            },
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Field can\'t be empty';
+              }
+
+              final emailRegex =
+                  RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
+              if (!emailRegex.hasMatch(value)) {
+                return 'Please provide an email in valid form';
+              }
+
+              return null;
+            },
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          FormTextfieldComponent(
+            fieldName: 'Password',
+            hintText: 'Enter your password',
+            obscureText: true,
+            controller: passwordTextController,
+            onChanged: (value) {
+              registerBloc.add(PasswordChanged(password: value));
+            },
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Field can\'t be empty';
+              } else if (value.length < 6) {
+                return 'Min. 6 characters';
+              }
+
+              final passwordRegex = RegExp(r'^(?=.*[A-Z])(?=.*\d)');
+              if (!passwordRegex.hasMatch(value)) {
+                return 'Password needs capital letters and digits';
+              }
+
+              return null;
+            },
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          FormTextfieldComponent(
+            hintText: 'Confirm your password',
+            obscureText: true,
+            controller: confirmPasswordTextController,
+            onChanged: (value) {
+              registerBloc.add(ConfirmPasswordChanged(confirmPassword: value));
+            },
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Field can\'t be empty';
+              }
+
+              if (value != passwordTextController.text) {
+                return 'Passwords don\'t match';
+              }
+
+              return null;
+            },
+          ),
+          const SizedBox(
+            height: 35,
+          ),
+          CustomButtonComponent(
+            text: 'Register now',
+            width: 328,
+            height: 48,
+            onPressed: () {
+              if (!formKey.currentState!.validate()) {
+                return;
+              }
+
+              registerBloc.add(RegisterWithCredentialsRequest());
+            },
+          ),
           const SizedBox(
             height: 45,
           ),
