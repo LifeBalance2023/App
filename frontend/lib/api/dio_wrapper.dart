@@ -52,9 +52,6 @@ class DioWrapper {
 
     try {
       final Response<T> response = await apiCall();
-      if(response.data == null) {
-        return Result.voidSuccess();
-      }
       return Result.success(response.data as T);
     } on DioException catch (dioError) {
       return Result.failure(ResultError(

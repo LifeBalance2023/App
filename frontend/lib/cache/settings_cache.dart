@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SettingsCache {
   final String _settingsKey = 'settings';
 
-  Future<Result<void>> saveSettings(SettingsValue settings) async => Result.runVoidCatchingAsync(() async {
+  Future<Result<void>> saveSettings(SettingsValue settings) async => Result.runCatchingAsync(() async {
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         String settingsJson = _toJson(settings);
         await prefs.setString(_settingsKey, settingsJson);

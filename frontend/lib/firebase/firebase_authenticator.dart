@@ -73,7 +73,7 @@ class FirebaseAuthenticator {
     try {
       await _googleSignIn.signOut();
       await _auth.signOut();
-      return Result.voidSuccess();
+      return Result.success(null);
     } on FirebaseAuthException catch (e) {
       return Result.failure(ResultError(message: "Code:${e.code} Message:${e.message}"));
     } catch (e) {
