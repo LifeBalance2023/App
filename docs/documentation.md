@@ -162,7 +162,7 @@ The domain diagram can [be found here on LucidChart](https://lucid.app/lucidchar
   ```json
   {
     "email": "dupa@google.com",
-    "userId": "u1",
+    "id": "u1"
   }
   ```
 

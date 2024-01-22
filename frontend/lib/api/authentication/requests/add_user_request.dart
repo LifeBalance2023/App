@@ -6,6 +6,6 @@ class AddUserRequest {
 
   Map<String, dynamic> toJson() => {
         'email': email,
-        'userId': userId,
+        'id': userId,
       };
 }
