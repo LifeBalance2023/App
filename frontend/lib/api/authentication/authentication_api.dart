@@ -9,5 +9,5 @@ class AuthenticationApi {
 
   AuthenticationApi(DioWrapper dioWrapper) : _dioWrapper = dioWrapper;
 
-  Future<Result<void>> addUser(AddUserRequest request) => _dioWrapper.post(_baseUrl, data: request.toJson());
+  Future<Result<void>> addUser(AddUserRequest request) => _dioWrapper.post('$_baseUrl/', data: request.toJson());
 }
