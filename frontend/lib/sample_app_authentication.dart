@@ -14,7 +14,10 @@ import 'firebase/firebase_configuration.dart';
 void main() async {
   _initializeTimeZones();
   (await FirebaseConfiguration.initialize()).onFailure(print);
-  runApp(const MyApp());
+
+  final dioWrapper = await DioWrapper.create(Dio(), SettingsCache());
+
+  runApp(MyApp(dioWrapper: dioWrapper));
 }
 
 void _initializeTimeZones() {
@@ -23,7 +26,9 @@ void _initializeTimeZones() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final DioWrapper dioWrapper;
+
+  const MyApp({super.key, required this.dioWrapper});
 
   // This widget is the root of your application.
   @override
@@ -35,7 +40,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: createProviders(
-        dioWrapper: DioWrapper.create(Dio(), SettingsCache()),
+        dioWrapper: dioWrapper,
         child: SampleSignInScreen(),
       ),
     );

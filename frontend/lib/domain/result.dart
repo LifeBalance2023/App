@@ -1,37 +1,42 @@
+import 'package:frontend/domain/box.dart';
+
 class Result<T> {
-  T? value;
-  ResultError? error;
-  bool _isVoidSuccess = false;
+  Box<T> _valueBox = EmptyBox();
+  Box<ResultError> _errorBox = EmptyBox();
 
-  bool get isSuccess => value != null || _isVoidSuccess;
-  bool get isFailure => error != null;
+  bool get isSuccess => _valueBox is ValueBox<T>;
+  bool get isFailure => _errorBox is ValueBox<ResultError>;
 
-  Result.success(T this.value);
-  Result.failure(this.error);
-  Result.voidSuccess() {
-    _isVoidSuccess = true;
+  T get value => (_valueBox as ValueBox<T>).value;
+  ResultError get error => (_errorBox as ValueBox<ResultError>).value;
+
+  Result.success(T value) {
+    this._valueBox = ValueBox(value);
   }
+  Result.failure(ResultError error) {
+    this._errorBox = ValueBox(error);
+  }
+  Result._failure(this._errorBox);
 
   Result<U> map<U>(U Function(T) transform) {
     if (isSuccess) {
-      return Result.success(transform(value as T));
-    } else {
-      return Result.failure(error);
+      return Result.success(transform(value));
     }
+    return Result._failure(_errorBox);
   }
 
   Result<T> mapFailure(ResultError Function(ResultError) transform) {
     if (isFailure) {
-      return Result.failure(transform(error!));
-    } else {
-      return Result.success(value as T);
+      return Result.failure(transform(error));
     }
+
+    return this;
   }
 
   Result<U> flatMap<U>(Result<U> Function(T) transform) {
     if (isSuccess) {
       try {
-        return transform(value as T);
+        return transform(value);
       } catch (e) {
         return Result.failure(ResultError(message: e.toString()));
       }
@@ -43,7 +48,7 @@ class Result<T> {
   Future<Result<U>> flatMapFuture<U>(Future<Result<U>> Function(T) transform) async {
     if (isSuccess) {
       try {
-        return await transform(value as T);
+        return await transform(value);
       } catch (e) {
         return Result.failure(ResultError(message: e.toString()));
       }
@@ -54,14 +59,14 @@ class Result<T> {
 
   Result<T> onSuccess(void Function(T) callback) {
     if (isSuccess) {
-      callback(value as T);
+      callback(value);
     }
     return this;
   }
 
   Result<T> onFailure(void Function(ResultError) callback) {
     if (isFailure) {
-      callback(error!);
+      callback(error);
     }
     return this;
   }
@@ -78,15 +83,6 @@ class Result<T> {
     try {
       U result = await operation();
       return Result.success(result);
-    } catch (e) {
-      return Result.failure(ResultError(message: e.toString()));
-    }
-  }
-
-  static Future<Result<void>> runVoidCatchingAsync(Future<void> Function() operation) async {
-    try {
-      await operation();
-      return Result.voidSuccess();
     } catch (e) {
       return Result.failure(ResultError(message: e.toString()));
     }
