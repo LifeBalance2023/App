@@ -18,9 +18,12 @@ abstract class TaskCreatorState {
     this.notificationTime,
   }) {
     priorityChips = [
-      PriorityChip(PriorityValue.low, 'Low', Colors.green, PriorityValue.low == priority),
-      PriorityChip(PriorityValue.medium, 'Medium', Colors.orange, PriorityValue.medium == priority),
-      PriorityChip(PriorityValue.high, 'High', Colors.red, PriorityValue.high == priority),
+      PriorityChip(PriorityValue.low, 'Low', Colors.green,
+          PriorityValue.low == priority),
+      PriorityChip(PriorityValue.medium, 'Medium', Colors.orange,
+          PriorityValue.medium == priority),
+      PriorityChip(PriorityValue.high, 'High', Colors.red,
+          PriorityValue.high == priority),
     ];
   }
 }
