@@ -12,7 +12,7 @@ class NotificationScheduler {
   }
 
   Future<void> _initializeNotifications() async {
-    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('minmap/ic_launcher');  // TODO: Repair icon
+    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('ic_launcher');  // TODO: Repair icon
 
     const InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,

@@ -70,6 +70,7 @@ class TasksService {
 
     return result.onSuccess((response) {
       final task = _taskAdapter.adapt(response);
+      print("Notification time: ${task.notificationTime}");
       _taskRepository.addOrUpdate(task);
     });
   }
