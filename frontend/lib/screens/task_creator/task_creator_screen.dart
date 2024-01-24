@@ -73,10 +73,6 @@ class TaskCreatorScreen extends StatelessWidget {
     TextEditingController descriptionTextController,
     BuildContext context,
   ) {
-    if (state is TaskModificationState) {
-      titleTextController.text = state.title;
-      descriptionTextController.text = state.description ?? '';
-    }
     if (state is TaskCreationSavingSuccess) {
       AppRouter.goBack(context);
     } else if (state is TaskCreationSavingFailure) {
