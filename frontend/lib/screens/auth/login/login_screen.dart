@@ -7,12 +7,14 @@ import 'package:frontend/router/router.dart';
 import 'package:frontend/screens/auth/login/bloc/login_bloc.dart';
 import 'package:frontend/screens/auth/login/bloc/login_event.dart';
 import 'package:frontend/screens/auth/login/bloc/login_state.dart';
+import 'package:frontend/utils/email_validator.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    EmailValidator emailValidator = EmailValidator();
     final loginBloc = BlocProvider.of<LoginBloc>(context);
 
     final emailTextController = TextEditingController();
@@ -58,7 +60,7 @@ class LoginScreen extends StatelessWidget {
             },
             builder: (context, state) {
               return _blocBuilder(loginBloc, state, emailTextController,
-                  passwordTextController, formKey, context);
+                  emailValidator, passwordTextController, formKey, context);
             },
           ),
         ),
@@ -86,6 +88,7 @@ Widget _blocBuilder(
   LoginBloc loginBloc,
   LoginState state,
   TextEditingController emailTextController,
+  EmailValidator emailValidator,
   TextEditingController passwordTextController,
   GlobalKey<FormState> formKey,
   BuildContext context,
@@ -135,17 +138,7 @@ Widget _blocBuilder(
               loginBloc.add(EmailChanged(email: value));
             },
             validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your email';
-              }
-
-              final emailRegex =
-                  RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
-              if (!emailRegex.hasMatch(value)) {
-                return 'Please enter a valid email';
-              }
-
-              return null;
+              return emailValidator.validate(value);
             },
           ),
           const SizedBox(
@@ -217,6 +210,7 @@ Widget _blocBuilder(
 
 void _showForgotPasswordDialog(BuildContext context) {
   final dialogFormKey = GlobalKey<FormState>();
+  EmailValidator emailValidator = EmailValidator();
   final emailResetController = TextEditingController();
 
   showDialog(
@@ -308,15 +302,7 @@ void _showForgotPasswordDialog(BuildContext context) {
                     fontWeight: FontWeight.w400,
                   ),
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    final emailRegex =
-                    RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
-                    if (!emailRegex.hasMatch(value)) {
-                      return 'Enter a valid email';
-                    }
-                    return null;
+                    return emailValidator.validate(value);
                   },
                 ),
                 const SizedBox(height: 20),
