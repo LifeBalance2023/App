@@ -70,7 +70,6 @@ class TasksService {
 
     return result.onSuccess((response) {
       final task = _taskAdapter.adapt(response);
-      print("Notification time: ${task.notificationTime}");
       _taskRepository.addOrUpdate(task);
     });
   }
@@ -79,11 +78,17 @@ class TasksService {
     required String id,
     String? title,
     String? description,
-    String? priority,
-    String? date,
-    String? notificationTime,
+    PriorityValue? priority,
+    DateTime? date,
+    DateTime? notificationTime,
   }) async {
-    var request = UpdateTaskRequest(title: title, description: description, priority: priority, date: date, notificationTime: notificationTime);
+    var request = UpdateTaskRequest(
+      title: title,
+      description: description,
+      priority: priority?.name,
+      date: date != null ? DateTimeFormatter.toStringDate(date) : null,
+      notificationTime: notificationTime != null ? DateTimeFormatter.toStringDateTime(notificationTime) : null,
+    );
     final result = await _tasksApi.patchTask(id, request);
 
     return result.onSuccess((response) {
