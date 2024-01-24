@@ -74,8 +74,8 @@ void _blocListener(
   BuildContext context,
 ) {
   if (state is LoginEdited) {
-    emailTextController.text = state.email;
-    passwordTextController.text = state.password;
+    // emailTextController.text = state.email;
+    // passwordTextController.text = state.password;
   }
   if (state is LoginSuccess) {
     AppRouter.goToMainScreen(context);
@@ -316,7 +316,7 @@ void _showForgotPasswordDialog(BuildContext context) {
                       return 'Please enter your email';
                     }
                     final emailRegex =
-                        RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                    RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
                     if (!emailRegex.hasMatch(value)) {
                       return 'Enter a valid email';
                     }
