@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          home: const MainScreen(),
+          home: const WelcomeScreen(),
           routes: {
             AppRouter.taskCreator: (context) => const TaskCreatorScreen(),
             AppRouter.settings: (context) => const SettingsScreen(),

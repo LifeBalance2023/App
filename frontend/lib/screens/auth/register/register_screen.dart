@@ -120,7 +120,7 @@ Widget _blocBuilder(
             height: 48,
             iconPath: 'assets/icons/google_icon.png',
             onPressed: () {
-              //TODO
+              registerBloc.add(RegisterWithGoogleRequest());
             },
           ),
           const SizedBox(

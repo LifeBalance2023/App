@@ -18,29 +18,6 @@ class FirebaseAuthenticator {
       return Result.failure(ResultError(message: e.toString()));
     }
   }
-  
-  Future<Result<UserCredential>> signUpWithGoogle() async {
-    try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) {
-        return Result.failure(ResultError(message: "Google sign-in was cancelled by user"));
-      }
-
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      UserCredential userCredential = await _auth.signInWithCredential(credential);
-      return Result.success(userCredential);
-    } on FirebaseAuthException catch (e) {
-      return Result.failure(ResultError(message: "Code:${e.code} Message:${e.message}"));
-    } catch (e) {
-      return Result.failure(ResultError(message: e.toString()));
-    }
-  }
 
   Future<Result<UserCredential>> signIn(String email, String password) async {
     try {
