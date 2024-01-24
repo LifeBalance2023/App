@@ -79,11 +79,6 @@ void _blocListener(
   TextEditingController confirmPasswordTextController,
   BuildContext context,
 ) {
-  if (state is RegisterEdited) {
-    // emailTextController.text = state.email;
-    // passwordTextController.text = state.password;
-    // confirmPasswordTextController.text = state.confirmPassword;
-  }
   if (state is RegisterSuccess) {
     AppRouter.goToMainScreen(context);
   } else if (state is RegisterFailure) {

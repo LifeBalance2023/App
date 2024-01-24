@@ -73,10 +73,6 @@ void _blocListener(
   TextEditingController passwordTextController,
   BuildContext context,
 ) {
-  if (state is LoginEdited) {
-    // emailTextController.text = state.email;
-    // passwordTextController.text = state.password;
-  }
   if (state is LoginSuccess) {
     AppRouter.goToMainScreen(context);
   } else if (state is LoginFailure) {
