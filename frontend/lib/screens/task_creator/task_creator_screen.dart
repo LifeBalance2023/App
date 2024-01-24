@@ -156,7 +156,7 @@ class TaskCreatorScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 2.0),
                 child: DateTimeSelectorComponent(
                     label: 'Select Notification Time',
-                    initialDateTime: state.notificationTime ?? DateTime.now(),
+                    initialDateTime: state.notificationTime,
                     includeTime: true,
                     horizontalPadding: 16.0,
                     onDateTimeChanged: (date) {
