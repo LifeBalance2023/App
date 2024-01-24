@@ -21,49 +21,54 @@ class TaskCreatorScreen extends StatelessWidget {
     final descriptionTextController = TextEditingController();
     final formKey = GlobalKey<FormState>();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Task',
-            style: TextStyle(
-              fontFamily: 'JejuGothic',
-            )),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              AppRouter.goToSettings(context);
-            },
-          ),
-        ],
-      ),
-      body: Container(
-        color: const Color(0xFF9A8C98),
-        width: double.infinity,
-        height: double.infinity,
-        child: SingleChildScrollView(
-          child: BlocConsumer<TaskCreatorBloc, TaskCreatorState>(
-            listener: (context, state) {
-              _blocListener(state, taskCreatorBloc, titleTextController, descriptionTextController, context);
-            },
-            builder: (context, state) {
-              return _blocBuilder(state, titleTextController, taskCreatorBloc, descriptionTextController, formKey, context);
-            },
+    return PopScope(
+      onPopInvoked: (value) {
+        taskCreatorBloc.add(TaskCreatorReset());
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Create Task',
+              style: TextStyle(
+                fontFamily: 'JejuGothic',
+              )),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () {
+                AppRouter.goToSettings(context);
+              },
+            ),
+          ],
+        ),
+        body: Container(
+          color: const Color(0xFF9A8C98),
+          width: double.infinity,
+          height: double.infinity,
+          child: SingleChildScrollView(
+            child: BlocConsumer<TaskCreatorBloc, TaskCreatorState>(
+              listener: (context, state) {
+                _blocListener(state, taskCreatorBloc, titleTextController, descriptionTextController, context);
+              },
+              builder: (context, state) {
+                return _blocBuilder(state, titleTextController, taskCreatorBloc, descriptionTextController, formKey, context);
+              },
+            ),
           ),
         ),
-      ),
-      floatingActionButton: CustomButtonComponent(
-        text: 'Add',
-        width: 140,
-        height: 48,
-        onPressed: () {
-          if (!formKey.currentState!.validate()) {
-            return;
-          }
+        floatingActionButton: CustomButtonComponent(
+          text: 'Add',
+          width: 140,
+          height: 48,
+          onPressed: () {
+            if (!formKey.currentState!.validate()) {
+              return;
+            }
 
-          taskCreatorBloc.add(TaskCreatorSaveRequested());
-        },
+            taskCreatorBloc.add(TaskCreatorSaveRequested());
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
