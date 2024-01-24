@@ -82,8 +82,8 @@ class _DateTimeSelectorComponentState extends State<DateTimeSelectorComponent> {
 
   String _formatDateTime(DateTime dateTime) {
     if(widget.includeTime) {
-      return DateTimeFormatter.toDateTime(dateTime);
+      return DateTimeFormatter.toStringDateTime(dateTime);
     }
-    return DateTimeFormatter.toDate(dateTime);
+    return DateTimeFormatter.toStringDate(dateTime);
   }
 }

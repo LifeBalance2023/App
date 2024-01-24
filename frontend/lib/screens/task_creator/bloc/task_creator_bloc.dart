@@ -59,9 +59,9 @@ class TaskCreatorBloc extends Bloc<TaskCreatorEvent, TaskCreatorState> {
     var result = await _tasksService.createTask(
       title: state.title,
       description: state.description,
-      priority: state.priority.name,
-      date: DateTimeFormatter.toDate(state.date),
-      notificationTime: state.notificationTime != null ? DateTimeFormatter.toTime(state.notificationTime!) : null
+      priority: state.priority,
+      date: state.date,
+      notificationTime: state.notificationTime,
     );
 
     result

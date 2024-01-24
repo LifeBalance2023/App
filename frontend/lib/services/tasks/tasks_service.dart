@@ -5,6 +5,7 @@ import 'package:frontend/domain/task_entity.dart';
 import 'package:frontend/repository/task_repository.dart';
 import 'package:frontend/scheduler/notification_scheduler.dart';
 import 'package:frontend/services/tasks/adapters/task_adapter.dart';
+import 'package:frontend/utils/date_time_formatter.dart';
 
 import '../../api/tasks/tasks_api.dart';
 import '../../repository/repository.dart';
@@ -54,11 +55,17 @@ class TasksService {
   Future<Result<void>> createTask({
     required String title,
     String? description,
-    required String priority,
-    required String date,
-    String? notificationTime,
+    required PriorityValue priority,
+    required DateTime date,
+    DateTime? notificationTime,
   }) async {
-    final request = CreateTaskRequest(title: title, description: description, priority: priority, date: date, notificationTime: notificationTime);
+    final request = CreateTaskRequest(
+        title: title,
+        description: description,
+        priority: priority.name,
+        date: DateTimeFormatter.toStringDate(date),
+        notificationTime: notificationTime != null ? DateTimeFormatter.toStringDateTime(notificationTime) : null,
+    );
     final result = await _tasksApi.postTask(request);
 
     return result.onSuccess((response) {
