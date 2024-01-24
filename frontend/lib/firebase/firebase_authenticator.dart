@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-import '../domain/result.dart';
+import 'package:frontend/domain/result.dart';
 
 class FirebaseAuthenticator {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -9,27 +8,18 @@ class FirebaseAuthenticator {
 
   Future<Result<UserCredential>> signUp(String email, String password) async {
     try {
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      UserCredential userCredential = await _auth
+          .createUserWithEmailAndPassword(email: email, password: password);
       return Result.success(userCredential);
     } on FirebaseAuthException catch (e) {
-      return Result.failure(ResultError(message: "Code:${e.code} Message:${e.message}"));
+      return Result.failure(
+          ResultError(message: "Code:${e.code} Message:${e.message}"));
     } catch (e) {
       return Result.failure(ResultError(message: e.toString()));
     }
   }
-
-  Future<Result<UserCredential>> signIn(String email, String password) async {
-    try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(email: email, password: password);
-      return Result.success(userCredential);
-    } on FirebaseAuthException catch (e) {
-      return Result.failure(ResultError(message: "Code:${e.code} Message:${e.message}"));
-    } catch (e) {
-      return Result.failure(ResultError(message: e.toString()));
-    }
-  }
-
-  Future<Result<UserCredential>> signInWithGoogle() async {
+  
+  Future<Result<UserCredential>> signUpWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
@@ -52,6 +42,46 @@ class FirebaseAuthenticator {
     }
   }
 
+  Future<Result<UserCredential>> signIn(String email, String password) async {
+    try {
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      return Result.success(userCredential);
+    } on FirebaseAuthException catch (e) {
+      return Result.failure(
+          ResultError(message: "Code:${e.code} Message:${e.message}"));
+    } catch (e) {
+      return Result.failure(ResultError(message: e.toString()));
+    }
+  }
+
+  Future<Result<UserCredential>> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        return Result.failure(
+            ResultError(message: "Google sign-in was cancelled by user"));
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      UserCredential userCredential =
+          await _auth.signInWithCredential(credential);
+      return Result.success(userCredential);
+    } on FirebaseAuthException catch (e) {
+      return Result.failure(
+          ResultError(message: "Code:${e.code} Message:${e.message}"));
+    } catch (e) {
+      return Result.failure(ResultError(message: e.toString()));
+    }
+  }
+
   Future<Result<User>> getCurrentUser() async {
     try {
       User? user = _auth.currentUser;
@@ -63,7 +93,8 @@ class FirebaseAuthenticator {
           return Result.success(user!);
       }
     } on FirebaseAuthException catch (e) {
-      return Result.failure(ResultError(message: "Code:${e.code} Message:${e.message}"));
+      return Result.failure(
+          ResultError(message: "Code:${e.code} Message:${e.message}"));
     } catch (e) {
       return Result.failure(ResultError(message: e.toString()));
     }
@@ -75,7 +106,8 @@ class FirebaseAuthenticator {
       await _auth.signOut();
       return Result.success(null);
     } on FirebaseAuthException catch (e) {
-      return Result.failure(ResultError(message: "Code:${e.code} Message:${e.message}"));
+      return Result.failure(
+          ResultError(message: "Code:${e.code} Message:${e.message}"));
     } catch (e) {
       return Result.failure(ResultError(message: e.toString()));
     }

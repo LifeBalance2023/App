@@ -11,7 +11,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     on<PasswordChanged>(_onPasswordChanged);
     on<ConfirmPasswordChanged>(_onConfirmPasswordChanged);
     on<RegisterWithCredentialsRequest>(_onCredentialsRegister);
-    // on<RegisterWithGoogleRequest>(_onGoogleRegister);  //TODO
+    on<RegisterWithGoogleRequest>(_onGoogleRegister);
   }
 
   void _onEmailChanged(EmailChanged event, Emitter<RegisterState> emit) {
@@ -57,16 +57,23 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
             confirmPassword: state.confirmPassword)));
   }
 
-//TODO Sign up with Google
-// Future<void> _onGoogleRegister(
-//     RegisterWithGoogleRequest event, Emitter<RegisterState> emit) async {
-//   emit(RegisterLoading(email: state.email, password: state.password, confirmPassword: state.confirmPassword));
-//   final result = await _authenticationService.
-//
-//   result
-//       .onFailure((error) => emit(RegisterFailure(
-//       email: state.email, password: state.password, confirmPassword: state.confirmPassword, error: error)))
-//       .onSuccess((_) =>
-//       emit(RegisterSuccess(email: state.email, password: state.password, confirmPassword: state.confirmPassword)));
-// }
+  Future<void> _onGoogleRegister(
+      RegisterWithGoogleRequest event, Emitter<RegisterState> emit) async {
+    emit(RegisterLoading(
+        email: state.email,
+        password: state.password,
+        confirmPassword: state.confirmPassword));
+    final result = await _authenticationService.signUpWithGoogle();
+
+    result
+        .onFailure((error) => emit(RegisterFailure(
+            email: state.email,
+            password: state.password,
+            confirmPassword: state.confirmPassword,
+            error: error)))
+        .onSuccess((_) => emit(RegisterSuccess(
+            email: state.email,
+            password: state.password,
+            confirmPassword: state.confirmPassword)));
+  }
 }
