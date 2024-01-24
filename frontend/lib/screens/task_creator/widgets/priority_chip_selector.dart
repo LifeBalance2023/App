@@ -15,29 +15,22 @@ class PriorityChipSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Select Priority',
-              style: TextStyle(
-                fontFamily: 'JejuGothic',
-                fontSize: 24.0,
-              ),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Text(
+            'Select Priority',
+            style: TextStyle(
+              fontFamily: 'JejuGothic',
+              fontSize: 24.0,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: priorityChips
-                  .map((priorityChip) =>
-                      _buildPriorityChip(context, priorityChip))
-                  .toList(),
-            ),
-          ],
-        ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: priorityChips.map((priorityChip) => _buildPriorityChip(context, priorityChip)).toList(),
+          ),
+        ]),
       );
 
-  Widget _buildPriorityChip(BuildContext context, PriorityChip priorityChip) =>
-      Padding(
+  Widget _buildPriorityChip(BuildContext context, PriorityChip priorityChip) => Padding(
         padding: const EdgeInsets.all(2.0),
         child: ChoiceChip(
           label: Text(
@@ -45,9 +38,7 @@ class PriorityChipSelector extends StatelessWidget {
             style: TextStyle(
               fontFamily: 'JejuGothic',
               fontSize: 16.0,
-              color: priorityChip.isSelected
-                  ? Colors.black
-                  : const Color(0xFF604E5E),
+              color: priorityChip.isSelected ? Colors.black : const Color(0xFF604E5E),
             ),
           ),
           selected: priorityChip.isSelected,
@@ -61,9 +52,7 @@ class PriorityChipSelector extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
             side: BorderSide(
-              color: priorityChip.isSelected
-                  ? const Color(0xFFA68DA4)
-                  : const Color(0xFF91778F),
+              color: priorityChip.isSelected ? const Color(0xFFA68DA4) : const Color(0xFF91778F),
             ),
           ),
         ),

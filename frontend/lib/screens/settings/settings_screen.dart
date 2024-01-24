@@ -101,7 +101,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   value: themeSwitch,
                                   onToggle: (value) {
                                     setState(
-                                      () {
+                                          () {
                                         themeSwitch = value;
                                         print(themeSwitch);
                                       },
@@ -134,7 +134,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   value: notificationSwitch,
                                   onToggle: (value) {
                                     setState(
-                                      () {
+                                          () {
                                         notificationSwitch = value;
                                         print(notificationSwitch);
                                       },
