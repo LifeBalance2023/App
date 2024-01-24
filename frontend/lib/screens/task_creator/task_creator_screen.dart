@@ -43,7 +43,7 @@ class TaskCreatorScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: BlocConsumer<TaskCreatorBloc, TaskCreatorState>(
             listener: (context, state) {
-              _blocListener(state, titleTextController, descriptionTextController, context);
+              _blocListener(state, taskCreatorBloc, titleTextController, descriptionTextController, context);
             },
             builder: (context, state) {
               return _blocBuilder(state, titleTextController, taskCreatorBloc, descriptionTextController, formKey, context);
@@ -56,7 +56,7 @@ class TaskCreatorScreen extends StatelessWidget {
         width: 140,
         height: 48,
         onPressed: () {
-          if(!formKey.currentState!.validate()) {
+          if (!formKey.currentState!.validate()) {
             return;
           }
 
@@ -69,12 +69,14 @@ class TaskCreatorScreen extends StatelessWidget {
 
   void _blocListener(
     TaskCreatorState state,
+    TaskCreatorBloc taskCreatorBloc,
     TextEditingController titleTextController,
     TextEditingController descriptionTextController,
     BuildContext context,
   ) {
     if (state is TaskCreationSavingSuccess) {
       AppRouter.goBack(context);
+      taskCreatorBloc.add(TaskCreatorReset());
     } else if (state is TaskCreationSavingFailure) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to save task: ${state.error.message}')),

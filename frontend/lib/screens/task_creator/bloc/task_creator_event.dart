@@ -33,3 +33,5 @@ class TaskCreatorNotificationTimeChanged extends TaskCreatorEvent {
 }
 
 class TaskCreatorSaveRequested extends TaskCreatorEvent {}
+
+class TaskCreatorReset extends TaskCreatorEvent {}

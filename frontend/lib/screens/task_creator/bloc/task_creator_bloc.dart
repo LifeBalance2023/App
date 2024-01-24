@@ -14,6 +14,7 @@ class TaskCreatorBloc extends Bloc<TaskCreatorEvent, TaskCreatorState> {
     on<TaskCreatorDateChanged>(_onDateChanged);
     on<TaskCreatorNotificationTimeChanged>(_onNotificationTimeChanged);
     on<TaskCreatorSaveRequested>(_onSaveRequested);
+    on<TaskCreatorReset>(_onReset);
   }
 
   void _onTitleChanged(TaskCreatorTitleChanged event, Emitter<TaskCreatorState> emit) {
@@ -83,5 +84,9 @@ class TaskCreatorBloc extends Bloc<TaskCreatorEvent, TaskCreatorState> {
               notificationTime: state.notificationTime,
             ));
         });
+  }
+
+  void _onReset(TaskCreatorReset event, Emitter<TaskCreatorState> emit) {
+    emit(TaskCreatorInitial());
   }
 }
