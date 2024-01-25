@@ -14,47 +14,40 @@ class TaskCreatorBloc extends Bloc<TaskCreatorEvent, TaskCreatorState> {
     on<TaskCreatorDateChanged>(_onDateChanged);
     on<TaskCreatorNotificationTimeChanged>(_onNotificationTimeChanged);
     on<TaskCreatorSaveRequested>(_onSaveRequested);
+    on<TaskCreatorReset>(_onReset);
   }
 
-  void _onTitleChanged(
-      TaskCreatorTitleChanged event, Emitter<TaskCreatorState> emit) {
+  void _onTitleChanged(TaskCreatorTitleChanged event, Emitter<TaskCreatorState> emit) {
     if (state is TaskModificationState) {
       emit((state as TaskModificationState).copyWith(title: event.title));
     }
   }
 
-  void _onDescriptionChanged(
-      TaskCreatorDescriptionChanged event, Emitter<TaskCreatorState> emit) {
+  void _onDescriptionChanged(TaskCreatorDescriptionChanged event, Emitter<TaskCreatorState> emit) {
     if (state is TaskModificationState) {
-      emit((state as TaskModificationState)
-          .copyWith(description: event.description));
+      emit((state as TaskModificationState).copyWith(description: event.description));
     }
   }
 
-  void _onPriorityChanged(
-      TaskCreatorPriorityChanged event, Emitter<TaskCreatorState> emit) {
+  void _onPriorityChanged(TaskCreatorPriorityChanged event, Emitter<TaskCreatorState> emit) {
     if (state is TaskModificationState) {
       emit((state as TaskModificationState).copyWith(priority: event.priority));
     }
   }
 
-  void _onDateChanged(
-      TaskCreatorDateChanged event, Emitter<TaskCreatorState> emit) {
+  void _onDateChanged(TaskCreatorDateChanged event, Emitter<TaskCreatorState> emit) {
     if (state is TaskModificationState) {
       emit((state as TaskModificationState).copyWith(date: event.date));
     }
   }
 
-  void _onNotificationTimeChanged(TaskCreatorNotificationTimeChanged event,
-      Emitter<TaskCreatorState> emit) {
+  void _onNotificationTimeChanged(TaskCreatorNotificationTimeChanged event, Emitter<TaskCreatorState> emit) {
     if (state is TaskModificationState) {
-      emit((state as TaskModificationState)
-          .copyWith(notificationTime: event.notificationTime));
+      emit((state as TaskModificationState).copyWith(notificationTime: event.notificationTime));
     }
   }
 
-  Future<void> _onSaveRequested(
-      TaskCreatorSaveRequested event, Emitter<TaskCreatorState> emit) async {
+  Future<void> _onSaveRequested(TaskCreatorSaveRequested event, Emitter<TaskCreatorState> emit) async {
     emit(TaskCreationSavingInProgress(
       title: state.title,
       description: state.description,
@@ -64,31 +57,36 @@ class TaskCreatorBloc extends Bloc<TaskCreatorEvent, TaskCreatorState> {
     ));
 
     var result = await _tasksService.createTask(
-        title: state.title,
-        description: state.description,
-        priority: state.priority.name,
-        date: DateTimeFormatter.toDate(state.date),
-        notificationTime: state.notificationTime != null
-            ? DateTimeFormatter.toTime(state.notificationTime!)
-            : null);
+      title: state.title,
+      description: state.description,
+      priority: state.priority,
+      date: state.date,
+      notificationTime: state.notificationTime,
+    );
 
-    result.onFailure((error) {
-      emit(TaskCreationSavingFailure(
-        title: state.title,
-        description: state.description,
-        priority: state.priority,
-        date: state.date,
-        notificationTime: state.notificationTime,
-        error: error,
-      ));
-    }).onSuccess((_) {
-      emit(TaskCreationSavingSuccess(
-        title: state.title,
-        description: state.description,
-        priority: state.priority,
-        date: state.date,
-        notificationTime: state.notificationTime,
-      ));
-    });
+    result
+        .onFailure((error) {
+          emit(TaskCreationSavingFailure(
+              title: state.title,
+              description: state.description,
+              priority: state.priority,
+              date: state.date,
+              notificationTime: state.notificationTime,
+              error: error,
+            ));
+        })
+        .onSuccess((_) {
+          emit(TaskCreationSavingSuccess(
+              title: state.title,
+              description: state.description,
+              priority: state.priority,
+              date: state.date,
+              notificationTime: state.notificationTime,
+            ));
+        });
+  }
+
+  void _onReset(TaskCreatorReset event, Emitter<TaskCreatorState> emit) {
+    emit(TaskCreatorInitial());
   }
 }
