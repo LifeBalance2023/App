@@ -96,21 +96,26 @@ class _MainScreenState extends State<MainScreen> {
                 fit: BoxFit.cover,
               ),
             ),
-            Container(
-              decoration: const BoxDecoration(
-                color: Color(0xFF9A8C98),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25),
-                  topRight: Radius.circular(25),
-                ),
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: screenHeight - topHeight,
               ),
-              child: BlocConsumer<MainScreenBloc, MainScreenState>(
-                listener: (context, state) {
-                  _blocListener(state, context);
-                },
-                builder: (context, state) {
-                  return _blocBuilder(mainScreenBloc, state, context);
-                },
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Color(0xFF9A8C98),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25),
+                  ),
+                ),
+                child: BlocConsumer<MainScreenBloc, MainScreenState>(
+                  listener: (context, state) {
+                    _blocListener(state, context);
+                  },
+                  builder: (context, state) {
+                    return _blocBuilder(mainScreenBloc, state, context);
+                  },
+                ),
               ),
             ),
           ],
@@ -164,9 +169,6 @@ Widget _blocBuilder(
   MainScreenState state,
   BuildContext context,
 ) {
-  if (state is ShowProgressIndicator) {
-    return const CustomProgressIndicator();
-  }
   if (state is ShowMainScreen) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -248,24 +250,27 @@ Widget _blocBuilder(
       ],
     );
   }
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      const Text(
-        'Error',
-        style: TextStyle(fontSize: 25),
-      ),
-      const SizedBox(
-        height: 15.0,
-      ),
-      CustomButtonComponent(
-        text: 'Reload',
-        onPressed: () {
-          mainScreenBloc.add(LoadMainScreen());
-        },
-        width: 328,
-        height: 48,
-      ),
-    ],
-  );
+  if(state is MainScreenError) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text(
+          'Error',
+          style: TextStyle(fontSize: 25),
+        ),
+        const SizedBox(
+          height: 15.0,
+        ),
+        CustomButtonComponent(
+          text: 'Reload',
+          onPressed: () {
+            mainScreenBloc.add(LoadMainScreen());
+          },
+          width: 328,
+          height: 48,
+        ),
+      ],
+    );
+  }
+  return const CustomProgressIndicator();
 }
