@@ -65,7 +65,7 @@ class TasksService {
   }) async {
     final request = CreateTaskRequest(
         title: title,
-        description: description,
+        description: description ?? '',
         priority: priority.name,
         date: DateTimeFormatter.toStringDate(date),
         notificationTime: notificationTime != null ? DateTimeFormatter.toStringDateTime(notificationTime) : null,
