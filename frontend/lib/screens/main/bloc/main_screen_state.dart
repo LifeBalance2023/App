@@ -20,6 +20,7 @@ class ShowMainScreen extends MainScreenState {
   late final String harmonyText;
 
   ShowMainScreen(this.tasks, this.statistics) {
+    _sortTasks(tasks);
     lifeBalancePercentage = statistics.lifeBalanceValue * 100;
     harmonyText = _generateHarmonyText(lifeBalancePercentage);
   }
@@ -34,5 +35,14 @@ class ShowMainScreen extends MainScreenState {
     } else {
       return 'Complete Harmony';
     }
+  }
+
+  void _sortTasks(List<TaskEntity> tasks) {
+    tasks.sort((a, b) {
+      if (a.isDone != b.isDone) {
+        return a.isDone ? 1 : -1;
+      }
+      return a.date.compareTo(b.date);
+    });
   }
 }
