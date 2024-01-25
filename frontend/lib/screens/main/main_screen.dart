@@ -16,7 +16,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -211,11 +210,7 @@ Widget _blocBuilder(
               ),
               Text(
                 state.harmonyText,
-                style: const TextStyle(
-                    fontFamily: 'JejuGothic',
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xBF4B4BC4)),
+                style: const TextStyle(fontFamily: 'JejuGothic', fontSize: 15.0, fontWeight: FontWeight.w400, color: Color(0xBF4B4BC4)),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -240,9 +235,21 @@ Widget _blocBuilder(
         const SizedBox(
           height: 10.0,
         ),
-        Text(
-          'Main Screen ${state.tasks.length} ${state.statistics.amountOfAllTasks}',
-        ),
+        Column(
+          children: state.tasks
+              .map((task) => Row(
+                    children: [
+                      Text(task.title),
+                      Checkbox(
+                        value: task.isDone,
+                        onChanged: (value) {
+                          mainScreenBloc.add(ClickDoneButton(task));
+                        },
+                      ),
+                    ],
+                  ))
+              .toList(),
+        )
       ],
     );
   }
