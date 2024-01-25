@@ -15,3 +15,9 @@ class PasswordChanged extends LoginEvent {
 class LoginWithCredentialsRequest extends LoginEvent {}
 
 class LoginWithGoogleRequest extends LoginEvent {}
+
+class ForgotPasswordRequest extends LoginEvent {
+  final String email;
+
+  ForgotPasswordRequest({required this.email});
+}
