@@ -1,23 +1,31 @@
-import 'package:equatable/equatable.dart';
+import 'package:frontend/domain/result.dart';
 
-abstract class LoginState extends Equatable {
-  const LoginState();
+abstract class LoginState {
+  final String email;
+  final String password;
 
-  @override
-  List<Object> get props => [];
+  LoginState({required this.email, required this.password});
 }
 
-class LoginInitial extends LoginState {}
+class LoginInitial extends LoginState {
+  LoginInitial() : super(email: '', password: '');
+}
 
-class LoginLoading extends LoginState {}
+class LoginEdited extends LoginState {
+  LoginEdited({email, password}) : super(email: email, password: password);
+}
+
+class LoginLoading extends LoginState {
+  LoginLoading({email, password}) : super(email: email, password: password);
+}
+
+class LoginSuccess extends LoginState {
+  LoginSuccess({email, password}) : super(email: email, password: password);
+}
 
 class LoginFailure extends LoginState {
-  final String error;
+  final ResultError error;
 
-  const LoginFailure({required this.error});
-
-  @override
-  List<Object> get props => [error];
+  LoginFailure({email, password, required this.error})
+      : super(email: email, password: password);
 }
-
-class LoginSuccess extends LoginState {}

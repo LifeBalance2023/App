@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-import '../domain/result.dart';
+import 'package:frontend/domain/result.dart';
 
 class FirebaseAuthenticator {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -12,7 +11,8 @@ class FirebaseAuthenticator {
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       return Result.success(userCredential);
     } on FirebaseAuthException catch (e) {
-      return Result.failure(ResultError(message: "Code:${e.code} Message:${e.message}"));
+      return Result.failure(
+          ResultError(message: "Code:${e.code} Message:${e.message}"));
     } catch (e) {
       return Result.failure(ResultError(message: e.toString()));
     }

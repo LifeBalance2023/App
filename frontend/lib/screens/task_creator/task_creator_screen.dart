@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/components/custom_button.dart';
+import 'package:frontend/components/custom_progress_indicator.dart';
 import 'package:frontend/components/date_selector_component.dart';
 import 'package:frontend/components/form_textfield.dart';
 import 'package:frontend/router/router.dart';
@@ -7,8 +9,6 @@ import 'package:frontend/screens/task_creator/bloc/task_creator_bloc.dart';
 import 'package:frontend/screens/task_creator/bloc/task_creator_event.dart';
 import 'package:frontend/screens/task_creator/bloc/task_creator_state.dart';
 import 'package:frontend/screens/task_creator/widgets/priority_chip_selector.dart';
-
-import '../../components/custom_button.dart';
 
 class TaskCreatorScreen extends StatelessWidget {
   const TaskCreatorScreen({Key? key}) : super(key: key);
@@ -98,7 +98,7 @@ class TaskCreatorScreen extends StatelessWidget {
     BuildContext context,
   ) {
     if (state is TaskCreationSavingInProgress) {
-      return const CircularProgressIndicator();
+      return const CustomProgressIndicator();
     } else {
       return Form(
         key: formKey,

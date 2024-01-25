@@ -2,8 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/domain/settings_value.dart';
 import 'package:frontend/screens/settings/bloc/settings_event.dart';
 import 'package:frontend/screens/settings/bloc/settings_state.dart';
-
-import '../../../services/settings/settings_service.dart';
+import 'package:frontend/services/settings/settings_service.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final SettingsService _settingsService;
