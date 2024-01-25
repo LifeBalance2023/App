@@ -80,4 +80,15 @@ class FirebaseAuthenticator {
       return Result.failure(ResultError(message: e.toString()));
     }
   }
+
+  Future<Result<void>> sendPasswordResetEmail(String email) async {
+    try {
+      return Result.success(await _auth.sendPasswordResetEmail(email: email));
+    } on FirebaseAuthException catch (e) {
+      return Result.failure(
+          ResultError(message: "Code:${e.code} Message:${e.message}"));
+    } catch (e) {
+      return Result.failure(ResultError(message: e.toString()));
+    }
+  }
 }

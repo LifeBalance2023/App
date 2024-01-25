@@ -32,6 +32,10 @@ class TasksService {
     }
   }
 
+  Future<void> cancelAllNotifications() async {
+    _notificationScheduler.cancelAllNotifications();
+  }
+
   Future<Result<void>> synchronizeTasks() async {
     final result = await _tasksApi.getTasks();
     return result.onSuccess((response) {
@@ -61,7 +65,7 @@ class TasksService {
   }) async {
     final request = CreateTaskRequest(
         title: title,
-        description: description,
+        description: description ?? '',
         priority: priority.name,
         date: DateTimeFormatter.toStringDate(date),
         notificationTime: notificationTime != null ? DateTimeFormatter.toStringDateTime(notificationTime) : null,
@@ -78,6 +82,7 @@ class TasksService {
     required String id,
     String? title,
     String? description,
+    bool? isDone,
     PriorityValue? priority,
     DateTime? date,
     DateTime? notificationTime,
@@ -86,6 +91,7 @@ class TasksService {
       title: title,
       description: description,
       priority: priority?.name,
+      isDone: isDone,
       date: date != null ? DateTimeFormatter.toStringDate(date) : null,
       notificationTime: notificationTime != null ? DateTimeFormatter.toStringDateTime(notificationTime) : null,
     );

@@ -31,14 +31,6 @@ class TaskCreatorScreen extends StatelessWidget {
               style: TextStyle(
                 fontFamily: 'JejuGothic',
               )),
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () {
-                AppRouter.goToSettings(context);
-              },
-            ),
-          ],
         ),
         body: Container(
           color: const Color(0xFF9A8C98),

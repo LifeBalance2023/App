@@ -19,6 +19,11 @@ class LoginLoading extends LoginState {
   LoginLoading({email, password}) : super(email: email, password: password);
 }
 
+class ForgotPasswordSuccess extends LoginState {
+  final String resetEmail;
+  ForgotPasswordSuccess({email, password, required this.resetEmail}) : super(email: email, password: password);
+}
+
 class LoginSuccess extends LoginState {
   LoginSuccess({email, password}) : super(email: email, password: password);
 }

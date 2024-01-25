@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/screens/auth/login/bloc/login_event.dart';
 import 'package:frontend/screens/auth/login/bloc/login_state.dart';
@@ -11,6 +13,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<PasswordChanged>(_onPasswordChanged);
     on<LoginWithCredentialsRequest>(_onCredentialsLogin);
     on<LoginWithGoogleRequest>(_onGoogleLogin);
+    on<ForgotPasswordRequest>(_onForgotPassword);
   }
 
   void _onEmailChanged(EmailChanged event, Emitter<LoginState> emit) {
@@ -44,5 +47,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             email: state.email, password: state.password, error: error)))
         .onSuccess((_) =>
             emit(LoginSuccess(email: state.email, password: state.password)));
+  }
+
+  Future<void> _onForgotPassword(ForgotPasswordRequest event, Emitter<LoginState> emit) async {
+    emit(LoginLoading(email: state.email, password: state.password));
+    final result = await _authenticationService.sendPasswordResetEmail(event.email);
+
+    result.onFailure((error) => emit(LoginFailure(email: state.email, password: state.password, error: error)))
+        .onSuccess((_) => emit(ForgotPasswordSuccess(email: state.email, password: state.password, resetEmail: event.email)));
   }
 }

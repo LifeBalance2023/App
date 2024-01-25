@@ -63,4 +63,9 @@ class AuthenticationService {
     final result = await _firebaseAuthenticator.signOut();
     return result.onSuccess((_) => _userRepository.clear());
   }
+
+  Future<Result<void>> sendPasswordResetEmail(String email) async {
+    final result = await _firebaseAuthenticator.sendPasswordResetEmail(email);
+    return result;
+  }
 }

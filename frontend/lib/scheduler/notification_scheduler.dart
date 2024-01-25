@@ -28,15 +28,16 @@ class NotificationScheduler {
   }
 
   Future<void> scheduleTaskNotification(TaskEntity task) async {
-    if (task.notificationTime == null) {
-      return;
+    final taskNotification = task.notificationTime;
+    final taskIsNotDone = !task.isDone;
+    if (taskIsNotDone && taskNotification != null && taskNotification.isAfter(DateTime.now())) {
+      await scheduleNotification(
+        task.id.hashCode,
+        task.title,
+        task.description,
+        task.notificationTime!,
+      );
     }
-    await scheduleNotification(
-      task.id.hashCode,
-      task.title,
-      task.description,
-      task.notificationTime!,
-    );
   }
 
   Future<void> scheduleNotification(int id, String title, String? body, DateTime scheduledTime) async {

@@ -16,6 +16,31 @@ class MainScreenError extends MainScreenState {
 class ShowMainScreen extends MainScreenState {
   final List<TaskEntity> tasks;
   final DailyStatisticsValue statistics;
+  late final String harmonyText;
 
-  ShowMainScreen(this.tasks, this.statistics);
+  ShowMainScreen(this.tasks, this.statistics) {
+    _sortTasks(tasks);
+    harmonyText = _generateHarmonyText(statistics.lifeBalanceValue);
+  }
+
+  String _generateHarmonyText(double lifeBalancePercentage) {
+    if(lifeBalancePercentage <= 24.0) {
+      return 'Disharmony Synchrony';
+    } else if(lifeBalancePercentage <= 49.0) {
+      return 'Mediocre Melody';
+    } else if(lifeBalancePercentage <= 74.0) {
+      return 'Semi-Euphony';
+    } else {
+      return 'Complete Harmony';
+    }
+  }
+
+  void _sortTasks(List<TaskEntity> tasks) {
+    tasks.sort((a, b) {
+      if (a.isDone != b.isDone) {
+        return a.isDone ? 1 : -1;
+      }
+      return a.date.compareTo(b.date);
+    });
+  }
 }

@@ -80,6 +80,10 @@ void _blocListener(
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Failed to log in: ${state.error.message}')),
     );
+  } else if (state is ForgotPasswordSuccess) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Password reset email sent to ${state.resetEmail}')),
+    );
   }
 }
 
@@ -311,7 +315,8 @@ void _showForgotPasswordDialog(BuildContext context) {
                   height: 48,
                   onPressed: () {
                     if (dialogFormKey.currentState!.validate()) {
-                      // If all fields passed validation make some action
+                      context.read<LoginBloc>().add(ForgotPasswordRequest(email: emailResetController.text));
+                      Navigator.pop(context);
                     }
                   },
                 ),
