@@ -46,26 +46,20 @@ class _MainScreenState extends State<MainScreen> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            DrawerHeader(
-                decoration: const BoxDecoration(
+            const DrawerHeader(
+                decoration: BoxDecoration(
                   color: Color(0xFF9A8C98),
                 ),
-                child: Column(
-                  children: [
-                    Container(
-                      height: 100,
-                      width: 100,
-                      decoration: BoxDecoration(
+                child: Center(
+                  child: Text('Life Balance App',
+                      style: TextStyle(
+                        fontFamily: 'JejuGothic',
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.w400,
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text('@user_id'),
-                  ],
-                )),
+                      )),
+                )
+            ),
             ListTile(
               title: const Text('Settings'),
               trailing: const Icon(Icons.settings_sharp),
