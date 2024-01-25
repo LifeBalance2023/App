@@ -1,6 +1,6 @@
 from fastapi import APIRouter, status, Depends, Query
 from interfaces.task import ITaskService
-from models.task import Task, TaskDTO, OptionalTaskDTO
+from models.task import Task, TaskDTO, OptionalTaskDTO, PatchTaskDTO
 from dependencies import get_task_service
 from typing import Optional
 from datetime import date, time
@@ -60,7 +60,7 @@ async def create_task(
 async def update_task(
         user_id: str,
         task_id: str,
-        task: OptionalTaskDTO,
+        task: PatchTaskDTO,
         task_service: ITaskService = Depends(get_task_service)
 ):
     return await task_service.update_task(user_id, task_id, task)

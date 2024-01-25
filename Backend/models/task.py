@@ -62,6 +62,28 @@ class TaskDTO(BaseModel):
         }
 
 
+class PatchTaskDTO(BaseModel):
+    title: Optional[str]
+    description: Optional[str]
+    priority: Optional[str]
+    isDone: Optional[bool]
+    date: Optional[date]
+    notificationTime: Optional[datetime]
+
+    def to_dict(self) -> dict:
+        return {
+            "title": self.title,
+            "description": self.description,
+            "priority": self.priority,
+            "isDone": self.isDone,
+            "date": self.date.isoformat() if self.date else None,
+            "notificationTime": self.notificationTime if self.notificationTime else None
+        }
+
+    class Config:
+        orm_mode = True
+
+
 class OptionalTaskDTO(BaseModel):
     userId: Optional[str]
     title: Optional[str]

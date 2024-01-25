@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from models.task import Task, TaskDTO, OptionalTaskDTO
+from models.task import Task, TaskDTO, OptionalTaskDTO, PatchTaskDTO
 
 
 class ITaskService(ABC):
@@ -32,7 +32,7 @@ class ITaskService(ABC):
             self,
             user_id: str,
             doc_id: str,
-            update_task: OptionalTaskDTO
+            update_task: PatchTaskDTO
     ) -> Task:
         pass
 
