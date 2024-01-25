@@ -126,7 +126,7 @@ Widget _blocBuilder(
             ),
             child: const DividerWithTextComponent(
               text: 'or log in with an email',
-              textSize: 24,
+              maxTextSize: 22,
             ),
           ),
           const SizedBox(
