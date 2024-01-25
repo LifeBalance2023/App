@@ -6,6 +6,7 @@ import 'package:frontend/router/router.dart';
 import 'package:frontend/screens/main/bloc/main_screen_bloc.dart';
 import 'package:frontend/screens/main/bloc/main_screen_event.dart';
 import 'package:frontend/screens/main/bloc/main_screen_state.dart';
+import 'package:frontend/screens/main/widgets/task_item.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class MainScreen extends StatefulWidget {
@@ -220,8 +221,8 @@ Widget _blocBuilder(
             animation: true,
             lineHeight: 20.0,
             animationDuration: 1500,
-            percent: state.lifeBalancePercentage / 100,
-            center: Text("${state.lifeBalancePercentage}%"),
+            percent: state.statistics.lifeBalanceValue / 100,
+            center: Text("${state.statistics.lifeBalanceValue}%"),
             progressColor: Colors.green,
             barRadius: const Radius.circular(10),
           ),
@@ -231,16 +232,13 @@ Widget _blocBuilder(
         ),
         Column(
           children: state.tasks
-              .map((task) => Row(
-                    children: [
-                      Text(task.title),
-                      Checkbox(
-                        value: task.isDone,
-                        onChanged: (value) {
-                          mainScreenBloc.add(ClickDoneButton(task));
-                        },
-                      ),
-                    ],
+              .map((task) => TaskItem(
+                    taskName: task.title,
+                    date: task.date,
+                    isDone: task.isDone,
+                    onCheckboxClicked: () {
+                      mainScreenBloc.add(ClickDoneButton(task));
+                    },
                   ))
               .toList(),
         ),

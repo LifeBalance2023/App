@@ -16,13 +16,11 @@ class MainScreenError extends MainScreenState {
 class ShowMainScreen extends MainScreenState {
   final List<TaskEntity> tasks;
   final DailyStatisticsValue statistics;
-  late final double lifeBalancePercentage;
   late final String harmonyText;
 
   ShowMainScreen(this.tasks, this.statistics) {
     _sortTasks(tasks);
-    lifeBalancePercentage = statistics.lifeBalanceValue * 100;
-    harmonyText = _generateHarmonyText(lifeBalancePercentage);
+    harmonyText = _generateHarmonyText(statistics.lifeBalanceValue);
   }
 
   String _generateHarmonyText(double lifeBalancePercentage) {
