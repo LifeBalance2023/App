@@ -103,7 +103,10 @@ Widget _blocBuilder(
   BuildContext context,
 ) {
   if (state is RegisterLoading) {
-    return const CircularProgressIndicator();
+    return const Center(
+        child: CircularProgressIndicator(
+          color: Color(0xFF81767F),
+        ));
   } else {
     return Form(
       key: formKey,

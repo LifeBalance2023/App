@@ -84,8 +84,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20.0, vertical: 10.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -101,7 +100,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   value: themeSwitch,
                                   onToggle: (value) {
                                     setState(
-                                          () {
+                                      () {
                                         themeSwitch = value;
                                         print(themeSwitch);
                                       },
@@ -117,8 +116,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             color: const Color(0xFF4A4E69).withOpacity(0.35),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20.0, vertical: 10.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -134,7 +132,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   value: notificationSwitch,
                                   onToggle: (value) {
                                     setState(
-                                          () {
+                                      () {
                                         notificationSwitch = value;
                                         print(notificationSwitch);
                                       },
@@ -171,11 +169,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     text: 'Save settings',
                     width: 192,
                     height: 48,
-                    onPressed: () =>
-                        _showSaveConfirmationDialog(context, settingsBloc),
+                    onPressed: () => _showSaveConfirmationDialog(context, settingsBloc),
                   ),
                   if (state is SettingsSaveInProgress)
-                    const CircularProgressIndicator(),
+                    const Center(
+                        child: CircularProgressIndicator(
+                      color: Color(0xFF81767F),
+                    )),
                 ],
               ),
             ),
@@ -203,8 +203,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  void _showSaveConfirmationDialog(
-      BuildContext context, SettingsBloc settingsBloc) {
+  void _showSaveConfirmationDialog(BuildContext context, SettingsBloc settingsBloc) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(

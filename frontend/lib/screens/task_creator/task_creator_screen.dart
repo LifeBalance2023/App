@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/components/custom_button.dart';
 import 'package:frontend/components/date_selector_component.dart';
 import 'package:frontend/components/form_textfield.dart';
 import 'package:frontend/router/router.dart';
@@ -7,7 +8,6 @@ import 'package:frontend/screens/task_creator/bloc/task_creator_bloc.dart';
 import 'package:frontend/screens/task_creator/bloc/task_creator_event.dart';
 import 'package:frontend/screens/task_creator/bloc/task_creator_state.dart';
 import 'package:frontend/screens/task_creator/widgets/priority_chip_selector.dart';
-import 'package:frontend/components/custom_button.dart';
 
 class TaskCreatorScreen extends StatelessWidget {
   const TaskCreatorScreen({Key? key}) : super(key: key);
@@ -55,7 +55,7 @@ class TaskCreatorScreen extends StatelessWidget {
         width: 140,
         height: 48,
         onPressed: () {
-          if(!formKey.currentState!.validate()) {
+          if (!formKey.currentState!.validate()) {
             return;
           }
 
@@ -94,7 +94,10 @@ class TaskCreatorScreen extends StatelessWidget {
     BuildContext context,
   ) {
     if (state is TaskCreationSavingInProgress) {
-      return const CircularProgressIndicator();
+      return const Center(
+          child: CircularProgressIndicator(
+        color: Color(0xFF81767F),
+      ));
     } else {
       return Form(
         key: formKey,
@@ -151,7 +154,7 @@ class TaskCreatorScreen extends StatelessWidget {
                     horizontalPadding: 16.0,
                     onDateTimeChanged: (date) {
                       taskCreatorBloc.add(TaskCreatorDateChanged(date));
-                  }),
+                    }),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 2.0),
@@ -162,7 +165,7 @@ class TaskCreatorScreen extends StatelessWidget {
                     horizontalPadding: 16.0,
                     onDateTimeChanged: (date) {
                       taskCreatorBloc.add(TaskCreatorNotificationTimeChanged(date));
-                  }),
+                    }),
               ),
             ],
           ),

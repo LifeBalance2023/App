@@ -55,12 +55,10 @@ class LoginScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: BlocConsumer<LoginBloc, LoginState>(
             listener: (context, state) {
-              _blocListener(
-                  state, emailTextController, passwordTextController, context);
+              _blocListener(state, emailTextController, passwordTextController, context);
             },
             builder: (context, state) {
-              return _blocBuilder(loginBloc, state, emailTextController,
-                  emailValidator, passwordTextController, formKey, context);
+              return _blocBuilder(loginBloc, state, emailTextController, emailValidator, passwordTextController, formKey, context);
             },
           ),
         ),
@@ -94,7 +92,10 @@ Widget _blocBuilder(
   BuildContext context,
 ) {
   if (state is LoginLoading) {
-    return const CircularProgressIndicator();
+    return const Center(
+        child: CircularProgressIndicator(
+      color: Color(0xFF81767F),
+    ));
   } else {
     return Form(
       key: formKey,

@@ -171,7 +171,9 @@ Widget _blocBuilder(
 ) {
   if (state is ShowProgressIndicator) {
     return const Center(
-      child: CircularProgressIndicator(),
+      child: CircularProgressIndicator(
+        color: Color(0xFF81767F),
+      ),
     );
   }
   if (state is ShowMainScreen) {
