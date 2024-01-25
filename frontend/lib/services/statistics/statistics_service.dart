@@ -18,7 +18,7 @@ class StatisticsService {
   }
 
   Future<Result<DailyStatisticsValue>> getDailyStatistics(DateTime date) async {
-    final response = await _statisticsApi.getDailyStatistics(DateTimeFormatter.toDate(date));
+    final response = await _statisticsApi.getDailyStatistics(DateTimeFormatter.toStringDate(date));
     return response.map(_dailyStatisticsAdapter.adapt);
   }
 }

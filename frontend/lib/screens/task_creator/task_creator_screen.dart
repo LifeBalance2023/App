@@ -21,64 +21,67 @@ class TaskCreatorScreen extends StatelessWidget {
     final descriptionTextController = TextEditingController();
     final formKey = GlobalKey<FormState>();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Task',
-            style: TextStyle(
-              fontFamily: 'JejuGothic',
-            )),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              AppRouter.goToSettings(context);
-            },
-          ),
-        ],
-      ),
-      body: Container(
-        color: const Color(0xFF9A8C98),
-        width: double.infinity,
-        height: double.infinity,
-        child: SingleChildScrollView(
-          child: BlocConsumer<TaskCreatorBloc, TaskCreatorState>(
-            listener: (context, state) {
-              _blocListener(state, titleTextController, descriptionTextController, context);
-            },
-            builder: (context, state) {
-              return _blocBuilder(state, titleTextController, taskCreatorBloc, descriptionTextController, formKey, context);
-            },
+    return PopScope(
+      onPopInvoked: (value) {
+        taskCreatorBloc.add(TaskCreatorReset());
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Create Task',
+              style: TextStyle(
+                fontFamily: 'JejuGothic',
+              )),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () {
+                AppRouter.goToSettings(context);
+              },
+            ),
+          ],
+        ),
+        body: Container(
+          color: const Color(0xFF9A8C98),
+          width: double.infinity,
+          height: double.infinity,
+          child: SingleChildScrollView(
+            child: BlocConsumer<TaskCreatorBloc, TaskCreatorState>(
+              listener: (context, state) {
+                _blocListener(state, taskCreatorBloc, titleTextController, descriptionTextController, context);
+              },
+              builder: (context, state) {
+                return _blocBuilder(state, titleTextController, taskCreatorBloc, descriptionTextController, formKey, context);
+              },
+            ),
           ),
         ),
-      ),
-      floatingActionButton: CustomButtonComponent(
-        text: 'Add',
-        width: 140,
-        height: 48,
-        onPressed: () {
-          if(!formKey.currentState!.validate()) {
-            return;
-          }
+        floatingActionButton: CustomButtonComponent(
+          text: 'Add',
+          width: 140,
+          height: 48,
+          onPressed: () {
+            if (!formKey.currentState!.validate()) {
+              return;
+            }
 
-          taskCreatorBloc.add(TaskCreatorSaveRequested());
-        },
+            taskCreatorBloc.add(TaskCreatorSaveRequested());
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
   void _blocListener(
     TaskCreatorState state,
+    TaskCreatorBloc taskCreatorBloc,
     TextEditingController titleTextController,
     TextEditingController descriptionTextController,
     BuildContext context,
   ) {
-    if (state is TaskModificationState) {
-      titleTextController.text = state.title;
-      descriptionTextController.text = state.description ?? '';
-    }
     if (state is TaskCreationSavingSuccess) {
       AppRouter.goBack(context);
+      taskCreatorBloc.add(TaskCreatorReset());
     } else if (state is TaskCreationSavingFailure) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to save task: ${state.error.message}')),
@@ -158,7 +161,7 @@ class TaskCreatorScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 2.0),
                 child: DateTimeSelectorComponent(
                     label: 'Select Notification Time',
-                    initialDateTime: state.notificationTime ?? DateTime.now(),
+                    initialDateTime: state.notificationTime,
                     includeTime: true,
                     horizontalPadding: 16.0,
                     onDateTimeChanged: (date) {
