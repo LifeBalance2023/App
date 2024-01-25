@@ -63,6 +63,7 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
 
     signOutResult
         .onFailure((error) => emit(MainScreenError("Error while signing out: ${error.code} ${error.message}}")))
+        .onSuccess((_) { _tasksService.cancelAllNotifications(); })
         .onSuccess((_) => emit(GoToWelcomeScreen()));
   }
 
@@ -76,7 +77,6 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
 
     updateTaskResult
         .onFailure((error) => emit(MainScreenError("Error while updating task: ${error.code} ${error.message}}")))
-        .onSuccess((_) { _tasksService.cancelAllNotifications(); })
         .onSuccess((_) => _loadTasksAndStatistics(emit));
   }
 }
