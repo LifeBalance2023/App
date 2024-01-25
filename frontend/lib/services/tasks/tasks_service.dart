@@ -32,6 +32,10 @@ class TasksService {
     }
   }
 
+  Future<void> cancelAllNotifications() async {
+    _notificationScheduler.cancelAllNotifications();
+  }
+
   Future<Result<void>> synchronizeTasks() async {
     final result = await _tasksApi.getTasks();
     return result.onSuccess((response) {
