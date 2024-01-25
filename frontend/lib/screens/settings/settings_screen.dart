@@ -20,10 +20,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool notificationSwitch = false;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     final settingsBloc = BlocProvider.of<SettingsBloc>(context);
     settingsBloc.add(LoadSettings());
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    final settingsBloc = BlocProvider.of<SettingsBloc>(context);
     final textController = TextEditingController();
 
     return Scaffold(
@@ -57,9 +62,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           if (state is SettingsSaveSuccess) {
             _showSettingsSavedDialog(context);
           } else if (state is SettingsSaveFailure) {
-            SnackBar(content: Text('Failed to save settings: ${state.error}'));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Failed to save settings: ${state.error}')),
+            );
           } else if (state is SettingsLoadFailure) {
-            SnackBar(content: Text('Failed to load settings: ${state.error}'));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Failed to load settings: ${state.error}')),
+            );
           } else if (state is SettingsLoadSuccess) {
             textController.text = state.currentUrl;
           }
