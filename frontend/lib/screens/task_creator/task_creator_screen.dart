@@ -13,6 +13,8 @@ import 'package:frontend/screens/task_creator/widgets/priority_chip_selector.dar
 class TaskCreatorScreen extends StatelessWidget {
   const TaskCreatorScreen({Key? key}) : super(key: key);
 
+  static final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -21,7 +23,6 @@ class TaskCreatorScreen extends StatelessWidget {
 
     final titleTextController = TextEditingController();
     final descriptionTextController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
 
     return PopScope(
       onPopInvoked: (value) {

@@ -9,7 +9,7 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    double topHeight = screenHeight * 0.65;
+    double topHeight = screenHeight * 0.6;
     double bottomHeight = screenHeight - topHeight;
 
     return Scaffold(
