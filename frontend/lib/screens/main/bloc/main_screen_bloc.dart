@@ -44,7 +44,7 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
     getStatisticsResult.onFailure((error) {
       emit(MainScreenError("Error getting statistics: ${error.code} ${error.message}}"));
     }).onSuccess((statistics) {
-      final tasksResult = _tasksService.getAllTasks(); // TODO: Choose specific date
+      final tasksResult = _tasksService.getAllTasks();
 
       tasksResult.onFailure((error) {
         emit(MainScreenError("Error getting tasks: ${error.code} ${error.message}}"));
@@ -75,8 +75,11 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
       isDone: !event.task.isDone,
     );
 
-    updateTaskResult
-        .onFailure((error) => emit(MainScreenError("Error while updating task: ${error.code} ${error.message}}")))
-        .onSuccess((_) => _loadTasksAndStatistics(emit));
+    if(updateTaskResult.isFailure) {
+      emit(MainScreenError("Error while updating task: ${updateTaskResult.error.code} ${updateTaskResult.error.message}}"));
+      return;
+    }
+
+    await _loadTasksAndStatistics(emit);
   }
 }
