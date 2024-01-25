@@ -86,7 +86,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         confirmPassword: state.confirmPassword,
       ),
     );
-    final result = await _authenticationService.signInWithGoogle();
+    final result = await _authenticationService.signUpWithGoogle();
 
     result
         .onFailure(
