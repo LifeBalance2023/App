@@ -1,22 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/components/custom_button.dart';
+import 'package:frontend/components/custom_progress_indicator.dart';
 import 'package:frontend/router/router.dart';
 import 'package:frontend/screens/main/bloc/main_screen_bloc.dart';
 import 'package:frontend/screens/main/bloc/main_screen_event.dart';
 import 'package:frontend/screens/main/bloc/main_screen_state.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
+
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    final mainScreenBloc = BlocProvider.of<MainScreenBloc>(context);
+    mainScreenBloc.add(LoadMainScreen());
+  }
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double topHeight = screenHeight * 0.35;
     final mainScreenBloc = BlocProvider.of<MainScreenBloc>(context);
-
-    mainScreenBloc.add(LoadMainScreen());
 
     return Scaffold(
       appBar: AppBar(
@@ -159,9 +171,7 @@ Widget _blocBuilder(
   BuildContext context,
 ) {
   if (state is ShowProgressIndicator) {
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
+    return const CustomProgressIndicator();
   }
   if (state is ShowMainScreen) {
     return Column(

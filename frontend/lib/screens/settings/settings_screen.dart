@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:frontend/components/custom_button.dart';
+import 'package:frontend/components/custom_progress_indicator.dart';
 import 'package:frontend/components/form_textfield.dart';
 import 'package:frontend/screens/settings/bloc/settings_bloc.dart';
 import 'package:frontend/screens/settings/bloc/settings_event.dart';
@@ -19,10 +20,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool notificationSwitch = false;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     final settingsBloc = BlocProvider.of<SettingsBloc>(context);
     settingsBloc.add(LoadSettings());
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    final settingsBloc = BlocProvider.of<SettingsBloc>(context);
     final textController = TextEditingController();
 
     return Scaffold(
@@ -56,9 +62,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           if (state is SettingsSaveSuccess) {
             _showSettingsSavedDialog(context);
           } else if (state is SettingsSaveFailure) {
-            SnackBar(content: Text('Failed to save settings: ${state.error}'));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Failed to save settings: ${state.error}')),
+            );
           } else if (state is SettingsLoadFailure) {
-            SnackBar(content: Text('Failed to load settings: ${state.error}'));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Failed to load settings: ${state.error}')),
+            );
           } else if (state is SettingsLoadSuccess) {
             textController.text = state.currentUrl;
           }
@@ -84,8 +94,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20.0, vertical: 10.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -101,7 +110,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   value: themeSwitch,
                                   onToggle: (value) {
                                     setState(
-                                          () {
+                                      () {
                                         themeSwitch = value;
                                         print(themeSwitch);
                                       },
@@ -117,8 +126,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             color: const Color(0xFF4A4E69).withOpacity(0.35),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20.0, vertical: 10.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -134,7 +142,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   value: notificationSwitch,
                                   onToggle: (value) {
                                     setState(
-                                          () {
+                                      () {
                                         notificationSwitch = value;
                                         print(notificationSwitch);
                                       },
@@ -171,11 +179,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     text: 'Save settings',
                     width: 192,
                     height: 48,
-                    onPressed: () =>
-                        _showSaveConfirmationDialog(context, settingsBloc),
+                    onPressed: () => _showSaveConfirmationDialog(context, settingsBloc),
                   ),
                   if (state is SettingsSaveInProgress)
-                    const CircularProgressIndicator(),
+                    const CustomProgressIndicator(),
                 ],
               ),
             ),
@@ -203,8 +210,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  void _showSaveConfirmationDialog(
-      BuildContext context, SettingsBloc settingsBloc) {
+  void _showSaveConfirmationDialog(BuildContext context, SettingsBloc settingsBloc) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
