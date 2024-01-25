@@ -14,6 +14,7 @@ class TaskCreatorBloc extends Bloc<TaskCreatorEvent, TaskCreatorState> {
     on<TaskCreatorDateChanged>(_onDateChanged);
     on<TaskCreatorNotificationTimeChanged>(_onNotificationTimeChanged);
     on<TaskCreatorSaveRequested>(_onSaveRequested);
+    on<TaskCreatorReset>(_onReset);
   }
 
   void _onTitleChanged(TaskCreatorTitleChanged event, Emitter<TaskCreatorState> emit) {
@@ -58,30 +59,34 @@ class TaskCreatorBloc extends Bloc<TaskCreatorEvent, TaskCreatorState> {
     var result = await _tasksService.createTask(
       title: state.title,
       description: state.description,
-      priority: state.priority.name,
-      date: DateTimeFormatter.toDate(state.date),
-      notificationTime: state.notificationTime != null ? DateTimeFormatter.toTime(state.notificationTime!) : null
+      priority: state.priority,
+      date: state.date,
+      notificationTime: state.notificationTime,
     );
 
     result
         .onFailure((error) {
           emit(TaskCreationSavingFailure(
-            title: state.title,
-            description: state.description,
-            priority: state.priority,
-            date: state.date,
-            notificationTime: state.notificationTime,
-            error: error,
-          ));
+              title: state.title,
+              description: state.description,
+              priority: state.priority,
+              date: state.date,
+              notificationTime: state.notificationTime,
+              error: error,
+            ));
         })
         .onSuccess((_) {
           emit(TaskCreationSavingSuccess(
-            title: state.title,
-            description: state.description,
-            priority: state.priority,
-            date: state.date,
-            notificationTime: state.notificationTime,
-          ));
+              title: state.title,
+              description: state.description,
+              priority: state.priority,
+              date: state.date,
+              notificationTime: state.notificationTime,
+            ));
         });
+  }
+
+  void _onReset(TaskCreatorReset event, Emitter<TaskCreatorState> emit) {
+    emit(TaskCreatorInitial());
   }
 }

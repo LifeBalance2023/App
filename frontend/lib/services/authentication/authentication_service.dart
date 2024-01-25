@@ -34,6 +34,11 @@ class AuthenticationService {
     return _saveUser(result);
   }
 
+  Future<Result<void>> signUpWithGoogle() async {
+    final result = await _firebaseAuthenticator.signInWithGoogle();
+    return await _saveUser(result).flatMapFuture((user) => _authenticationApi.addUser(AddUserRequest(email: user.email, userId: user.id)));
+  }
+
   Result<UserEntity> _saveUser(Result<UserCredential> userCredential) => userCredential
       .map((userCredential) => userCredential.user)
       .map((user) => UserEntity(id: user?.uid ?? '', email: user?.email ?? ''))
