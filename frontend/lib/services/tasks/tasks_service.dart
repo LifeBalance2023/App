@@ -78,6 +78,7 @@ class TasksService {
     required String id,
     String? title,
     String? description,
+    bool? isDone,
     PriorityValue? priority,
     DateTime? date,
     DateTime? notificationTime,
@@ -86,6 +87,7 @@ class TasksService {
       title: title,
       description: description,
       priority: priority?.name,
+      isDone: isDone,
       date: date != null ? DateTimeFormatter.toStringDate(date) : null,
       notificationTime: notificationTime != null ? DateTimeFormatter.toStringDateTime(notificationTime) : null,
     );
