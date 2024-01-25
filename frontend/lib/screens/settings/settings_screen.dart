@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:frontend/components/custom_button.dart';
+import 'package:frontend/components/custom_progress_indicator.dart';
 import 'package:frontend/components/form_textfield.dart';
 import 'package:frontend/screens/settings/bloc/settings_bloc.dart';
 import 'package:frontend/screens/settings/bloc/settings_event.dart';
@@ -172,10 +173,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     onPressed: () => _showSaveConfirmationDialog(context, settingsBloc),
                   ),
                   if (state is SettingsSaveInProgress)
-                    const Center(
-                        child: CircularProgressIndicator(
-                      color: Color(0xFF81767F),
-                    )),
+                    const CustomProgressIndicator(),
                 ],
               ),
             ),

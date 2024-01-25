@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/components/custom_button.dart';
+import 'package:frontend/components/custom_progress_indicator.dart';
 import 'package:frontend/components/divider_with_text.dart';
 import 'package:frontend/components/form_textfield.dart';
 import 'package:frontend/router/router.dart';
@@ -103,10 +104,7 @@ Widget _blocBuilder(
   BuildContext context,
 ) {
   if (state is RegisterLoading) {
-    return const Center(
-        child: CircularProgressIndicator(
-          color: Color(0xFF81767F),
-        ));
+    return const CustomProgressIndicator();
   } else {
     return Form(
       key: formKey,

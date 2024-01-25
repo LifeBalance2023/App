@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/components/custom_button.dart';
+import 'package:frontend/components/custom_progress_indicator.dart';
 import 'package:frontend/components/date_selector_component.dart';
 import 'package:frontend/components/form_textfield.dart';
 import 'package:frontend/router/router.dart';
@@ -94,10 +95,7 @@ class TaskCreatorScreen extends StatelessWidget {
     BuildContext context,
   ) {
     if (state is TaskCreationSavingInProgress) {
-      return const Center(
-          child: CircularProgressIndicator(
-        color: Color(0xFF81767F),
-      ));
+      return const CustomProgressIndicator();
     } else {
       return Form(
         key: formKey,
