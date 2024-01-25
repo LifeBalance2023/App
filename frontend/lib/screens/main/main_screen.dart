@@ -195,12 +195,12 @@ Widget _blocBuilder(
         const SizedBox(
           height: 10.0,
         ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 'Today balance is ',
                 style: TextStyle(
                   fontFamily: 'JejuGothic',
@@ -210,8 +210,8 @@ Widget _blocBuilder(
                 textAlign: TextAlign.center,
               ),
               Text(
-                'complete harmony',
-                style: TextStyle(
+                state.harmonyText,
+                style: const TextStyle(
                     fontFamily: 'JejuGothic',
                     fontSize: 15.0,
                     fontWeight: FontWeight.w400,
@@ -231,8 +231,8 @@ Widget _blocBuilder(
             animation: true,
             lineHeight: 20.0,
             animationDuration: 1500,
-            percent: 0.8,
-            center: const Text("80.0%"),
+            percent: state.lifeBalancePercentage / 100,
+            center: Text("${state.lifeBalancePercentage}%"),
             progressColor: Colors.green,
             barRadius: const Radius.circular(10),
           ),
