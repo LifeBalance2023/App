@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/components/custom_button.dart';
+import 'package:frontend/components/custom_progress_indicator.dart';
 import 'package:frontend/components/divider_with_text.dart';
 import 'package:frontend/components/form_textfield.dart';
 import 'package:frontend/router/router.dart';
 import 'package:frontend/screens/auth/register/bloc/register_bloc.dart';
 import 'package:frontend/screens/auth/register/bloc/register_state.dart';
 import 'package:frontend/screens/auth/register/bloc/register_event.dart';
+import 'package:frontend/utils/email_validator.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    EmailValidator emailValidator = EmailValidator();
     final registerBloc = BlocProvider.of<RegisterBloc>(context);
 
     final emailTextController = TextEditingController();
@@ -51,22 +54,24 @@ class RegisterScreen extends StatelessWidget {
         width: double.infinity,
         height: double.infinity,
         child: SingleChildScrollView(
-            child: BlocConsumer<RegisterBloc, RegisterState>(
-          listener: (context, state) {
-            _blocListener(state, emailTextController, passwordTextController,
-                confirmPasswordTextController, context);
-          },
-          builder: (context, state) {
-            return _blocBuilder(
-                registerBloc,
-                state,
-                emailTextController,
-                passwordTextController,
-                confirmPasswordTextController,
-                formKey,
-                context);
-          },
-        )),
+          child: BlocConsumer<RegisterBloc, RegisterState>(
+            listener: (context, state) {
+              _blocListener(state, emailTextController, passwordTextController,
+                  confirmPasswordTextController, context);
+            },
+            builder: (context, state) {
+              return _blocBuilder(
+                  registerBloc,
+                  state,
+                  emailTextController,
+                  emailValidator,
+                  passwordTextController,
+                  confirmPasswordTextController,
+                  formKey,
+                  context);
+            },
+          ),
+        ),
       ),
     );
   }
@@ -79,11 +84,6 @@ void _blocListener(
   TextEditingController confirmPasswordTextController,
   BuildContext context,
 ) {
-  if (state is RegisterEdited) {
-    emailTextController.text = state.email;
-    passwordTextController.text = state.password;
-    confirmPasswordTextController.text = state.confirmPassword;
-  }
   if (state is RegisterSuccess) {
     AppRouter.goToMainScreen(context);
   } else if (state is RegisterFailure) {
@@ -97,13 +97,14 @@ Widget _blocBuilder(
   RegisterBloc registerBloc,
   RegisterState state,
   TextEditingController emailTextController,
+  EmailValidator emailValidator,
   TextEditingController passwordTextController,
   TextEditingController confirmPasswordTextController,
   GlobalKey<FormState> formKey,
   BuildContext context,
 ) {
   if (state is RegisterLoading) {
-    return const CircularProgressIndicator();
+    return const CustomProgressIndicator();
   } else {
     return Form(
       key: formKey,
@@ -120,7 +121,7 @@ Widget _blocBuilder(
             height: 48,
             iconPath: 'assets/icons/google_icon.png',
             onPressed: () {
-              //TODO
+              registerBloc.add(RegisterWithGoogleRequest());
             },
           ),
           const SizedBox(
@@ -147,17 +148,7 @@ Widget _blocBuilder(
               registerBloc.add(EmailChanged(email: value));
             },
             validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Field can\'t be empty';
-              }
-
-              final emailRegex =
-                  RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
-              if (!emailRegex.hasMatch(value)) {
-                return 'Please provide an email in valid form';
-              }
-
-              return null;
+              return emailValidator.validate(value);
             },
           ),
           const SizedBox(

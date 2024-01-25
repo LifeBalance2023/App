@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/components/custom_button.dart';
+import 'package:frontend/components/custom_progress_indicator.dart';
 import 'package:frontend/components/divider_with_text.dart';
 import 'package:frontend/components/form_textfield.dart';
 import 'package:frontend/router/router.dart';
 import 'package:frontend/screens/auth/login/bloc/login_bloc.dart';
 import 'package:frontend/screens/auth/login/bloc/login_event.dart';
 import 'package:frontend/screens/auth/login/bloc/login_state.dart';
+import 'package:frontend/utils/email_validator.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    EmailValidator emailValidator = EmailValidator();
     final loginBloc = BlocProvider.of<LoginBloc>(context);
 
     final emailTextController = TextEditingController();
@@ -53,12 +56,10 @@ class LoginScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: BlocConsumer<LoginBloc, LoginState>(
             listener: (context, state) {
-              _blocListener(
-                  state, emailTextController, passwordTextController, context);
+              _blocListener(state, emailTextController, passwordTextController, context);
             },
             builder: (context, state) {
-              return _blocBuilder(loginBloc, state, emailTextController,
-                  passwordTextController, formKey, context);
+              return _blocBuilder(loginBloc, state, emailTextController, emailValidator, passwordTextController, formKey, context);
             },
           ),
         ),
@@ -73,10 +74,6 @@ void _blocListener(
   TextEditingController passwordTextController,
   BuildContext context,
 ) {
-  if (state is LoginEdited) {
-    emailTextController.text = state.email;
-    passwordTextController.text = state.password;
-  }
   if (state is LoginSuccess) {
     AppRouter.goToMainScreen(context);
   } else if (state is LoginFailure) {
@@ -90,12 +87,13 @@ Widget _blocBuilder(
   LoginBloc loginBloc,
   LoginState state,
   TextEditingController emailTextController,
+  EmailValidator emailValidator,
   TextEditingController passwordTextController,
   GlobalKey<FormState> formKey,
   BuildContext context,
 ) {
   if (state is LoginLoading) {
-    return const CircularProgressIndicator();
+    return const CustomProgressIndicator();
   } else {
     return Form(
       key: formKey,
@@ -139,17 +137,7 @@ Widget _blocBuilder(
               loginBloc.add(EmailChanged(email: value));
             },
             validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your email';
-              }
-
-              final emailRegex =
-                  RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
-              if (!emailRegex.hasMatch(value)) {
-                return 'Please enter a valid email';
-              }
-
-              return null;
+              return emailValidator.validate(value);
             },
           ),
           const SizedBox(
@@ -221,6 +209,7 @@ Widget _blocBuilder(
 
 void _showForgotPasswordDialog(BuildContext context) {
   final dialogFormKey = GlobalKey<FormState>();
+  EmailValidator emailValidator = EmailValidator();
   final emailResetController = TextEditingController();
 
   showDialog(
@@ -312,15 +301,7 @@ void _showForgotPasswordDialog(BuildContext context) {
                     fontWeight: FontWeight.w400,
                   ),
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    final emailRegex =
-                        RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-                    if (!emailRegex.hasMatch(value)) {
-                      return 'Enter a valid email';
-                    }
-                    return null;
+                    return emailValidator.validate(value);
                   },
                 ),
                 const SizedBox(height: 20),

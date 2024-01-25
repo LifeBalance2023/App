@@ -15,65 +15,98 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   }
 
   void _onEmailChanged(EmailChanged event, Emitter<RegisterState> emit) {
-    emit(RegisterEdited(
-        email: event.email,
-        password: state.password,
-        confirmPassword: state.confirmPassword));
+    emit(
+      RegisterEdited(
+          email: event.email,
+          password: state.password,
+          confirmPassword: state.confirmPassword),
+    );
   }
 
   void _onPasswordChanged(PasswordChanged event, Emitter<RegisterState> emit) {
-    emit(RegisterEdited(
-        email: state.email,
-        password: event.password,
-        confirmPassword: state.confirmPassword));
+    emit(
+      RegisterEdited(
+          email: state.email,
+          password: event.password,
+          confirmPassword: state.confirmPassword),
+    );
   }
 
   void _onConfirmPasswordChanged(
       ConfirmPasswordChanged event, Emitter<RegisterState> emit) {
-    emit(RegisterEdited(
-        email: state.email,
-        password: state.password,
-        confirmPassword: event.confirmPassword));
+    emit(
+      RegisterEdited(
+          email: state.email,
+          password: state.password,
+          confirmPassword: event.confirmPassword),
+    );
   }
 
   Future<void> _onCredentialsRegister(
       RegisterWithCredentialsRequest event, Emitter<RegisterState> emit) async {
-    emit(RegisterLoading(
-        email: state.email,
-        password: state.password,
-        confirmPassword: state.confirmPassword));
+    emit(
+      RegisterLoading(
+          email: state.email,
+          password: state.password,
+          confirmPassword: state.confirmPassword),
+    );
     final result = await _authenticationService.signUp(
-        email: state.email, password: state.password);
+      email: state.email,
+      password: state.password,
+    );
 
     result
-        .onFailure((error) => emit(RegisterFailure(
-            email: state.email,
-            password: state.password,
-            confirmPassword: state.confirmPassword,
-            error: error)))
-        .onSuccess((_) => emit(RegisterSuccess(
-            email: state.email,
-            password: state.password,
-            confirmPassword: state.confirmPassword)));
+        .onFailure(
+          (error) => emit(
+            RegisterFailure(
+              email: state.email,
+              password: state.password,
+              confirmPassword: state.confirmPassword,
+              error: error,
+            ),
+          ),
+        )
+        .onSuccess(
+          (_) => emit(
+            RegisterSuccess(
+              email: state.email,
+              password: state.password,
+              confirmPassword: state.confirmPassword,
+            ),
+          ),
+        );
   }
 
   Future<void> _onGoogleRegister(
       RegisterWithGoogleRequest event, Emitter<RegisterState> emit) async {
-    emit(RegisterLoading(
+    emit(
+      RegisterLoading(
         email: state.email,
         password: state.password,
-        confirmPassword: state.confirmPassword));
+        confirmPassword: state.confirmPassword,
+      ),
+    );
     final result = await _authenticationService.signUpWithGoogle();
 
     result
-        .onFailure((error) => emit(RegisterFailure(
-            email: state.email,
-            password: state.password,
-            confirmPassword: state.confirmPassword,
-            error: error)))
-        .onSuccess((_) => emit(RegisterSuccess(
-            email: state.email,
-            password: state.password,
-            confirmPassword: state.confirmPassword)));
+        .onFailure(
+          (error) => emit(
+            RegisterFailure(
+              email: state.email,
+              password: state.password,
+              confirmPassword: state.confirmPassword,
+              error: error,
+            ),
+          ),
+        )
+        .onSuccess(
+          (_) => emit(
+            RegisterSuccess(
+              email: state.email,
+              password: state.password,
+              confirmPassword: state.confirmPassword,
+            ),
+          ),
+        );
   }
 }

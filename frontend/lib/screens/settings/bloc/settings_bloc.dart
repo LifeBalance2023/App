@@ -13,28 +13,25 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<SettingsSaveRequested>(_onSaveRequested);
   }
 
-  Future<void> _onLoadSettings(
-      LoadSettings event, Emitter<SettingsState> emit) async {
+  Future<void> _onLoadSettings(LoadSettings event, Emitter<SettingsState> emit) async {
     emit(SettingsLoadInProgress(''));
     var result = await _settingsService.loadSettings();
 
-    result.onFailure((error) => emit(SettingsLoadFailure('', error))).onSuccess(
-        (settings) => emit(SettingsLoadSuccess(settings?.backendUrl ?? '')));
+    result
+        .onFailure((error) => emit(SettingsLoadFailure('', error)))
+        .onSuccess((settings) => emit(SettingsLoadSuccess(settings?.backendUrl ?? '')));
   }
 
   void _onUrlChanged(SettingsUrlChanged event, Emitter<SettingsState> emit) {
     emit(SettingsLoadSuccess(event.url));
   }
 
-  Future<void> _onSaveRequested(
-      SettingsSaveRequested event, Emitter<SettingsState> emit) async {
+  Future<void> _onSaveRequested(SettingsSaveRequested event, Emitter<SettingsState> emit) async {
     emit(SettingsSaveInProgress(state.currentUrl));
-    var result = await _settingsService
-        .saveSettings(SettingsValue(backendUrl: state.currentUrl));
+    var result = await _settingsService.saveSettings(SettingsValue(backendUrl: state.currentUrl));
 
     result
-        .onFailure(
-            (error) => emit(SettingsSaveFailure(state.currentUrl, error)))
+        .onFailure((error) => emit(SettingsSaveFailure(state.currentUrl, error)))
         .onSuccess((_) => emit(SettingsSaveSuccess(state.currentUrl)));
   }
 }

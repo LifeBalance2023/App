@@ -4,9 +4,9 @@ import 'package:frontend/services/tasks/tasks_service.dart';
 import 'package:provider/single_child_widget.dart';
 
 List<SingleChildWidget> createTaskCreatorProviders() => [
-      BlocProvider<TaskCreatorBloc>(
-        create: (context) => TaskCreatorBloc(
-          context.read<TasksService>(),
-        ),
-      ),
-    ];
+  BlocProvider<TaskCreatorBloc>(
+    create: (context) => TaskCreatorBloc(
+      context.read<TasksService>(),
+    ),
+  ),
+];
