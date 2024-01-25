@@ -3,7 +3,7 @@ from fastapi import HTTPException, status
 from google.cloud.firestore_v1 import FieldFilter
 
 from interfaces.task import ITaskService
-from models.task import Task, TaskDTO, OptionalTaskDTO
+from models.task import Task, TaskDTO, OptionalTaskDTO,PatchTaskDTO
 from database.firestore.utils.firestore_translator import FirestoreTranslator
 from database.firestore.database_manager import DatabaseManager
 
@@ -71,7 +71,7 @@ class TaskService(ITaskService):
             self,
             user_id: str,
             doc_id: str,
-            update_task: OptionalTaskDTO
+            update_task: PatchTaskDTO
     ) -> Task:
         doc_ref = self.db_manager.collection(self.collection_name).document(doc_id)
         to_update = await doc_ref.get()
@@ -82,7 +82,7 @@ class TaskService(ITaskService):
 
         base: TaskDTO = FirestoreTranslator.update_base_object(to_update, TaskDTO, update_task)
 
-        if not to_update.userId == user_id:
+        if not FirestoreTranslator.document_to_object(to_update, Task).userId == user_id:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                 detail=f"Task with id: {doc_id} exists but you are not authorized to handle")
 
@@ -97,8 +97,7 @@ class TaskService(ITaskService):
             user_id: str,
             doc_id: str
     ) -> Task:
-        doc_ref = self.db_manager.collection(self.collection_name).where(filter=FieldFilter('userId', '==', user_id))
-        doc_ref = doc_ref.document(doc_id)
+        doc_ref = self.db_manager.collection(self.collection_name).document(doc_id)
         deleted_task_doc = await doc_ref.get()
 
         if not deleted_task_doc.exists:

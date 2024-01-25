@@ -31,6 +31,7 @@ class Task(BaseModel):
 
 
 class TaskDTO(BaseModel):
+    # userId: str
     title: str
     description: str
     priority: str
@@ -40,6 +41,7 @@ class TaskDTO(BaseModel):
 
     def to_dict(self) -> dict:
         return {
+            # "userId": self.userId,
             "title": self.title,
             "description": self.description,
             "priority": self.priority,
@@ -52,6 +54,7 @@ class TaskDTO(BaseModel):
         orm_mode = True
         schema_extra = {
             "example": {
+                # "userId": "u2",
                 "title": "Task Two",
                 "description": "This is the second task",
                 "isDone": False,
@@ -60,6 +63,28 @@ class TaskDTO(BaseModel):
                 "notificationTime": datetime.now(),
             }
         }
+
+
+class PatchTaskDTO(BaseModel):
+    title: Optional[str]
+    description: Optional[str]
+    priority: Optional[str]
+    isDone: Optional[bool]
+    date: Optional[date]
+    notificationTime: Optional[datetime]
+
+    def to_dict(self) -> dict:
+        return {
+            "title": self.title,
+            "description": self.description,
+            "priority": self.priority,
+            "isDone": self.isDone,
+            "date": self.date.isoformat() if self.date else None,
+            "notificationTime": self.notificationTime if self.notificationTime else None
+        }
+
+    class Config:
+        orm_mode = True
 
 
 class OptionalTaskDTO(BaseModel):
