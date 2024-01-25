@@ -18,6 +18,12 @@ class CustomButtonComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double baseWidth = 375.0;
+    double maxTextSize = 20.0;
+    double scaleFactor = screenWidth / baseWidth;
+    double fontSize = (scaleFactor * maxTextSize).clamp(14.0, maxTextSize);
+
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
@@ -32,10 +38,10 @@ class CustomButtonComponent extends StatelessWidget {
       child: iconPath == null
           ? Text(
               text,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'JejuGothic',
-                fontSize: 20.0,
-                color: Color(0xFFF2E9E4),
+                fontSize: fontSize,
+                color: const Color(0xFFF2E9E4),
               ),
             )
           : Row(
@@ -51,10 +57,10 @@ class CustomButtonComponent extends StatelessWidget {
                 ),
                 Text(
                   text,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'JejuGothic',
-                    fontSize: 20.0,
-                    color: Color(0xFFF2E9E4),
+                    fontSize: fontSize,
+                    color: const Color(0xFFF2E9E4),
                   ),
                 ),
               ],
