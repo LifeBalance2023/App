@@ -84,24 +84,18 @@ class _MainScreenState extends State<MainScreen> {
           ],
         ),
       ),
-      body: Stack(
-        children: [
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            height: topHeight,
-            child: Image.asset(
-              'assets/graphics/m_page_picture.png',
-              fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: topHeight,
+              width: double.infinity,
+              child: Image.asset(
+                'assets/graphics/m_page_picture.png',
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          Positioned(
-            top: topHeight - 15,
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
+            Container(
               decoration: const BoxDecoration(
                 color: Color(0xFF9A8C98),
                 borderRadius: BorderRadius.only(
@@ -118,8 +112,8 @@ class _MainScreenState extends State<MainScreen> {
                 },
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: SizedBox(
         height: 70,
@@ -249,6 +243,9 @@ Widget _blocBuilder(
                     ],
                   ))
               .toList(),
+        ),
+        const SizedBox(
+          height: 100,
         )
       ],
     );
