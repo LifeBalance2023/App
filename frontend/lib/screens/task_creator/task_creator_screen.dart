@@ -13,71 +13,74 @@ import 'package:frontend/screens/task_creator/widgets/priority_chip_selector.dar
 class TaskCreatorScreen extends StatelessWidget {
   const TaskCreatorScreen({Key? key}) : super(key: key);
 
-  static final formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
     final taskCreatorBloc = BlocProvider.of<TaskCreatorBloc>(context);
 
     final titleTextController = TextEditingController();
     final descriptionTextController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
 
-    return PopScope(
-      onPopInvoked: (value) {
-        taskCreatorBloc.add(TaskCreatorReset());
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Create task',
-            style: TextStyle(
-              fontFamily: 'JejuGothic',
-              fontSize: 20.0,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          centerTitle: true,
-        ),
-        body: Container(
-          color: const Color(0xFF9A8C98),
-          width: double.infinity,
-          height: double.infinity,
-          child: SingleChildScrollView(
-            child: BlocConsumer<TaskCreatorBloc, TaskCreatorState>(
-              listener: (context, state) {
-                _blocListener(state, taskCreatorBloc, titleTextController,
-                    descriptionTextController, context);
-              },
-              builder: (context, state) {
-                return _blocBuilder(
-                    state,
-                    titleTextController,
-                    taskCreatorBloc,
-                    descriptionTextController,
-                    formKey,
-                    context,
-                    screenHeight,
-                    screenWidth);
-              },
-            ),
-          ),
-        ),
-        floatingActionButton: CustomButtonComponent(
-          text: 'Add',
-          width: 140,
-          height: 48,
-          onPressed: () {
-            if (!formKey.currentState!.validate()) {
-              return;
-            }
-
-            taskCreatorBloc.add(TaskCreatorSaveRequested());
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        double screenHeight = constraints.maxHeight;
+        double screenWidth = constraints.maxWidth;
+        return PopScope(
+          onPopInvoked: (value) {
+            taskCreatorBloc.add(TaskCreatorReset());
           },
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      ),
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text(
+                'Create task',
+                style: TextStyle(
+                  fontFamily: 'JejuGothic',
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              centerTitle: true,
+            ),
+            body: Container(
+              color: const Color(0xFF9A8C98),
+              width: double.infinity,
+              height: double.infinity,
+              child: SingleChildScrollView(
+                child: BlocConsumer<TaskCreatorBloc, TaskCreatorState>(
+                  listener: (context, state) {
+                    _blocListener(state, taskCreatorBloc, titleTextController,
+                        descriptionTextController, context);
+                  },
+                  builder: (context, state) {
+                    return _blocBuilder(
+                        state,
+                        titleTextController,
+                        taskCreatorBloc,
+                        descriptionTextController,
+                        formKey,
+                        context,
+                        screenHeight,
+                        screenWidth);
+                  },
+                ),
+              ),
+            ),
+            floatingActionButton: CustomButtonComponent(
+              text: 'Add',
+              width: 140,
+              height: 48,
+              onPressed: () {
+                if (!formKey.currentState!.validate()) {
+                  return;
+                }
+
+                taskCreatorBloc.add(TaskCreatorSaveRequested());
+              },
+            ),
+            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          ),
+        );
+      }
     );
   }
 
