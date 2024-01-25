@@ -19,6 +19,7 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
   }
 
   Future<void> _onLoadMainScreen(LoadMainScreen event, Emitter<MainScreenState> emit) async {
+    emit(ShowProgressIndicator());
     final userIdResult = await _authenticationService.getUserId();
 
     if (userIdResult.isSuccess) {

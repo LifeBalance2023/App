@@ -76,6 +76,22 @@ class WelcomeScreen extends StatelessWidget {
                       AppRouter.goToRegister(context);
                     },
                   ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      AppRouter.goToSettings(context);
+                    },
+                    child: Text(
+                      'Settings',
+                      style: TextStyle(
+                        fontFamily: 'JejuGothic',
+                        fontSize: 18.0,
+                        color: Colors.grey[800],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

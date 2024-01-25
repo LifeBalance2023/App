@@ -93,6 +93,7 @@ class _MainScreenState extends State<MainScreen> {
             ConstrainedBox(
               constraints: BoxConstraints(
                 minHeight: screenHeight - topHeight,
+                minWidth: double.infinity,
               ),
               child: Container(
                 decoration: const BoxDecoration(
