@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:frontend/components/custom_button.dart';
 import 'package:frontend/components/custom_progress_indicator.dart';
 import 'package:frontend/components/form_textfield.dart';
@@ -16,9 +15,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool themeSwitch = false;
-  bool notificationSwitch = false;
-
   @override
   void initState() {
     super.initState();
@@ -93,80 +89,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       child: Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text(
-                                  'Light mode / dark mode',
-                                  style: TextStyle(
-                                    fontFamily: 'JejuGothic',
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.w400,
-                                  ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Backend URL',
+                                style: TextStyle(
+                                  fontFamily: 'JejuGothic',
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.w400,
                                 ),
-                                FlutterSwitch(
-                                  value: themeSwitch,
-                                  onToggle: (value) {
-                                    setState(
-                                      () {
-                                        themeSwitch = value;
-                                        print(themeSwitch);
-                                      },
-                                    );
-                                  },
-                                  inactiveColor: const Color(0xFF4A4E69),
-                                  activeColor: Colors.green,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Divider(
-                            color: const Color(0xFF4A4E69).withOpacity(0.35),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text(
-                                  'Notification',
-                                  style: TextStyle(
-                                    fontFamily: 'JejuGothic',
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                FlutterSwitch(
-                                  value: notificationSwitch,
-                                  onToggle: (value) {
-                                    setState(
-                                      () {
-                                        notificationSwitch = value;
-                                        print(notificationSwitch);
-                                      },
-                                    );
-                                  },
-                                  inactiveColor: const Color(0xFF4A4E69),
-                                  activeColor: Colors.green,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Divider(
-                            color: const Color(0xFF4A4E69).withOpacity(0.35),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: FormTextfieldComponent(
-                              hintText: 'Enter backend URL',
-                              obscureText: false,
-                              onChanged: (url) => settingsBloc.add(
-                                SettingsUrlChanged(url),
                               ),
-                              controller: textController,
-                            ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                child: FormTextfieldComponent(
+                                  hintText: 'Enter backend URL',
+                                  obscureText: false,
+                                  onChanged: (url) => settingsBloc.add(
+                                    SettingsUrlChanged(url),
+                                  ),
+                                  controller: textController,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
