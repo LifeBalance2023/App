@@ -4,7 +4,7 @@ import 'package:frontend/utils/date_time_formatter.dart';
 
 class DateTimeSelectorComponent extends StatefulWidget {
   final String label;
-  final DateTime initialDateTime;
+  final DateTime? initialDateTime;
   final Function(DateTime) onDateTimeChanged;
   final bool includeTime;
   final double? horizontalPadding;
@@ -50,7 +50,7 @@ class _DateTimeSelectorComponentState extends State<DateTimeSelectorComponent> {
       onTap: () async {
         DateTime? pickedDate = await showDatePicker(
           context: context,
-          initialDate: widget.initialDateTime,
+          initialDate: widget.initialDateTime ?? DateTime.now(),
           firstDate: DateTime(2000),
           lastDate: DateTime(2030),
         );
@@ -59,7 +59,7 @@ class _DateTimeSelectorComponentState extends State<DateTimeSelectorComponent> {
           if (widget.includeTime) {
             TimeOfDay? pickedTime = await showTimePicker(
               context: context,
-              initialTime: TimeOfDay.fromDateTime(widget.initialDateTime),
+              initialTime: TimeOfDay.fromDateTime(widget.initialDateTime ?? DateTime.now()),
             );
             if (pickedTime != null) {
               finalDateTime = DateTime(
@@ -80,10 +80,13 @@ class _DateTimeSelectorComponentState extends State<DateTimeSelectorComponent> {
     );
   }
 
-  String _formatDateTime(DateTime dateTime) {
-    if(widget.includeTime) {
-      return DateTimeFormatter.toDateTime(dateTime);
+  String _formatDateTime(DateTime? dateTime) {
+    if(dateTime == null) {
+      return 'Date and Time is not set';
     }
-    return DateTimeFormatter.toDate(dateTime);
+    if(widget.includeTime) {
+      return DateTimeFormatter.toStringDateWithHours(dateTime);
+    }
+    return DateTimeFormatter.toStringDate(dateTime);
   }
 }
