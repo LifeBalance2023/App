@@ -31,7 +31,6 @@ class Task(BaseModel):
 
 
 class TaskDTO(BaseModel):
-    # userId: str
     title: str
     description: str
     priority: str
@@ -41,7 +40,6 @@ class TaskDTO(BaseModel):
 
     def to_dict(self) -> dict:
         return {
-            # "userId": self.userId,
             "title": self.title,
             "description": self.description,
             "priority": self.priority,
@@ -54,7 +52,6 @@ class TaskDTO(BaseModel):
         orm_mode = True
         schema_extra = {
             "example": {
-                # "userId": "u2",
                 "title": "Task Two",
                 "description": "This is the second task",
                 "isDone": False,
