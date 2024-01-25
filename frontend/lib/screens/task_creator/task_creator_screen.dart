@@ -15,6 +15,8 @@ class TaskCreatorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     final taskCreatorBloc = BlocProvider.of<TaskCreatorBloc>(context);
 
     final titleTextController = TextEditingController();
@@ -27,10 +29,15 @@ class TaskCreatorScreen extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Create Task',
-              style: TextStyle(
-                fontFamily: 'JejuGothic',
-              )),
+          title: const Text(
+            'Create task',
+            style: TextStyle(
+              fontFamily: 'JejuGothic',
+              fontSize: 20.0,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          centerTitle: true,
         ),
         body: Container(
           color: const Color(0xFF9A8C98),
@@ -39,10 +46,19 @@ class TaskCreatorScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: BlocConsumer<TaskCreatorBloc, TaskCreatorState>(
               listener: (context, state) {
-                _blocListener(state, taskCreatorBloc, titleTextController, descriptionTextController, context);
+                _blocListener(state, taskCreatorBloc, titleTextController,
+                    descriptionTextController, context);
               },
               builder: (context, state) {
-                return _blocBuilder(state, titleTextController, taskCreatorBloc, descriptionTextController, formKey, context);
+                return _blocBuilder(
+                    state,
+                    titleTextController,
+                    taskCreatorBloc,
+                    descriptionTextController,
+                    formKey,
+                    context,
+                    screenHeight,
+                    screenWidth);
               },
             ),
           ),
@@ -88,6 +104,8 @@ class TaskCreatorScreen extends StatelessWidget {
     TextEditingController descriptionTextController,
     GlobalKey<FormState> formKey,
     BuildContext context,
+    double screenHeight,
+    double screenWidth,
   ) {
     if (state is TaskCreationSavingInProgress) {
       return const CustomProgressIndicator();
@@ -95,70 +113,76 @@ class TaskCreatorScreen extends StatelessWidget {
       return Form(
         key: formKey,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.symmetric(
+              horizontal: screenWidth * 0.03, vertical: screenHeight * 0.03),
           child: Column(
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(bottom: 2.0),
-                child: FormTextfieldComponent(
-                  controller: titleTextController,
-                  fieldName: 'Title',
-                  hintText: 'Enter your title',
-                  obscureText: false,
-                  horizontalPadding: 16.0,
-                  textCapitalization: TextCapitalization.words,
-                  onChanged: (value) {
-                    taskCreatorBloc.add(TaskCreatorTitleChanged(value));
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Field can\'t be empty';
-                    }
-                    return null;
-                  },
-                ),
+              FormTextfieldComponent(
+                controller: titleTextController,
+                fieldName: 'Title',
+                hintText: 'Enter your title',
+                obscureText: false,
+                horizontalPadding: 16.0,
+                textCapitalization: TextCapitalization.words,
+                onChanged: (value) {
+                  taskCreatorBloc.add(TaskCreatorTitleChanged(value));
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Field can\'t be empty';
+                  }
+                  return null;
+                },
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2.0),
-                child: FormTextfieldComponent(
-                  controller: descriptionTextController,
-                  fieldName: 'Description',
-                  hintText: 'Enter your description',
-                  obscureText: false,
-                  horizontalPadding: 16.0,
-                  textCapitalization: TextCapitalization.sentences,
-                  onChanged: (value) {
-                    taskCreatorBloc.add(TaskCreatorDescriptionChanged(value));
-                  },
-                ),
+              SizedBox(
+                height: screenHeight * 0.02,
+              ),
+              FormTextfieldComponent(
+                controller: descriptionTextController,
+                fieldName: 'Description',
+                hintText: 'Enter your description',
+                obscureText: false,
+                horizontalPadding: 16.0,
+                textCapitalization: TextCapitalization.sentences,
+                onChanged: (value) {
+                  taskCreatorBloc.add(TaskCreatorDescriptionChanged(value));
+                },
+              ),
+              SizedBox(
+                height: screenHeight * 0.02,
               ),
               PriorityChipSelector(
                 priorityChips: state.priorityChips,
                 onPrioritySelected: (selectedPriority) {
-                  taskCreatorBloc.add(TaskCreatorPriorityChanged(selectedPriority));
+                  taskCreatorBloc
+                      .add(TaskCreatorPriorityChanged(selectedPriority));
                 },
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2.0),
-                child: DateTimeSelectorComponent(
-                    label: 'Select Date',
-                    initialDateTime: state.date,
-                    includeTime: false,
-                    horizontalPadding: 16.0,
-                    onDateTimeChanged: (date) {
-                      taskCreatorBloc.add(TaskCreatorDateChanged(date));
-                    }),
+              SizedBox(
+                height: screenHeight * 0.02,
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 2.0),
-                child: DateTimeSelectorComponent(
-                    label: 'Select Notification Time',
-                    initialDateTime: state.notificationTime,
-                    includeTime: true,
-                    horizontalPadding: 16.0,
-                    onDateTimeChanged: (date) {
-                      taskCreatorBloc.add(TaskCreatorNotificationTimeChanged(date));
-                    }),
+              DateTimeSelectorComponent(
+                  label: 'Select Date',
+                  initialDateTime: state.date,
+                  includeTime: false,
+                  horizontalPadding: 16.0,
+                  onDateTimeChanged: (date) {
+                    taskCreatorBloc.add(TaskCreatorDateChanged(date));
+                  }),
+              SizedBox(
+                height: screenHeight * 0.02,
+              ),
+              DateTimeSelectorComponent(
+                  label: 'Select Notification Time',
+                  initialDateTime: state.notificationTime,
+                  includeTime: true,
+                  horizontalPadding: 16.0,
+                  onDateTimeChanged: (date) {
+                    taskCreatorBloc
+                        .add(TaskCreatorNotificationTimeChanged(date));
+                  }),
+              SizedBox(
+                height: screenHeight * 0.02,
               ),
             ],
           ),

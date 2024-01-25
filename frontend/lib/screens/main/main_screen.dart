@@ -28,6 +28,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double topHeight = screenHeight * 0.35;
+    double bottomHeight = screenHeight - topHeight;
     final mainScreenBloc = BlocProvider.of<MainScreenBloc>(context);
 
     return Scaffold(
@@ -92,7 +93,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
             ConstrainedBox(
               constraints: BoxConstraints(
-                minHeight: screenHeight - topHeight,
+                minHeight: bottomHeight,
                 minWidth: double.infinity,
               ),
               child: Container(

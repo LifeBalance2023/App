@@ -8,7 +8,9 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     double topHeight = screenHeight * 0.65;
+    double bottomHeight = screenHeight - topHeight;
 
     return Scaffold(
       body: Stack(
@@ -36,15 +38,14 @@ class WelcomeScreen extends StatelessWidget {
                   topRight: Radius.circular(55),
                 ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    height: 40.0,
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 70),
-                    child: Text(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth * 0.15,
+                    vertical: bottomHeight * 0.08),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
                       'Let’s start to change your balance!',
                       style: TextStyle(
                         fontFamily: 'JejuGothic',
@@ -53,46 +54,59 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 50.0,
-                  ),
-                  CustomButtonComponent(
-                    text: 'Log in',
-                    width: 192,
-                    height: 48,
-                    onPressed: () {
-                      AppRouter.goToLogin(context);
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  CustomButtonComponent(
-                    text: 'Register',
-                    width: 192,
-                    height: 48,
-                    onPressed: () {
-                      AppRouter.goToRegister(context);
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      AppRouter.goToSettings(context);
-                    },
-                    child: Text(
-                      'Settings',
-                      style: TextStyle(
-                        fontFamily: 'JejuGothic',
-                        fontSize: 18.0,
-                        color: Colors.grey[800],
+                    SizedBox(
+                      height: bottomHeight * 0.1,
+                    ),
+                    CustomButtonComponent(
+                      text: 'Log in',
+                      width: screenWidth * 0.5,
+                      height: bottomHeight * 0.15,
+                      onPressed: () {
+                        AppRouter.goToLogin(context);
+                      },
+                    ),
+                    SizedBox(
+                      height: bottomHeight * 0.05,
+                    ),
+                    CustomButtonComponent(
+                      text: 'Register',
+                      width: screenWidth * 0.5,
+                      height: bottomHeight * 0.15,
+                      onPressed: () {
+                        AppRouter.goToRegister(context);
+                      },
+                    ),
+                    SizedBox(
+                      height: bottomHeight * 0.1,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        AppRouter.goToSettings(context);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.settings,
+                            color: Colors.grey[800],
+                          ),
+                          SizedBox(
+                            width: screenWidth * 0.01,
+                          ),
+                          Text(
+                            'Settings',
+                            style: TextStyle(
+                              fontFamily: 'JejuGothic',
+                              fontSize: 18.0,
+                              color: Colors.grey[800],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

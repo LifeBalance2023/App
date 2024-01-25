@@ -4,17 +4,22 @@ class DividerWithTextComponent extends StatelessWidget {
   final String text;
   final double height;
   final Color textColor;
-  final double textSize;
+  final double maxTextSize;
 
   const DividerWithTextComponent({super.key,
     required this.text,
     this.height = 1.0,
     this.textColor = Colors.black,
-    this.textSize = 16.0,
+    this.maxTextSize = 16.0,
   });
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double baseWidth = 375.0;
+    double scaleFactor = screenWidth / baseWidth;
+    double fontSize = (scaleFactor * maxTextSize).clamp(16.0, maxTextSize);
+
     return Row(
       children: [
         Expanded(
@@ -29,7 +34,7 @@ class DividerWithTextComponent extends StatelessWidget {
             text,
             style: TextStyle(
               color: textColor,
-              fontSize: textSize,
+              fontSize: fontSize,
               fontFamily: 'JejuGothic',
             ),
           ),

@@ -133,7 +133,7 @@ Widget _blocBuilder(
             ),
             child: const DividerWithTextComponent(
               text: 'or register with an email',
-              textSize: 24,
+              maxTextSize: 22,
             ),
           ),
           const SizedBox(
